@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Inertia\Middleware;
 use Tightenco\Ziggy\Ziggy;
 
@@ -43,7 +44,8 @@ class HandleInertiaRequests extends Middleware
                     'location' => $request->url(),
                 ]);
             },
-            'flash' => session()->all()
+            'flash' => session()->all(),
+            'env' => App::environment()
         ]);
     }
 }
