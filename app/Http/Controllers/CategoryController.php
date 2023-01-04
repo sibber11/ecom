@@ -47,8 +47,7 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        $category->parent = Category::select('name')->find($category->parent_id)?->name;
-//        dd($category->toJson());
+        $category->parent = $category->parent?->name;
         return Inertia::render('Category/Edit',[
             'category' => $category
         ]);
