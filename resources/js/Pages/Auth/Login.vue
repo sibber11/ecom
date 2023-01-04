@@ -23,6 +23,12 @@ const submit = () => {
         onFinish: () => form.reset('password'),
     });
 };
+
+const set_guest_account = ()=>{
+    form.email = 'test@example.com';
+    form.password = 'password';
+    submit();
+}
 </script>
 
 <template>
@@ -83,6 +89,9 @@ const submit = () => {
 
                 <PrimaryButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                     Log in
+                </PrimaryButton>
+                <PrimaryButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" v-if="$page.props.env === 'local'" @click="set_guest_account">
+                    Log in with guest account
                 </PrimaryButton>
             </div>
         </form>
