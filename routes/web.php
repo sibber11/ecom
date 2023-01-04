@@ -37,6 +37,10 @@ Route::middleware('auth')->group(function () {
     Route::resource('products', \App\Http\Controllers\ProductController::class);
     Route::post('product/getslug', [\App\Http\Controllers\ProductController::class, 'getslug'])
         ->name('product.getslug');
+    Route::resource('categories', \App\Http\Controllers\CategoryController::class)
+    ->except('show');
+    Route::post('categories/get_parent', [\App\Http\Controllers\CategoryController::class, 'get_parent'])
+        ->name('categories.parent');
 });
 
 require __DIR__.'/auth.php';
