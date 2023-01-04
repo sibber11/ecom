@@ -17,7 +17,7 @@ class ProductTest extends TestCase
      */
     public function test_create_product_screen_can_be_rendered()
     {
-        $response = $this->get(route('product.create'));
+        $response = $this->get(route('products.create'));
 
         $response->assertStatus(200);
     }

@@ -1,7 +1,7 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/inertia-vue3';
-import ProductFields from "@/Pages/Product/Partials/ProductFields.vue";
+import ProductFields from "@/Pages/Product/Partials/Fields.vue";
 
 defineProps({
     product: Object,
@@ -21,7 +21,7 @@ defineProps({
                 <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
                     <ProductFields
                         method="post"
-                        :url="route('product.store')"
+                        :url="route('products.store')"
                     />
                 </div>
             </div>

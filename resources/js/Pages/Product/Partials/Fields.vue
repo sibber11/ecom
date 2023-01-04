@@ -52,7 +52,7 @@ function submitForm(){
 }
 
 const processApiCall = debounce(()=>{
-    axios.post(route('product.getslug'), {
+    axios.post(route('products.getslug'), {
         name: form.name
     })
         .then((r) => {

@@ -15,10 +15,10 @@ const props = defineProps({
 <!--            <div class="text-sm text-gray-600">Category: {{product.category}}</div>-->
 <!--            <div class="text-sm text-gray-600">Brand: {{product.brand}}</div>-->
             <p class="text-gray-800">{{product.description}}</p>
-            <Link :href="route('product.edit',product)" class="text-blue-500">
+            <Link :href="route('products.edit',product)" class="text-blue-500">
                 Edit
             </Link>
-            <Link :href="route('product.destroy',product)" as="button" method="delete" class="text-red-600">
+            <Link :href="route('products.destroy',product)" as="button" method="delete" class="text-red-600">
                 Delete
             </Link>
         </div>

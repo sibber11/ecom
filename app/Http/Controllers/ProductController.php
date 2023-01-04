@@ -35,7 +35,7 @@ class ProductController extends Controller
     public function store(StoreProductRequest $request)
     {
         Product::create($request->validated());
-        return to_route('product.index')
+        return to_route('products.index')
             ->with('message', 'Product created successfully');
     }
 
@@ -64,7 +64,7 @@ class ProductController extends Controller
     {
         $product->update($request->validated());
         // return to index page with success message "Product updated successfully"
-        return to_route('product.index')
+        return to_route('products.index')
             ->with('message', 'Product updated successfully');
     }
 
@@ -75,7 +75,7 @@ class ProductController extends Controller
     {
         $product->delete();
         // return to index page with success message "Product deleted successfully"
-        return to_route('product.index')
+        return to_route('products.index')
             ->with('message', 'Product deleted successfully');
     }
 

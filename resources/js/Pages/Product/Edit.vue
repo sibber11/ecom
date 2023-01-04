@@ -1,7 +1,7 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/inertia-vue3';
-import ProductFields from "@/Pages/Product/Partials/ProductFields.vue";
+import ProductFields from "@/Pages/Product/Partials/Fields.vue";
 
 defineProps({
     product: Object,
@@ -22,7 +22,7 @@ defineProps({
                     <ProductFields
                         :product="product"
                         method="patch"
-                        :url="route('product.update', product)"
+                        :url="route('products.update', product)"
                         class="max-w-xl"
                     />
                 </div>
