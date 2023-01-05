@@ -19,8 +19,8 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->string('sku', 32)->unique()->nullable();
             $table->text('description');
-//            $table->foreignIdFor();todo category
-//            $table->foreignIdFor();todo tag
+            $table->integer('price');
+            $table->foreignIdFor(\App\Models\Category::class);
 //            $table->foreignIdFor();todo photos
             $table->timestamps();
         });

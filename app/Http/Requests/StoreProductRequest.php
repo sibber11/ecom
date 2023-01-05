@@ -26,7 +26,10 @@ class StoreProductRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:1023',
-            'sku' => 'nullable|string|max:32'
+            'sku' => 'nullable|string|max:32',
+            'tags' => 'nullable|string|max:255',
+            'price' => 'required|numeric|min:0',
+            'category' => 'required|exists:categories,name',
         ];
     }
 }

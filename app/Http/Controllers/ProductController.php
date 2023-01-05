@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\GetSlugRequest;
+use App\Models\Category;
 use App\Models\Product;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
@@ -17,7 +18,7 @@ class ProductController extends Controller
     public function index()
     {
         return Inertia::render('Product/Index',[
-            'products' => Product::paginate(4)
+            'products' => Product::with(['category', 'tags'])->paginate(4)
         ]);
     }
 
@@ -34,7 +35,14 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
-        Product::create($request->validated());
+        $product = new Product;
+        $product->fill($request->validated());
+        //associate category
+        $product->category()->associate(Category::where('name', $request->category)->first());
+        $product->save();
+        //extract tags from request
+        $tags = explode(',', $request->tags);
+        $product->syncTags($tags);
         return to_route('products.index')
             ->with('message', 'Product created successfully');
     }
@@ -53,7 +61,7 @@ class ProductController extends Controller
     public function edit(Product $product)
     {
         return Inertia::render('Product/Edit',[
-            'product' => $product
+            'product' => $product->load(['category', 'tags'])
         ]);
     }
 
@@ -62,8 +70,13 @@ class ProductController extends Controller
      */
     public function update(UpdateProductRequest $request, Product $product)
     {
-        $product->update($request->validated());
-        // return to index page with success message "Product updated successfully"
+        $product->fill($request->validated());
+        //associate category
+        $product->category()->associate(Category::where('name', $request->category)->first());
+        // extract the tags into an array
+        $tags = explode(',', $request->tags);
+        $product->syncTags($tags);
+        $product->save();
         return to_route('products.index')
             ->with('message', 'Product updated successfully');
     }
@@ -74,7 +87,6 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         $product->delete();
-        // return to index page with success message "Product deleted successfully"
         return to_route('products.index')
             ->with('message', 'Product deleted successfully');
     }

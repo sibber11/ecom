@@ -19,7 +19,16 @@ class ProductFactory extends Factory
         return [
             'name' => fake()->name,
             'sku' => fake()->unique()->text(8),
-            'description' => fake()->text(32)
+            'description' => fake()->text(32),
+            'price' => fake()->numberBetween(100, 1000),
+            'category_id' => \App\Models\Category::factory(),
         ];
+    }
+
+    public function configure()
+    {
+        return $this->afterCreating(function (\App\Models\Product $product) {
+            $product->attachTags(fake()->words(3));
+        });
     }
 }

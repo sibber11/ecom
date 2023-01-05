@@ -6,14 +6,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
+use Spatie\Tags\HasTags;
 
 class Product extends Model
 {
-    use HasFactory, HasSlug;
+    use HasFactory, HasSlug, HasTags;
     protected $fillable = [
         'name',
         'sku',
-        'description'
+        'description',
+        'category_id',
+        'price',
     ];
 
     public function getSlugOptions(): SlugOptions
@@ -25,5 +28,9 @@ class Product extends Model
     public function getRouteKeyName()
     {
         return 'slug';
+    }
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
     }
 }
