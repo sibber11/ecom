@@ -44,7 +44,7 @@ class ProductController extends Controller
         $tags = explode(',', $request->tags);
         $product->syncTags($tags);
         return to_route('products.index')
-            ->with('message', 'Product created successfully');
+            ->with('success', 'Product created successfully');
     }
 
     /**
@@ -78,7 +78,7 @@ class ProductController extends Controller
         $product->syncTags($tags);
         $product->save();
         return to_route('products.index')
-            ->with('message', 'Product updated successfully');
+            ->with('success', 'Product updated successfully');
     }
 
     /**
@@ -86,9 +86,10 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
+        //todo check relation before deleting
         $product->delete();
         return to_route('products.index')
-            ->with('message', 'Product deleted successfully');
+            ->with('success', 'Product deleted successfully');
     }
 
     /**
