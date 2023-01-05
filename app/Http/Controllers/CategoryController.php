@@ -75,13 +75,12 @@ class CategoryController extends Controller
             ->with('message', 'Category deleted successfully');
     }
 
-    public function get_parent(Request $request)
+    public function get_category(Request $request)
     {
         $request->validate([
-            'parent_name' => 'required|string|max:255'
+            'category_name' => 'nullable|string|max:255'
         ]);
 
-        $parent = Category::select('id', 'name')->where('name', 'like',$request->input('parent_name').'%')->get();
-        return $parent;
+        return Category::select('id', 'name')->where('name', 'like',$request->input('category_name').'%')->limit(10)->get();
     }
 }
