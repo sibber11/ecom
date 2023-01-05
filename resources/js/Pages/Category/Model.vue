@@ -26,6 +26,8 @@ onMounted(() => {
         </div>
         <div class="pt-2">
             <div class="text-sm text-gray-600" v-if="parent_name">Parent: {{ parent_name }}</div>
+            <div class="text-sm text-gray-600" v-if="category.children_count">Children Count: {{ category.children_count }}</div>
+            <div class="text-sm text-gray-600" v-if="category.descendants_count">Descendants Count: {{ category.descendants_count }}</div>
 <!--            <div class="text-sm text-gray-600">Category: {{category.category}}</div>-->
 <!--            <div class="text-sm text-gray-600">Brand: {{category.brand}}</div>-->
 <!--            <p class="text-gray-800">{{ category.description }}</p>-->

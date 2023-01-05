@@ -17,7 +17,7 @@ class CategoryController extends Controller
     {
 
         return Inertia::render('Category/Index', [
-            'categories' => Category::with('ancestors')->paginate(10)
+            'categories' => Category::with(['ancestors'])->withCount('children')->withCount('descendants')->paginate(10)
         ]);
     }
 
@@ -39,7 +39,7 @@ class CategoryController extends Controller
         $category->fill($request->validated());
         $category->appendToNode($parent)->save();
         return to_route('categories.index')
-            ->with('message', 'Category created successfully');
+            ->with('success', 'Category created successfully');
     }
 
     /**
@@ -62,7 +62,7 @@ class CategoryController extends Controller
         $category->fill($request->validated());
         $category->appendToNode($parent)->save();
         return to_route('categories.index')
-            ->with('message', 'Category updated successfully');
+            ->with('success', 'Category updated successfully');
     }
 
     /**
@@ -72,7 +72,8 @@ class CategoryController extends Controller
     {
         $category->delete();
         return to_route('categories.index')
-            ->with('message', 'Category deleted successfully');
+            ->with('success', 'Category deleted successfully')
+            ->withInput();
     }
 
     public function get_category(Request $request)
