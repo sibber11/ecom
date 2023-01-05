@@ -26,11 +26,11 @@ defineProps({
                 </Link>
             </div>
         </template>
-        <FlashMessage :message="$page.props.flash.message" :show="true"/>
+        <FlashMessage/>
 
         <div class="py-5">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-                <Product v-for="product in products.data" :product="product"/>
+                <Product v-for="product in products.data" :product="product" :key="product.id"/>
                 <Pagination :links="products.links"/>
             </div>
         </div>
