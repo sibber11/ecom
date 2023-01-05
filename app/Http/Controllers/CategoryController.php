@@ -70,6 +70,12 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
+        if ($category->children()->count() > 0) {
+            return back()->with('error', 'Category has children');
+        }
+        if ($category->products()->count() > 0){
+            return back()->with('error', 'Category has products');
+        }
         $category->delete();
         return to_route('categories.index')
             ->with('success', 'Category deleted successfully')
