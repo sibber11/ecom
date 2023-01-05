@@ -1,14 +1,12 @@
 <script setup>
+import {onMounted} from "vue";
+import {submitForm} from "@/helper";
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
-import {useForm} from '@inertiajs/inertia-vue3';
-import debounce from "lodash/debounce";
-import {onMounted} from "vue";
-import {submitForm} from "@/helper";
-import {ref} from "vue";
-import {InertiaLink} from "@inertiajs/inertia-vue3";
+import SelectCategories from "@/Pages/Category/Partials/SelectCategories.vue";
+import {InertiaLink, useForm} from '@inertiajs/inertia-vue3';
 
 
 const props = defineProps({
@@ -32,19 +30,6 @@ onMounted(()=>{
     form.name = props.category.name;
     form.parent = props.category.parent;
 })
-
-//data property named as parent_categories
-const parent_categories = ref([]);
-//fetch parent categories using a function with debounce
-const fetchParentCategories = debounce(()=>{
-    axios.post(route('categories.parent',{
-        parent_name: form.parent
-    }))
-        .then((r) => {
-            parent_categories.value = r.data
-        })
-}, 300)
-
 
 </script>
 
@@ -77,18 +62,8 @@ const fetchParentCategories = debounce(()=>{
             <div>
                 <InputLabel for="parent_name" value="Parent"/>
 
-                <TextInput
-                    id="parent_name"
-                    type="text"
-                    class="mt-1 block w-full"
-                    v-model="form.parent"
-                    @input="fetchParentCategories"
-                    list="parent-name"
-                />
+                <SelectCategories v-model="form.parent"/>
 
-                <datalist id="parent-name">
-                    <option v-for="parent in parent_categories" :value="parent.name"></option>
-                </datalist>
                 <InputError class="mt-2" :message="form.errors.parent"/>
 
             </div>
