@@ -43,6 +43,12 @@ Route::middleware('auth')->group(function () {
         ->name('categories.get_names');
     Route::post('categories/get_slug', [\App\Http\Controllers\CategoryController::class, 'get_slug'])
         ->name('categories.get_slug');
+
+    Route::resource('brands', \App\Http\Controllers\BrandController::class);
+    Route::post('brands/get_names', [\App\Http\Controllers\BrandController::class, 'get_names'])
+        ->name('brands.get_names');
+    Route::post('brands/get_slug', [\App\Http\Controllers\BrandController::class, 'get_slug'])
+        ->name('brands.get_slug');
 });
 
 require __DIR__.'/auth.php';
