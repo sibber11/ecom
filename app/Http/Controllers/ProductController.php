@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\GetSlugRequest;
+use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class ProductController extends Controller
@@ -18,7 +21,7 @@ class ProductController extends Controller
     public function index()
     {
         return Inertia::render('Product/Index',[
-            'products' => Product::with(['category', 'tags'])->paginate(4)
+            'products' => Product::with(['tags', 'media'])->paginate(4)
         ]);
     }
 
@@ -35,14 +38,14 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
+        DB::beginTransaction();
         $product = new Product;
-        $product->fill($request->validated());
-        //associate category
-        $product->category()->associate(Category::where('name', $request->category)->first());
-        $product->save();
-        //extract tags from request
-        $tags = explode(',', $request->tags);
-        $product->syncTags($tags);
+        $this->fill_n_save($request, $product);
+        //if request has file store it
+        if ($request->hasFile('images')) {
+            $product->addMediaFromRequest('images')->toMediaCollection('product_images');
+        }
+        DB::commit();
         return to_route('products.index')
             ->with('success', 'Product created successfully');
     }
@@ -70,13 +73,9 @@ class ProductController extends Controller
      */
     public function update(UpdateProductRequest $request, Product $product)
     {
-        $product->fill($request->validated());
-        //associate category
-        $product->category()->associate(Category::where('name', $request->category)->first());
-        // extract the tags into an array
-        $tags = explode(',', $request->tags);
-        $product->syncTags($tags);
-        $product->save();
+        DB::beginTransaction();
+        $this->fill_n_save($request, $product);
+        DB::commit();
         return to_route('products.index')
             ->with('success', 'Product updated successfully');
     }
@@ -95,9 +94,25 @@ class ProductController extends Controller
     /**
      * Returns a unique slug
      */
-    public function getslug(GetSlugRequest $request){
+    public function get_slug(GetSlugRequest $request){
         $product = new Product($request->validated());
         $product->generateSlug();
         return $product;
+    }
+
+    /**
+     * @param StoreProductRequest $request
+     * @param Product $product
+     * @return void
+     */
+    public function fill_n_save(Request $request, Product $product): void
+    {
+        $product->fill($request->validated());
+        $product->category()->associate(Category::whereName($request->category)->first());
+        $product->brand()->associate(Brand::whereName($request->brand)->first());
+        $product->save();
+        //extract tags from request
+        $tags = explode(',', $request->tags);
+        $product->syncTags($tags);
     }
 }
