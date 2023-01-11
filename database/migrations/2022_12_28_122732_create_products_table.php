@@ -20,8 +20,9 @@ return new class extends Migration
             $table->string('sku', 32)->unique()->nullable();
             $table->text('description');
             $table->integer('price');
+            $table->integer('quantity');
             $table->foreignIdFor(\App\Models\Category::class);
-//            $table->foreignIdFor();todo photos
+            $table->foreignIdFor(\App\Models\Brand::class);
             $table->timestamps();
         });
     }
