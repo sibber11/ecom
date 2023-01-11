@@ -17,7 +17,7 @@
         "laravel/breeze": "^1.16",
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^2.8",
-        "laravel/tinker": "^2.7",
+        "protonemedia/inertiajs-tables-laravel-query-builder": "^2.0",
         "spatie/laravel-medialibrary": "10.7.6",
         "spatie/laravel-sluggable": "^3.4",
         "spatie/laravel-tags": "4.3.5",
@@ -30,7 +30,7 @@
         "nunomaduro/collision": "^6.1",
         "phpunit/phpunit": "^9.5.10",
         "spatie/laravel-ignition": "^1.0",
-        "yajra/laravel-datatables": "v9.0.0"
+        "laravel/tinker": "^2.7"
     },
     "autoload": {
         "psr-4": {
