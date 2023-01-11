@@ -35,8 +35,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::resource('products', \App\Http\Controllers\ProductController::class);
-    Route::post('products/getslug', [\App\Http\Controllers\ProductController::class, 'getslug'])
-        ->name('products.getslug');
+    Route::post('products/get_slug', [\App\Http\Controllers\ProductController::class, 'get_slug'])
+        ->name('products.get_slug');
     Route::resource('categories', \App\Http\Controllers\CategoryController::class)
     ->except('show');
     Route::post('categories/get_category', [\App\Http\Controllers\CategoryController::class, 'get_category'])
