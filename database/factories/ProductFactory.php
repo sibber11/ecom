@@ -2,7 +2,10 @@
 
 namespace Database\Factories;
 
+use App\Models\Brand;
+use App\Models\Category;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Product>
@@ -16,19 +19,42 @@ class ProductFactory extends Factory
      */
     public function definition()
     {
+        $category = Category::inRandomOrder()->first() ?? Category::factory();
+        $brand = Brand::inRandomOrder()->first() ?? Brand::factory();
         return [
             'name' => fake()->name,
-            'sku' => fake()->unique()->text(8),
+            'sku' => Str::random(8),
             'description' => fake()->text(32),
             'price' => fake()->numberBetween(100, 1000),
-            'category_id' => \App\Models\Category::factory(),
+            'category_id' => $category,
+            'quantity' => fake()->numberBetween(1, 100),
+            'brand_id' => $brand,
         ];
     }
 
     public function configure()
     {
         return $this->afterCreating(function (\App\Models\Product $product) {
-            $product->attachTags(fake()->words(3));
+            if ($product->tags()->count() === 0) {
+                $product->attachTags(fake()->words(3));
+            }
         });
     }
+
+    // a function to create a product with photos
+    public function withPhotos()
+    {
+        return $this->afterCreating(function (\App\Models\Product $product) {
+            $product->addMediaFromUrl('https://picsum.photos/seed/' . fake()->numberBetween(1, 1000) . '/640/480')->toMediaCollection('images');
+        });
+    }
+
+    // a function to create a product with tags
+    public function withTags($tags)
+    {
+        return $this->afterCreating(function (\App\Models\Product $product) use ($tags) {
+            $product->attachTags($tags);
+        });
+    }
+
 }
