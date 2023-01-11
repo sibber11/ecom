@@ -1,32 +1,21 @@
 <script setup>
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head } from '@inertiajs/inertia-vue3';
-import ProductFields from "@/Pages/Product/Partials/Fields.vue";
+import Fields from "@/Pages/Product/Partials/Fields.vue";
+import CreateEdit from "@/components/CreateEdit.vue";
 
-defineProps({
+    defineProps
+
+({
     product: Object,
 });
 </script>
 
 <template>
-    <Head title="Create Product" />
-
-    <AuthenticatedLayout>
-        <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Edit Product</h2>
-        </template>
-
-        <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-                <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                    <ProductFields
-                        :product="product"
-                        method="patch"
-                        :url="route('products.update', product)"
-                        class="max-w-xl"
-                    />
-                </div>
-            </div>
-        </div>
-    </AuthenticatedLayout>
+    <CreateEdit title="Edit Product">
+        <Fields
+            :product="product"
+            method="patch"
+            :url="route('products.update', product)"
+            class="max-w-xl"
+        />
+    </CreateEdit>
 </template>

@@ -23,6 +23,7 @@ const props = defineProps({
                         :href="link.url"
                         class="page-link"
                         v-html="link.label"
+                        :disabled="link.url"
                     />
                  </span>
             </li>

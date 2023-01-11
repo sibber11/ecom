@@ -26,7 +26,7 @@ Inertia.on('finish', function () {
         leave-to-class="transform opacity-0 translate-y-20"
         appear
     >
-        <div class="fixed right-4 bottom-4" v-if="show && ($page.props.flash.error || $page.props.flash.success)">
+        <div class="fixed right-4 bottom-4 z-10" v-if="show && ($page.props.flash.error || $page.props.flash.success)">
         <p class="p-3 rounded font-bold border-2"
            v-show="show"
            :class="{'border-green-600 bg-green-400': $page.props.flash.success, 'border-red-600 bg-red-400': $page.props.flash.error,}">

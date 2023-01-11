@@ -1,14 +1,14 @@
 <script setup>
 import {useForm} from '@inertiajs/inertia-vue3';
-import debounce from "lodash/debounce";
-import {onMounted} from "vue";
+import {onMounted, ref} from "vue";
 import {submitForm} from "@/helper";
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import TextArea from "@/components/TextArea.vue";
-import SelectCategories from "@/Pages/Category/Partials/SelectCategories.vue";
+import SelectModels from '@/components/SelectModels.vue'
+import SlugInput from '@/components/SlugInput.vue'
 
 const props = defineProps({
     method: {
@@ -25,41 +25,54 @@ const form = useForm({
     sku: '',
     slug: '',
     price: '',
+    quantity: '',
     category: '',
+    brand: '',
     tags: [],
+    images: null
+
 });
-onMounted(()=>{
-    if (!props.product){
+onMounted(() => {
+    if (!props.product) {
         return
     }
-
     form.name = props.product.name;
     form.description = props.product.description;
     form.sku = props.product.sku;
     form.slug = props.product.slug;
     form.price = props.product.price;
+    form.quantity = props.product.quantity;
     form.category = props.product.category.name;
+    form.brand = props.product.brand.name;
+
     // check if the tags array is empty, if not, then map the tags array and return the name of each tag
     form.tags = props.product.tags.length > 0 ? props.product.tags.map(tag => tag.name.en) : [];
 
 })
-function getslug(event) {
-    if (event.target.value === '') {
-        return;
+
+const preview_list = ref([]);
+const image_list = ref([]);
+const previewMultiImage = function (event) {
+    const input = event.target;
+    let count = input.files.length;
+    let index = 0;
+    //empty preview_list and image_list
+    preview_list.value = [];
+    image_list.value = [];
+    if (input.files) {
+        while (count--) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                preview_list.value.push(e.target.result);
+            }
+            image_list.value.push(input.files[index]);
+            reader.readAsDataURL(input.files[index]);
+            index++;
+        }
     }
-    processApiCall();
 }
 
-
-const processApiCall = debounce(()=>{
-    axios.post(route('products.getslug'), {
-        name: form.name
-    })
-        .then((r) => {
-            form.slug = r.data.slug
-        })
-}, 300)
-
+const slug_input = ref(null);
 </script>
 
 <template>
@@ -80,12 +93,12 @@ const processApiCall = debounce(()=>{
                     id="name"
                     type="text"
                     class="mt-1 block w-full"
+                    autocomplete="name"
+                    placeholder="Product Name"
                     v-model="form.name"
+                    @input="slug_input.get_slug($event.target.value)"
                     required
                     autofocus
-                    autocomplete="name"
-                    @input="getslug"
-                    placeholder="Product Name"
                 />
 
                 <InputError class="mt-2" :message="form.errors.name"/>
@@ -94,27 +107,29 @@ const processApiCall = debounce(()=>{
             <div>
                 <InputLabel for="slug" value="Slug"/>
 
-                <TextInput
-                    id="slug"
-                    type="text"
-                    class="mt-1 block w-full"
-                    v-model="form.slug"
-                    disabled
-                />
+                <SlugInput class="mt-1 block w-full" :url="route('products.get_slug')" v-model="form.slug" ref="slug_input"/>
 
                 <InputError class="mt-2" :message="form.errors.slug"/>
             </div>
 
             <div>
-                <InputLabel for="slug" value="Category"/>
+                <InputLabel for="category_name" value="Category"/>
 
-                <SelectCategories v-model="form.category"/>
+                <SelectModels v-model="form.category" :url="route('categories.get_names')" model-name="Category"/>
 
                 <InputError class="mt-2" :message="form.errors.category"/>
             </div>
 
             <div>
-                <InputLabel for="slug" value="Price"/>
+                <InputLabel for="category_name" value="Brand"/>
+
+                <SelectModels v-model="form.brand" :url="route('brands.get_names')" model-name="Brand"/>
+
+                <InputError class="mt-2" :message="form.errors.brand"/>
+            </div>
+
+            <div>
+                <InputLabel for="price" value="Price"/>
 
                 <TextInput
                     id="price"
@@ -125,6 +140,20 @@ const processApiCall = debounce(()=>{
                 />
 
                 <InputError class="mt-2" :message="form.errors.price"/>
+            </div>
+
+            <div>
+                <InputLabel for="quantity" value="Quantity"/>
+
+                <TextInput
+                    id="quantity"
+                    type="number"
+                    class="mt-1 block w-full"
+                    v-model="form.quantity"
+                    placeholder="Product quantity"
+                />
+
+                <InputError class="mt-2" :message="form.errors.quantity"/>
             </div>
 
             <div>
@@ -147,7 +176,6 @@ const processApiCall = debounce(()=>{
 
                 <TextArea
                     id="description"
-                    type="text"
                     class="mt-1 block w-full"
                     v-model="form.description"
                     autocomplete="description"
@@ -159,7 +187,7 @@ const processApiCall = debounce(()=>{
             </div>
 
             <div>
-                <InputLabel for="sku" value="Tags"/>
+                <InputLabel for="tags" value="Tags"/>
 
                 <TextInput
                     id="tags"
@@ -171,6 +199,29 @@ const processApiCall = debounce(()=>{
                 />
 
                 <InputError class="mt-2" :message="form.errors.tags"/>
+            </div>
+
+            <div>
+                <InputLabel for="images" value="Images"/>
+
+                <input type="file" id="images" @change="form.images = $event.target.files; previewMultiImage($event)"
+                       multiple>
+                <progress v-if="form.progress" :value="form.progress.percentage" max="100" class="">
+                    {{ form.progress.percentage }}%
+                </progress>
+                <InputError class="mt-2" :message="form.errors.images"/>
+                <template v-if="preview_list.length">
+                    <div class="flex mt-8 flex-wrap justify-start">
+                        <div v-for="(item, index) in preview_list" :key="index"
+                             class="border-2 p-1 rounded flex flex-col justify-between m-1">
+                            <img :src="item" class="w-52" alt="images"/>
+                            <div>
+                                <p class="">File name: {{ image_list[index].name }}</p>
+                                <p class="">Size: {{ Math.floor(image_list[index].size / 1024) }} KB</p>
+                            </div>
+                        </div>
+                    </div>
+                </template>
             </div>
 
             <div class="flex items-center gap-4">
