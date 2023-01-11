@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\GetSlugRequest;
 use App\Models\Category;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
@@ -34,10 +35,10 @@ class CategoryController extends Controller
      */
     public function store(StoreCategoryRequest $request)
     {
-        $parent = Category::whereName($request->input('parent'))->first();
+
         $category = new Category();
-        $category->fill($request->validated());
-        $category->appendToNode($parent)->save();
+        $this->fill_n_save($category, $request);
+
         return to_route('categories.index')
             ->with('success', 'Category created successfully');
     }
@@ -47,7 +48,6 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        $category->parent = $category->parent?->name;
         return Inertia::render('Category/Edit',[
             'category' => $category
         ]);
@@ -58,9 +58,8 @@ class CategoryController extends Controller
      */
     public function update(UpdateCategoryRequest $request, Category $category)
     {
-        $parent = Category::whereName($request->input('parent'))->first();
-        $category->fill($request->validated());
-        $category->appendToNode($parent)->save();
+
+        $this->fill_n_save($category, $request);
         return to_route('categories.index')
             ->with('success', 'Category updated successfully');
     }
@@ -78,16 +77,37 @@ class CategoryController extends Controller
         }
         $category->delete();
         return to_route('categories.index')
-            ->with('success', 'Category deleted successfully')
-            ->withInput();
+            ->with('success', 'Category deleted successfully');
     }
 
-    public function get_category(Request $request)
+    public function get_names(Request $request)
     {
         $request->validate([
-            'category_name' => 'nullable|string|max:255'
+            'name' => 'nullable|string|max:255'
         ]);
 
-        return Category::select('id', 'name')->where('name', 'like',$request->input('category_name').'%')->limit(10)->get();
+        return Category::select('id', 'name')->where('name', 'like',$request->input('name').'%')->limit(10)->get();
+    }
+
+    public function get_slug(GetSlugRequest $request)
+    {
+        $category = new Category($request->validated());
+        $category->generateSlug();
+        return $category;
+    }
+
+    /**
+     * @param Category $category
+     * @param StoreCategoryRequest $request
+     * @return void
+     */
+    public function fill_n_save(Category $category, Request $request): void
+    {
+        $category->fill($request->validated());
+        if ($request->input('parent') != '') {
+            $parent = Category::whereName($request->input('parent'))->first();
+            $category->appendToNode($parent);
+        }
+        $category->save();
     }
 }
