@@ -7,7 +7,11 @@ use App\Models\Category;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Inertia\Inertia;
+use ProtoneMedia\LaravelQueryBuilderInertiaJs\InertiaTable;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class CategoryController extends Controller
 {
@@ -16,10 +20,33 @@ class CategoryController extends Controller
      */
     public function index()
     {
+        $globalSearch = AllowedFilter::callback('global', function ($query, $value) {
+            $query->where(function ($query) use ($value) {
+                Collection::wrap($value)->each(function ($value) use ($query) {
+                    $query
+                        ->orWhere('name', 'LIKE', "%{$value}%");
+                });
+            });
+        });
+        $categories = QueryBuilder::for(Category::class)
+            ->defaultSort('name')
+            ->allowedSorts(['name'])
+            ->allowedFilters(['name', $globalSearch])
+            ->paginate(\request()->input('perPage')??9)
+            ->withQueryString();
+        //$categories = Category::with(['ancestors', 'parent'])->withCount('children')->withCount('descendants')->paginate(10);
+
 
         return Inertia::render('Category/Index', [
-            'categories' => Category::with(['ancestors'])->withCount('children')->withCount('descendants')->paginate(10)
-        ]);
+            'categories' => $categories
+        ])->table(function (InertiaTable $table){
+            $table->defaultSort('name');
+            $table->withGlobalSearch();
+            $table->column('name', 'Category Name', sortable: true, searchable: true);
+            $table->column('slug', 'Slug');
+            $table->column('parent_name', 'Parent name');
+            $table->column(label: 'Actions');
+        });
     }
 
     /**
@@ -76,6 +103,7 @@ class CategoryController extends Controller
             return back()->with('error', 'Category has products');
         }
         $category->delete();
+        //todo return back to the page user came from with the page number
         return to_route('categories.index')
             ->with('success', 'Category deleted successfully');
     }

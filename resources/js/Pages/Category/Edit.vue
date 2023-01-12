@@ -13,7 +13,6 @@ defineProps({
             :category="category"
             method="patch"
             :url="route('categories.update', category)"
-            class="max-w-xl"
         />
     </CreateEdit>
 </template>

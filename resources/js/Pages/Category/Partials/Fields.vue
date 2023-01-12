@@ -21,7 +21,8 @@ const props = defineProps({
 
 const form = useForm({
     name: '',
-    parent_name: ''
+    parent_name: '',
+    slug: ''
 });
 onMounted(()=>{
     if (!props.category){
@@ -30,6 +31,7 @@ onMounted(()=>{
 
     form.name = props.category.name;
     form.parent_name = props.category.parent_name;
+    form.slug = props.category.slug
 })
 
 const slug_input = ref(null);

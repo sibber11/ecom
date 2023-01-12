@@ -2,10 +2,10 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import {Head, Link} from '@inertiajs/inertia-vue3';
 import SecondaryButton from '@/components/SecondaryButton.vue'
-import Category from '@/Pages/Category/Model.vue'
-import Pagination from '@/components/Pagination.vue'
 import FlashMessage from "@/components/FlashMessage.vue";
-
+import {Table} from '@protonemedia/inertiajs-tables-laravel-query-builder'
+import EditButton from "@/components/EditButton.vue";
+import DeleteButton from "@/components/DeleteButton.vue";
 
 defineProps({
     categories: Object,
@@ -30,8 +30,13 @@ defineProps({
 
         <div class="py-5">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-                <Category v-for="category in categories.data" :category="category" :key="category.id"/>
-                <Pagination :links="categories.links"/>
+<!--                <Model v-for="category in categories.data" :category="category" :key="category.id"/>-->
+                <Table :resource="categories" :striped="true">
+                    <template #cell(actions)="{ item: category }">
+                        <EditButton :url="route('categories.edit', category)"/>
+                        <DeleteButton :url="route('categories.destroy', category)" />
+                    </template>
+                </Table>
             </div>
         </div>
     </AuthenticatedLayout>

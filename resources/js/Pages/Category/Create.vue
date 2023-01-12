@@ -13,5 +13,5 @@ defineProps({
             method="post"
             :url="route('categories.store')"
         />
-        </CreateEdit>
+    </CreateEdit>
 </template>
