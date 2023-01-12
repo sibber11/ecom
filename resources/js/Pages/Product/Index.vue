@@ -2,9 +2,10 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import {Head, Link} from '@inertiajs/inertia-vue3';
 import SecondaryButton from '@/components/SecondaryButton.vue'
-import Product from '@/Pages/Product/Model.vue'
-import Pagination from '@/components/Pagination.vue'
 import FlashMessage from "@/components/FlashMessage.vue";
+import {Table} from "@protonemedia/inertiajs-tables-laravel-query-builder";
+import EditButton from "@/components/EditButton.vue";
+import DeleteButton from "@/components/DeleteButton.vue";
 
 
 defineProps({
@@ -30,8 +31,18 @@ defineProps({
 
         <div class="py-5">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-                <Product v-for="product in products.data" :product="product" :key="product.id"/>
-                <Pagination :links="products.links"/>
+                <Table :resource="products" :striped="true">
+                    <template #cell(actions)="{ item: product}">
+                        <EditButton :url="route('products.edit', product)"/>
+                        <DeleteButton :url="route('products.destroy', product)"/>
+                    </template>
+                    <template #cell(category)="{ item: product}">
+                        {{product.category.name}}
+                    </template>
+                    <template #cell(brand)="{ item: product}">
+                        {{product.brand.name}}
+                    </template>
+                </Table>
             </div>
         </div>
     </AuthenticatedLayout>

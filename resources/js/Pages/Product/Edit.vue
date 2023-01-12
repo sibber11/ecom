@@ -15,7 +15,6 @@ import CreateEdit from "@/components/CreateEdit.vue";
             :product="product"
             method="patch"
             :url="route('products.update', product)"
-            class="max-w-xl"
         />
     </CreateEdit>
 </template>

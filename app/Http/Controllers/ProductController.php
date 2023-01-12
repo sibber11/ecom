@@ -11,6 +11,8 @@ use App\Http\Requests\UpdateProductRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+use ProtoneMedia\LaravelQueryBuilderInertiaJs\InertiaTable;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class ProductController extends Controller
 {
@@ -20,9 +22,26 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Product/Index',[
-            'products' => Product::with(['tags', 'media'])->paginate(4)
-        ]);
+        $products = QueryBuilder::for(Product::class)
+            ->defaultSort('name')
+            ->allowedSorts(['name', 'id', 'category_id', 'brand_id'])
+            ->allowedFilters(['name'])
+            ->paginate(\request()->input('perPage') ?? 9)
+            ->withQueryString();
+
+        return Inertia::render('Product/Index', [
+            'products' => $products
+        ])->table(function (InertiaTable $table) {
+            $table->withGlobalSearch()
+                ->column('id',sortable: true)
+                ->column('name', sortable: true, searchable: true)
+                ->column('sku')
+                ->column('brand')
+                ->column('category')
+                ->column('quantity')
+                ->column(label: 'actions')
+                ->defaultSort('name');
+        });
     }
 
     /**
@@ -63,7 +82,7 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        return Inertia::render('Product/Edit',[
+        return Inertia::render('Product/Edit', [
             'product' => $product->load(['category', 'tags'])
         ]);
     }
@@ -94,7 +113,8 @@ class ProductController extends Controller
     /**
      * Returns a unique slug
      */
-    public function get_slug(GetSlugRequest $request){
+    public function get_slug(GetSlugRequest $request)
+    {
         $product = new Product($request->validated());
         $product->generateSlug();
         return $product;
