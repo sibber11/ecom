@@ -9,6 +9,10 @@ defineProps({
 
 <template>
     <CreateEdit title="Create Brand">
-        <Fields :brand="brand" method="post" :url="route('brands.store')" />
+        <Fields
+            :brand="brand"
+            method="post"
+            :url="route('brands.store')"
+        />
     </CreateEdit>
 </template>

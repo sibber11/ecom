@@ -21,14 +21,14 @@ const props = defineProps({
 
 const form = useForm({
     name: '',
-    parent: ''
+    slug: ''
 });
 onMounted(()=>{
-    console.log(props.url)
     if (!props.brand){
         return
     }
     form.name = props.brand.name;
+    form.slug = props.brand.slug;
 })
 
 const slug_input = ref(null);

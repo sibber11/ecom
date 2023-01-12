@@ -2,9 +2,10 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import {Head, Link} from '@inertiajs/inertia-vue3';
 import SecondaryButton from '@/components/SecondaryButton.vue'
-import Brand from '@/Pages/Brand/Model.vue'
-import Pagination from '@/components/Pagination.vue'
 import FlashMessage from "@/components/FlashMessage.vue";
+import {Table} from "@protonemedia/inertiajs-tables-laravel-query-builder";
+import EditButton from "@/components/EditButton.vue";
+import DeleteButton from "@/components/DeleteButton.vue";
 
 
 defineProps({
@@ -13,7 +14,7 @@ defineProps({
 </script>
 
 <template>
-    <Head title="Create Brand" />
+    <Head title="Create Brand"/>
 
     <AuthenticatedLayout>
         <template #header>
@@ -30,8 +31,12 @@ defineProps({
 
         <div class="py-5">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-                <Brand v-for="brand in brands.data" :brand="brand" :key="brand.id"/>
-                <Pagination :links="brands.links"/>
+                <Table :resource="brands" :striped="true">
+                    <template #cell(actions)="{ item: category }">
+                        <EditButton :url="route('brands.edit', category)"/>
+                        <DeleteButton :url="route('brands.destroy', category)"/>
+                    </template>
+                </Table>
             </div>
         </div>
     </AuthenticatedLayout>
