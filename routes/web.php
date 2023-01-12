@@ -17,7 +17,7 @@ use Inertia\Inertia;
 */
 
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
+    return Inertia::render('Index', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,
@@ -49,6 +49,8 @@ Route::middleware('auth')->group(function () {
         ->name('brands.get_names');
     Route::post('brands/get_slug', [\App\Http\Controllers\BrandController::class, 'get_slug'])
         ->name('brands.get_slug');
+
+    Route::resource('users', \App\Http\Controllers\UserController::class);
 });
 
 require __DIR__.'/auth.php';
