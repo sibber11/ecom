@@ -46,12 +46,15 @@ onMounted(() => {
     form.quantity = props.product.quantity;
     form.category = props.product.category.name;
     form.brand = props.product.brand.name;
-
-    // check if the tags array is empty, if not, then map the tags array and return the name of each tag
-    form.tags = props.product.tags.length > 0 ? props.product.tags.map(tag => tag.name.en) : [];
-
+    form.tags = tags.value;
 })
+const tags = ref(props.product?.tags.length > 0 ? props.product.tags.map(tag => tag.name.en) : '');
 
+function extractTags() {
+    form.tags = tags.value.split(',').map(e => e.trim()).filter(e => e)
+}
+
+watch(tags, extractTags)
 const preview_list = ref([]);
 const image_list = ref([]);
 const previewMultiImage = function (event) {
@@ -196,7 +199,7 @@ const slug_input = ref(null);
                     id="tags"
                     type="text"
                     class="mt-1 block w-full"
-                    v-model="form.tags"
+                    v-model="tags"
                     autocomplete="tags"
                     placeholder="Enter tags separated by comma"
                 />
