@@ -1,6 +1,6 @@
 <script setup>
 import {useForm} from '@inertiajs/inertia-vue3';
-import {onMounted, ref} from "vue";
+import {onMounted, ref, watch} from "vue";
 import {submitForm} from "@/helper";
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
@@ -9,6 +9,7 @@ import TextInput from '@/Components/TextInput.vue';
 import TextArea from "@/components/TextArea.vue";
 import SelectModels from '@/components/SelectModels.vue'
 import SlugInput from '@/components/SlugInput.vue'
+import {InertiaLink} from "@inertiajs/inertia-vue3";
 
 const props = defineProps({
     method: {
@@ -29,10 +30,11 @@ const form = useForm({
     category: '',
     brand: '',
     tags: [],
-    images: null
-
+    images: null,
+    _method: 'post'
 });
 onMounted(() => {
+
     if (!props.product) {
         return
     }
@@ -107,7 +109,8 @@ const slug_input = ref(null);
             <div>
                 <InputLabel for="slug" value="Slug"/>
 
-                <SlugInput class="mt-1 block w-full" :url="route('products.get_slug')" v-model="form.slug" ref="slug_input"/>
+                <SlugInput class="mt-1 block w-full" :url="route('products.get_slug')" v-model="form.slug"
+                           ref="slug_input"/>
 
                 <InputError class="mt-2" :message="form.errors.slug"/>
             </div>
@@ -206,10 +209,13 @@ const slug_input = ref(null);
 
                 <input type="file" id="images" @change="form.images = $event.target.files; previewMultiImage($event)"
                        multiple>
+
                 <progress v-if="form.progress" :value="form.progress.percentage" max="100" class="">
                     {{ form.progress.percentage }}%
                 </progress>
+
                 <InputError class="mt-2" :message="form.errors.images"/>
+
                 <template v-if="preview_list.length">
                     <div class="flex mt-8 flex-wrap justify-start">
                         <div v-for="(item, index) in preview_list" :key="index"
@@ -219,6 +225,21 @@ const slug_input = ref(null);
                                 <p class="">File name: {{ image_list[index].name }}</p>
                                 <p class="">Size: {{ Math.floor(image_list[index].size / 1024) }} KB</p>
                             </div>
+                        </div>
+                    </div>
+                </template>
+
+                <template v-if="product?.media">
+                    <div class="flex mt-8 flex-wrap justify-start">
+                        <div v-for="(item, index) in product.media" :key="index"
+                             class="border-2 p-1 rounded flex flex-col justify-between m-1">
+                            <img :src="item.original_url" class="w-52" alt="images"/>
+                            <InertiaLink :href="route('products.deleteMedia', [product, item])" as="button"
+                                         method="delete"
+                                         class="text-center border border-red-300 text-red-600 text-3xl">
+                                <i class="fa fa-trash"></i>
+                                <span class="m-2 font-bold">Delete</span>
+                            </InertiaLink>
                         </div>
                     </div>
                 </template>

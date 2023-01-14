@@ -12,6 +12,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use ProtoneMedia\LaravelQueryBuilderInertiaJs\InertiaTable;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class ProductController extends Controller
@@ -60,10 +63,7 @@ class ProductController extends Controller
         DB::beginTransaction();
         $product = new Product;
         $this->fill_n_save($request, $product);
-        //if request has file store it
-        if ($request->hasFile('images')) {
-            $product->addMediaFromRequest('images')->toMediaCollection('product_images');
-        }
+
         DB::commit();
         return to_route('products.index')
             ->with('success', 'Product created successfully');
@@ -121,18 +121,32 @@ class ProductController extends Controller
     }
 
     /**
-     * @param StoreProductRequest $request
-     * @param Product $product
-     * @return void
+     * @throws FileIsTooBig
+     * @throws FileDoesNotExist
      */
     public function fill_n_save(Request $request, Product $product): void
     {
         $product->fill($request->validated());
         $product->category()->associate(Category::whereName($request->category)->first());
-        $product->brand()->associate(Brand::whereName($request->brand)->first());
+        $product->brand()->associate(Brand::whereName($request->input('brand'))->first());
         $product->save();
         //extract tags from request
-        $tags = explode(',', $request->tags);
+        if (is_string($request->tags)){
+            $tags = explode(',', $request->tags);
+        }else{
+            $tags = $request->tags;
+        }
+
         $product->syncTags($tags);
+        if ($request->hasFile('images')) {
+            $product->addMediaFromRequest('images')->toMediaCollection('product_images');
+        }
+    }
+
+    public function deleteMedia(Product $product, Media $media)
+    {
+        $product->deleteMedia($media);
+        return back()
+            ->with('success', 'Product image deleted successfully');
     }
 }

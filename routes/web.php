@@ -37,6 +37,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('products', \App\Http\Controllers\ProductController::class);
     Route::post('products/get_slug', [\App\Http\Controllers\ProductController::class, 'get_slug'])
         ->name('products.get_slug');
+    Route::delete('products/{product}/{media}', [\App\Http\Controllers\ProductController::class, 'deleteMedia'])->name('products.deleteMedia');
+
     Route::resource('categories', \App\Http\Controllers\CategoryController::class)
     ->except('show');
     Route::post('categories/get_names', [\App\Http\Controllers\CategoryController::class, 'get_names'])

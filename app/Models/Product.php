@@ -14,7 +14,7 @@ class Product extends Model implements HasMedia
 {
     use HasFactory, HasSlug, HasTags, InteractsWithMedia;
 
-    protected $with = ['brand', 'category'];
+    protected $with = ['brand', 'category', 'media'];
 
     protected $fillable = [
         'name',

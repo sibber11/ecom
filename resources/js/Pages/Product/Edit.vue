@@ -1,10 +1,9 @@
 <script setup>
+
 import Fields from "@/Pages/Product/Partials/Fields.vue";
 import CreateEdit from "@/components/CreateEdit.vue";
 
-    defineProps
-
-({
+defineProps({
     product: Object,
 });
 </script>
