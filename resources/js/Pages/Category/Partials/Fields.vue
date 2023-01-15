@@ -8,7 +8,7 @@ import TextInput from '@/Components/TextInput.vue';
 import {InertiaLink, useForm} from '@inertiajs/inertia-vue3';
 import SelectModels from '@/components/SelectModels.vue';
 import SlugInput from '@/components/SlugInput.vue';
-
+import PreviewImage from "@/components/PreviewImage.vue"
 
 const props = defineProps({
     method: {
@@ -22,7 +22,8 @@ const props = defineProps({
 const form = useForm({
     name: '',
     parent_name: '',
-    slug: ''
+    slug: '',
+    images: null,
 });
 onMounted(()=>{
     if (!props.category){
@@ -35,7 +36,7 @@ onMounted(()=>{
 })
 
 const slug_input = ref(null);
-
+const imageViewer = ref(null)
 </script>
 
 <template>
@@ -81,6 +82,13 @@ const slug_input = ref(null);
 
                 <InputError class="mt-2" :message="form.errors.parent_name"/>
 
+            </div>
+            <div>
+                <InputLabel for="images" value="Images"/>
+
+                <input type="file" id="images" @change="form.images = $event.target.files; imageViewer.preview($event)">
+
+                <PreviewImage :model="category" url-name="categories.deleteMedia" ref="imageViewer"/>
             </div>
 
             <div class="flex items-center gap-4">

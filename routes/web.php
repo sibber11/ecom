@@ -45,6 +45,8 @@ Route::middleware('auth')->group(function () {
         ->name('categories.get_names');
     Route::post('categories/get_slug', [\App\Http\Controllers\CategoryController::class, 'get_slug'])
         ->name('categories.get_slug');
+    Route::delete('categories/{category}/{media}', [\App\Http\Controllers\CategoryController::class, 'deleteMedia'])
+        ->name('categories.deleteMedia');
 
     Route::resource('brands', \App\Http\Controllers\BrandController::class);
     Route::post('brands/get_names', [\App\Http\Controllers\BrandController::class, 'get_names'])

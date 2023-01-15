@@ -32,6 +32,9 @@ defineProps({
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
 <!--                <Model v-for="category in categories.data" :category="category" :key="category.id"/>-->
                 <Table :resource="categories" :striped="true">
+                    <template #cell(image)="{ item: category }">
+                        <img :src="category.media[0]?.original_url" alt="category image" class="w-28">
+                    </template>
                     <template #cell(actions)="{ item: category }">
                         <EditButton :url="route('categories.edit', category)"/>
                         <DeleteButton :url="route('categories.destroy', category)" />

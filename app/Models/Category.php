@@ -5,12 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Kalnoy\Nestedset\NodeTrait;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
-class Category extends Model
+class Category extends Model implements HasMedia
 {
-    use HasFactory, NodeTrait, HasSlug;
+    use HasFactory, NodeTrait, HasSlug, InteractsWithMedia;
 
     public $timestamps = false;
     protected $fillable = [
@@ -19,6 +21,8 @@ class Category extends Model
     protected $appends = [
         'parent_name'
     ];
+
+    protected $with = ['media'];
 
     public function products()
     {
