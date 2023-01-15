@@ -3,7 +3,10 @@ export function submitForm(_method, _form, _url){
         _form.post(_url)
     }
     if (_method === 'patch'){
-        _form._method = 'patch'
+        _form.transform(({ ...data }) => ({
+            _method: 'patch',
+            ...data,
+        }))
         _form.post(_url)
     }
 }
