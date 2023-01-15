@@ -139,7 +139,10 @@ class ProductController extends Controller
 
         $product->syncTags($tags);
         if ($request->hasFile('images')) {
-            $product->addMediaFromRequest('images')->toMediaCollection('product_images');
+            $product->addMultipleMediaFromRequest(['images'])
+                ->each(function ($fileAdder) {
+                    $fileAdder->toMediaCollection('product_images');
+                });
         }
     }
 
