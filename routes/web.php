@@ -18,12 +18,10 @@ use Inertia\Inertia;
 
 Route::get('/', function () {
     return Inertia::render('Index', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
+        'newArrival' => \App\Models\Product::latest()->limit(4)->get(),
+        'recommended' => \App\Models\Product::inRandomOrder()->limit(8)->get(),
     ]);
-});
+})->name('home');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
@@ -57,4 +55,11 @@ Route::middleware('auth')->group(function () {
     Route::resource('users', \App\Http\Controllers\UserController::class);
 });
 
+Route::post('cart/{product}', [\App\Http\Controllers\CartController::class, 'store'])->name('cart.store');
+Route::post('wishlist/{product}', [\App\Http\Controllers\WishlistController::class, 'store'])->name('wishlist.store');
+Route::get('products/{product}', function (\App\Models\Product $product){
+    return Inertia::render('Customer/Product', [
+        'product' => $product,
+    ]);
+})->name('products.show');
 require __DIR__.'/auth.php';

@@ -11,9 +11,18 @@ module.exports = {
     ],
 
     theme: {
+        container: {
+            center: true,
+            padding: "1rem",
+        },
         extend: {
             fontFamily: {
                 sans: ['Nunito', ...defaultTheme.fontFamily.sans],
+                poppins: ["Poppins", "sans-serif"],
+                roboto: ["Roboto", "sans-serif"],
+            },
+            colors: {
+                primary: "#fd3d57",
             },
         },
     },
