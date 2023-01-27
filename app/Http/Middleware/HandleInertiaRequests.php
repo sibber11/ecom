@@ -2,6 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Category;
+use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Inertia\Middleware;
@@ -45,7 +47,10 @@ class HandleInertiaRequests extends Middleware
                 ]);
             },
             'flash' => session()->all(),
-            'env' => App::environment()
+            'env' => App::environment(),
+            'cart' => Cart::instance('cart')->count(),
+            'wishlist' => Cart::instance('wishlist')->countItems(),
+            'categories' => Category::where('parent_id', null)->limit(6)->get(),
         ]);
     }
 }

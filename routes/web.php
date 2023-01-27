@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -38,7 +37,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('products/{product}/{media}', [\App\Http\Controllers\ProductController::class, 'deleteMedia'])->name('products.deleteMedia');
 
     Route::resource('categories', \App\Http\Controllers\CategoryController::class)
-    ->except('show');
+        ->except('show');
     Route::post('categories/get_names', [\App\Http\Controllers\CategoryController::class, 'get_names'])
         ->name('categories.get_names');
     Route::post('categories/get_slug', [\App\Http\Controllers\CategoryController::class, 'get_slug'])
@@ -57,9 +56,11 @@ Route::middleware('auth')->group(function () {
 
 Route::post('cart/{product}', [\App\Http\Controllers\CartController::class, 'store'])->name('cart.store');
 Route::post('wishlist/{product}', [\App\Http\Controllers\WishlistController::class, 'store'])->name('wishlist.store');
-Route::get('products/{product}', function (\App\Models\Product $product){
+Route::delete('wishlist/{rowId}', [\App\Http\Controllers\WishlistController::class, 'destroy'])->name('wishlist.delete');
+
+Route::get('products/{product}', function (\App\Models\Product $product) {
     return Inertia::render('Customer/Product', [
         'product' => $product,
     ]);
 })->name('products.show');
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

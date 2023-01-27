@@ -55,7 +55,7 @@ class Product extends Model implements HasMedia, Buyable
      */
     public function getBuyableIdentifier($options = null)
     {
-        return $this->sku;
+        return $this->slug;
     }
 
     /**

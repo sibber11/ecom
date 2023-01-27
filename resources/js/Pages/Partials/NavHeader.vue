@@ -22,7 +22,7 @@ import {InertiaLink} from "@inertiajs/inertia-vue3";
             </div>
 
             <div class="flex items-center space-x-4">
-                <a href="#" class="text-center text-gray-700 hover:text-primary transition relative">
+                <InertiaLink :href="route('wishlist')" class="text-center text-gray-700 hover:text-primary transition relative">
                     <div class="text-2xl">
                         <i class="fa fa-heart"></i>
                     </div>
@@ -31,8 +31,8 @@ import {InertiaLink} from "@inertiajs/inertia-vue3";
                         class="absolute right-0 -top-1 w-5 h-5 rounded-full flex items-center justify-center bg-primary text-white text-xs">
                         {{ $page.props.wishlist }}
                     </div>
-                </a>
-                <a href="#" class="text-center text-gray-700 hover:text-primary transition relative">
+                </InertiaLink>
+                <InertiaLink :href="route('cart')" class="text-center text-gray-700 hover:text-primary transition relative">
                     <div class="text-2xl">
                         <i class="fa fa-shopping-cart"></i>
                     </div>
@@ -41,7 +41,7 @@ import {InertiaLink} from "@inertiajs/inertia-vue3";
                         class="absolute -right-3 -top-1 w-5 h-5 rounded-full flex items-center justify-center bg-primary text-white text-xs">
                         {{ $page.props.cart }}
                     </div>
-                </a>
+                </InertiaLink>
                 <InertiaLink :href="route('profile.edit')" class="text-center text-gray-700 hover:text-primary transition relative" v-if="$page.props.auth.user">
                         <div class="text-2xl">
                             <i class="fa fa-user"></i>
