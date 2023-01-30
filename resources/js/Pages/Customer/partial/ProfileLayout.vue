@@ -1,6 +1,6 @@
 <script setup>
 import CustomerLayout from "@/Layouts/CustomerLayout.vue"
-</script>
+import ProfileSideLinks from "@/Pages/Customer/partial/ProfileSideLinks.vue";</script>
 
 <template>
     <CustomerLayout>
@@ -22,18 +22,11 @@ import CustomerLayout from "@/Layouts/CustomerLayout.vue"
 
                 <div class="mt-6 bg-white shadow rounded p-4 divide-y divide-gray-200 space-y-4 text-gray-600">
                     <div class="space-y-1 pl-8">
-                        <a href="#" class="relative text-primary block font-medium capitalize transition">
-                        <span class="absolute -left-8 top-0 text-base">
+                        <ProfileSideLinks url="account" label="Manage account">
                             <i class="fa-regular fa-address-card"></i>
-                        </span>
-                            Manage account
-                        </a>
-                        <a href="#" class="relative hover:text-primary block capitalize transition">
-                            Profile information
-                        </a>
-                        <a href="#" class="relative hover:text-primary block capitalize transition">
-                            Manage addresses
-                        </a>
+                        </ProfileSideLinks>
+                        <ProfileSideLinks url="profile" label="Profile information"/>
+                        <ProfileSideLinks url="address" label="Manage addresses"/>
                         <a href="#" class="relative hover:text-primary block capitalize transition">
                             Change password
                         </a>
@@ -70,12 +63,9 @@ import CustomerLayout from "@/Layouts/CustomerLayout.vue"
                     </div>
 
                     <div class="space-y-1 pl-8 pt-4">
-                        <a href="#" class="relative hover:text-primary block font-medium capitalize transition">
-                        <span class="absolute -left-8 top-0 text-base">
+                        <ProfileSideLinks url="wishlist" label="My wishlist">
                             <i class="fa-regular fa-heart"></i>
-                        </span>
-                            My wishlist
-                        </a>
+                        </ProfileSideLinks>
                     </div>
 
                     <div class="space-y-1 pl-8 pt-4">
