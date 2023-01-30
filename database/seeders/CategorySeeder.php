@@ -72,6 +72,7 @@ class CategorySeeder extends Seeder
      * Run the database seeds.
      *
      * @return void
+     * @throws \Exception
      */
     public function run()
     {
@@ -79,6 +80,9 @@ class CategorySeeder extends Seeder
             $parent = Category::create([
                 'name' => $category
             ]);
+            $image_names = glob('storage/temp/category/*.jpg');
+            $random = random_int(0, count($image_names) - 1);
+            $parent->addMedia($image_names[$random])->preservingOriginal()->toMediaCollection('category_images');
 
             foreach ($subcategories as $subcategory) {
                 Category::create([

@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use App\Models\Product;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -16,6 +15,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        $this->emptyPublicDirectory();
         DB::beginTransaction();
         $this->call([
             CategorySeeder::class,
@@ -25,10 +25,28 @@ class DatabaseSeeder extends Seeder
 
         // \App\Models\User::factory(10)->create();
 
-         \App\Models\User::factory()->create([
-             'name' => 'Test User',
-             'email' => 'test@example.com',
-         ]);
-         DB::commit();
+        \App\Models\User::factory()->create([
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+        ]);
+        DB::commit();
+    }
+
+    /**
+     * Delete all folders in the app/public directory
+     * @return void
+     */
+    public function emptyPublicDirectory(): void
+    {
+        $folders = glob('storage/app/public/*');
+        foreach ($folders as $folder) {
+            foreach (scandir($folder) as $item) {
+                if ($item == '.' || $item == '..')
+                    continue;
+                if (!is_dir($item))
+                    unlink($folder . DIRECTORY_SEPARATOR . $item);
+            }
+            rmdir($folder);
+        }
     }
 }

@@ -41,14 +41,9 @@ class ProductFactory extends Factory
             if ($product->tags()->count() === 0) {
                 $product->attachTags(fake()->words(3));
             }
-        });
-    }
-
-    // a function to create a product with photos
-    public function withPhotos()
-    {
-        return $this->afterCreating(function (\App\Models\Product $product) {
-            $product->addMediaFromUrl('https://picsum.photos/seed/' . fake()->numberBetween(1, 1000) . '/640/480')->toMediaCollection('images');
+            $image_names = glob('storage/temp/product/*.jpg');
+            $random = random_int(0, count($image_names) - 1);
+            $product->addMedia($image_names[$random])->preservingOriginal()->toMediaCollection('product_images');
         });
     }
 

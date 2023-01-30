@@ -25,7 +25,11 @@ class CategoryFactory extends Factory
     //after creating the model associate to a random parent
     public function configure()
     {
-        return $this->afterMaking(function ($category){
+        return $this->afterCreating(function (Category $category){
+            $image_names = glob('storage/temp/*.jpg');
+            $random = random_int(0, count($image_names) - 1);
+            $category->addMedia($image_names[$random])->preservingOriginal()->toMediaCollection('category_images');
+        })->afterMaking(function (Category $category){
             $category->parent_id = Category::inRandomOrder()->first()->id ?? null;
         });
     }
