@@ -134,8 +134,8 @@ class CategoryController extends Controller
     public function fill_n_save(Category $category, Request $request): void
     {
         $category->fill($request->validated());
-        if ($request->input('parent') != '') {
-            $parent = Category::whereName($request->input('parent'))->first();
+        if ($request->input('parent_name') != '') {
+            $parent = Category::whereName($request->input('parent_name'))->first();
             $category->appendToNode($parent);
         }
         $category->save();
