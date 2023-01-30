@@ -42,11 +42,13 @@ import {InertiaLink} from "@inertiajs/inertia-vue3";
                         {{ $page.props.cart }}
                     </div>
                 </InertiaLink>
-                <InertiaLink :href="route('profile.edit')" class="text-center text-gray-700 hover:text-primary transition relative" v-if="$page.props.auth.user">
+                <InertiaLink :href="route('profile')" class="text-center text-gray-700 hover:text-primary transition relative" v-if="$page.props.auth.user">
                         <div class="text-2xl">
                             <i class="fa fa-user"></i>
                         </div>
-                        <div class="text-xs leading-3">Account</div>
+                        <div class="text-xs leading-3">
+                            Account
+                        </div>
                 </InertiaLink>
 
             </div>
