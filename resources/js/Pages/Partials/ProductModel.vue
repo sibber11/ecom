@@ -28,7 +28,7 @@ const form = useForm({
         </div>
         <div class="pt-4 pb-3 px-4">
             <InertiaLink :href="route('products.show', product)">
-                <h4 class="uppercase font-medium text-xl mb-2 text-gray-800 hover:text-primary transition">
+                <h4 class="capitalize font-medium text-xl mb-2 text-gray-800 hover:text-primary transition overflow-ellipsis">
                     {{product.name}}
                 </h4>
             </InertiaLink>
