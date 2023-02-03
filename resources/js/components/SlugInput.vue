@@ -1,7 +1,7 @@
 <script setup>
 
 import debounce from "lodash/debounce";
-import TextInput from '@/Components/TextInput.vue';
+import TextInput from '@/components/TextInput.vue';
 
 const props = defineProps({
     url: String,

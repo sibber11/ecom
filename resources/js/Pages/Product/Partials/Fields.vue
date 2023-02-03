@@ -2,10 +2,10 @@
 import {useForm} from '@inertiajs/inertia-vue3';
 import {onMounted, ref, watch} from "vue";
 import {submitForm} from "@/helper";
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
+import InputError from '@/components/InputError.vue';
+import InputLabel from '@/components/InputLabel.vue';
+import PrimaryButton from '@/components/PrimaryButton.vue';
+import TextInput from '@/components/TextInput.vue';
 import TextArea from "@/components/TextArea.vue";
 import SelectModels from '@/components/SelectModels.vue'
 import SlugInput from '@/components/SlugInput.vue'

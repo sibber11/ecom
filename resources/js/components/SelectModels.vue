@@ -2,7 +2,7 @@
 
 import {onMounted, ref} from "vue";
 import debounce from "lodash/debounce";
-import TextInput from "@/Components/TextInput.vue";
+import TextInput from "@/components/TextInput.vue";
 
 const props = defineProps(['modelValue', 'url', 'modelName']);
 
