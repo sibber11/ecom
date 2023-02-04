@@ -18,7 +18,7 @@ use Inertia\Inertia;
 Route::get('/', function () {
     return Inertia::render('Index', [
         'newArrival' => \App\Models\Product::latest()->limit(4)->get(),
-        'recommended' => \App\Models\Product::inRandomOrder()->limit(8)->get(),
+        'recommended' => \App\Models\Product::limit(8)->get(),
     ]);
 })->name('home');
 
@@ -54,13 +54,62 @@ Route::middleware('auth')->group(function () {
     Route::resource('users', \App\Http\Controllers\UserController::class);
 });
 
-Route::post('cart/{product}', [\App\Http\Controllers\CartController::class, 'store'])->name('cart.store');
-Route::post('wishlist/{product}', [\App\Http\Controllers\WishlistController::class, 'store'])->name('wishlist.store');
-Route::delete('wishlist/{rowId}', [\App\Http\Controllers\WishlistController::class, 'destroy'])->name('wishlist.delete');
+/**
+ * Cart routes
+ */
+Route::post('cart/{product}', [\App\Http\Controllers\CartController::class, 'store'])
+    ->name('cart.store');
+Route::delete('cart/{rowId}', [\App\Http\Controllers\CartController::class, 'destroy'])
+    ->name('cart.delete');
+Route::get('cart', function () {
+    return Inertia::render('Customer/Cart', [
+        'products' => \App\Http\Resources\CartItemResource::collection(Cart::instance('cart')->content()),
+    ]);
+})->name('cart');
 
 Route::get('products/{product}', function (\App\Models\Product $product) {
     return Inertia::render('Customer/Product', [
         'product' => $product,
     ]);
 })->name('products.show');
+
+Route::middleware('auth')->group(function () {
+    /**
+     * wishlist routes
+     */
+    Route::get('wishlist', function () {
+        return Inertia::render('Customer/Wishlist', [
+            'products' => \App\Http\Resources\CartItemResource::collection(Cart::instance('wishlist')->content()),
+        ]);
+    })->name('wishlist');
+    Route::post('wishlist/{product}', [\App\Http\Controllers\WishlistController::class, 'store'])->name('wishlist.store');
+    Route::delete('wishlist/{rowId}', [\App\Http\Controllers\WishlistController::class, 'destroy'])->name('wishlist.delete');
+
+    /**
+     * profile routes
+     */
+    Route::get('account', function () {
+        return Inertia::render('Customer/Profile');
+    })->name('account');
+    Route::get('address', function () {
+        return Inertia::render('Customer/Address');
+    })->name('address');
+
+    Route::get('profile/edit', function () {
+        return Inertia::render('Customer/Profile');
+    })->name('profile');
+});
+
+Route::get('login', function () {
+    return Inertia::render('Customer/Login');
+})->name('login');
+
+Route::get('register', function () {
+    return Inertia::render('Customer/Register');
+})->name('register');
+
+Route::get('icons', function () {
+    return Inertia::render('Icons');
+});
+
 require __DIR__ . '/auth.php';
