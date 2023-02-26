@@ -45,9 +45,19 @@ const props = defineProps(['products']);
                 </div>
             </template>
 
-            <button class="p-2 bg-primary rounded-md px-4 text-white float-right">
+            <button class="p-2 bg-primary rounded-md px-4 text-white float-right" v-show="products.data.length">
                 Order
             </button>
+            <article v-if="products.data.length === 0">
+                Head to
+                <InertiaLink :href="route('home')" preserve-scroll as="button"
+                             class="text-primary cursor-pointer hover:text-primary"
+                >
+                    Home
+                </InertiaLink>
+                page and add some products to your cart.
+
+            </article>
         </div>
     </ProfileLayout>
 </template>

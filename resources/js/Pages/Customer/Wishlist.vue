@@ -30,6 +30,16 @@ defineProps(['products'])
                     </InertiaLink>
                 </div>
             </template>
+            <article v-if="products.data.length === 0">
+                Head to
+                <InertiaLink :href="route('home')" preserve-scroll as="button"
+                             class="text-primary cursor-pointer hover:text-primary"
+                >
+                    Home
+                </InertiaLink>
+                page and add some products to your cart.
+
+            </article>
         </div>
     </ProfileLayout>
 </template>
