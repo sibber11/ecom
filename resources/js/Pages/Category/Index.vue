@@ -33,7 +33,7 @@ defineProps({
 <!--                <Model v-for="category in categories.data" :category="category" :key="category.id"/>-->
                 <Table :resource="categories" :striped="true">
                     <template #cell(image)="{ item: category }">
-                        <img :src="category.media[0]?.original_url" alt="category image" class="w-28">
+                        <img :src="category.media[0]?.original_url" v-show="category.media[0]" alt="category image" class="w-28">
                     </template>
                     <template #cell(actions)="{ item: category }">
                         <EditButton :url="route('categories.edit', category)"/>
