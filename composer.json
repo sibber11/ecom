@@ -10,6 +10,7 @@
     "require": {
         "php": ">=8.0.2",
         "barryvdh/laravel-dompdf": "^2.0",
+        "bumbummen99/shoppingcart": "^4.2.0",
         "doctrine/dbal": "^3.5",
         "guzzlehttp/guzzle": "^7.2",
         "inertiajs/inertia-laravel": "^0.6.3",
@@ -19,6 +20,7 @@
         "laravel/sanctum": "^2.8",
         "protonemedia/inertiajs-tables-laravel-query-builder": "^2.0",
         "spatie/laravel-medialibrary": "10.7.6",
+        "spatie/laravel-query-builder": "^5.2",
         "spatie/laravel-sluggable": "^3.4",
         "spatie/laravel-tags": "4.3.5",
         "tightenco/ziggy": "^1.0"

@@ -86,18 +86,26 @@ Route::middleware('auth')->group(function () {
     Route::delete('wishlist/{rowId}', [\App\Http\Controllers\WishlistController::class, 'destroy'])->name('wishlist.delete');
 
     /**
+     * checkout routes
+     */
+
+    Route::post('checkout', [\App\Http\Controllers\CheckoutController::class, 'store'])->name('checkout.store');
+    Route::get('checkout', [\App\Http\Controllers\CheckoutController::class, 'show'])->name('checkout.show');
+
+
+    Route::get('orders', [\App\Http\Controllers\OrderController::class, 'index'])->name('orders.index');
+    Route::get('orders/{order}', [\App\Http\Controllers\OrderController::class, 'show'])->name('orders.show');
+    Route::delete('orders/{order}', [\App\Http\Controllers\OrderController::class, 'destroy'])->name('orders.destroy');
+
+    /**
      * profile routes
      */
-    Route::get('account', function () {
-        return Inertia::render('Customer/Profile');
-    })->name('account');
-    Route::get('address', function () {
-        return Inertia::render('Customer/Address');
-    })->name('address');
-
-    Route::get('profile/edit', function () {
+    Route::get('profile', function () {
         return Inertia::render('Customer/Profile');
     })->name('profile');
+    Route::post('profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+    Route::get('address', [ProfileController::class, 'editAddress'])->name('address');
+    Route::post('address', [\App\Http\Controllers\ProfileController::class, 'updateAddress'])->name('address.store');
 });
 
 Route::get('login', function () {

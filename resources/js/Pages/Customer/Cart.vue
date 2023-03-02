@@ -45,19 +45,19 @@ const props = defineProps(['products']);
                 </div>
             </template>
 
-            <button class="p-2 bg-primary rounded-md px-4 text-white float-right" v-show="products.data.length">
-                Order
-            </button>
             <article v-if="products.data.length === 0">
-                Head to
-                <InertiaLink :href="route('home')" preserve-scroll as="button"
-                             class="text-primary cursor-pointer hover:text-primary"
-                >
-                    Home
-                </InertiaLink>
-                page and add some products to your cart.
+                <div class="flex flex-col items-center justify-center space-y-4">
+                    <i class="fa-solid fa-shopping-cart text-5xl text-gray-300"></i>
+                    <h2 class="text-gray-600 text-xl font-medium">No products in Cart</h2>
+                    <p class="text-gray-500 text-sm text-center">You have no items in your Cart. To add items to
+                        your
+                        cart click on the <button class="px-2">Add to cart</button> on the product page.</p>
+                </div>
 
             </article>
+            <InertiaLink :href="route('checkout.show')" class="p-2 bg-primary rounded-md px-4 text-white float-right" v-else>
+                Checkout
+            </InertiaLink>
         </div>
     </ProfileLayout>
 </template>

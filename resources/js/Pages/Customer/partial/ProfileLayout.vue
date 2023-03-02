@@ -22,10 +22,10 @@ import ProfileSideLinks from "@/Pages/Customer/partial/ProfileSideLinks.vue";</s
 
                 <div class="mt-6 bg-white shadow rounded p-4 divide-y divide-gray-200 space-y-4 text-gray-600">
                     <div class="space-y-1 pl-8">
-                        <ProfileSideLinks url="account" label="Manage account">
+                        <ProfileSideLinks url="profile" label="Manage account">
                             <i class="fa-regular fa-address-card"></i>
                         </ProfileSideLinks>
-                        <ProfileSideLinks url="profile" label="Profile information"/>
+<!--                        <ProfileSideLinks url="profile" label="Profile information"/>-->
                         <ProfileSideLinks url="address" label="Manage addresses"/>
                         <a href="#" class="relative hover:text-primary block capitalize transition">
                             Change password
@@ -33,12 +33,9 @@ import ProfileSideLinks from "@/Pages/Customer/partial/ProfileSideLinks.vue";</s
                     </div>
 
                     <div class="space-y-1 pl-8 pt-4">
-                        <a href="#" class="relative hover:text-primary block font-medium capitalize transition">
-                        <span class="absolute -left-8 top-0 text-base">
+                        <ProfileSideLinks url="orders.index" label="My Order History">
                             <i class="fa-solid fa-box-archive"></i>
-                        </span>
-                            My order history
-                        </a>
+                        </ProfileSideLinks>
                         <a href="#" class="relative hover:text-primary block capitalize transition">
                             My returns
                         </a>
