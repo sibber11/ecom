@@ -26,7 +26,7 @@ class CategoryFactory extends Factory
     public function configure()
     {
         return $this->afterCreating(function (Category $category){
-            $image_names = glob('storage/temp/*.jpg');
+            $image_names = glob('storage/temp/category/*.jpg');
             $random = random_int(0, count($image_names) - 1);
             $category->addMedia($image_names[$random])->preservingOriginal()->toMediaCollection('category_images');
         })->afterMaking(function (Category $category){
