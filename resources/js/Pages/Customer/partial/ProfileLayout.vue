@@ -27,9 +27,7 @@ import ProfileSideLinks from "@/Pages/Customer/partial/ProfileSideLinks.vue";</s
                         </ProfileSideLinks>
 <!--                        <ProfileSideLinks url="profile" label="Profile information"/>-->
                         <ProfileSideLinks url="address" label="Manage addresses"/>
-                        <a href="#" class="relative hover:text-primary block capitalize transition">
-                            Change password
-                        </a>
+                        <ProfileSideLinks url="password" label="Change Password"/>
                     </div>
 
                     <div class="space-y-1 pl-8 pt-4">
@@ -42,9 +40,7 @@ import ProfileSideLinks from "@/Pages/Customer/partial/ProfileSideLinks.vue";</s
                         <a href="#" class="relative hover:text-primary block capitalize transition">
                             My Cancellations
                         </a>
-                        <a href="#" class="relative hover:text-primary block capitalize transition">
-                            My reviews
-                        </a>
+                        <ProfileSideLinks url="reviews.index" label="My reviews"/>
                     </div>
 
                     <div class="space-y-1 pl-8 pt-4">

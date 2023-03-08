@@ -15,6 +15,6 @@ class ProductSeeder extends Seeder
      */
     public function run()
     {
-        Product::factory(10)->hasReviews(10)->create();
+        Product::factory(10)->hasReviews(fake()->numberBetween(0,10))->create();
     }
 }

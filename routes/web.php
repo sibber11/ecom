@@ -102,6 +102,8 @@ Route::middleware('auth')->group(function () {
     Route::post('profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
     Route::get('address', [ProfileController::class, 'editAddress'])->name('address');
     Route::post('address', [\App\Http\Controllers\ProfileController::class, 'updateAddress'])->name('address.store');
+    Route::get('password', [ProfileController::class, 'editPassword'])->name('password');
+    Route::get('reviews', [\App\Http\Controllers\ProfileController::class, 'showReviews'])->name('reviews.index');
 
     Route::resource('review', \App\Http\Controllers\ReviewController::class)->only('store');
 });

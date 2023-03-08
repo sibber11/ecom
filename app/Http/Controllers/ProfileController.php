@@ -80,4 +80,19 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
+
+    public function showReviews()
+    {
+        $reviews = Auth::user()->reviews()->with(['product:id,name'=>[
+            'media'
+        ]])->paginate(10);
+        return Inertia::render('Customer/Reviews',[
+            'reviews' => $reviews,
+        ]);
+    }
+
+    public function editPassword()
+    {
+        return Inertia::render('Customer/Password');
+    }
 }

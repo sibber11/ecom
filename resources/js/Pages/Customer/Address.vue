@@ -70,9 +70,6 @@ const form = useForm({
                         <p v-if="form.recentlySuccessful" class="text-sm text-gray-600">Information Saved.</p>
                     </Transition>
                 </div>
-                <div>
-                    {{address}}
-                </div>
             </form>
         </section>
     </ProfileLayout>
