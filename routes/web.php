@@ -67,11 +67,7 @@ Route::get('cart', function () {
     ]);
 })->name('cart');
 
-Route::get('products/{product}', function (\App\Models\Product $product) {
-    return Inertia::render('Customer/Product', [
-        'product' => $product,
-    ]);
-})->name('products.show');
+Route::get('products/{product}', [\App\Http\Controllers\Customer\ProductController::class, 'show'])->name('products.show');
 
 Route::middleware('auth')->group(function () {
     /**
@@ -106,6 +102,8 @@ Route::middleware('auth')->group(function () {
     Route::post('profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
     Route::get('address', [ProfileController::class, 'editAddress'])->name('address');
     Route::post('address', [\App\Http\Controllers\ProfileController::class, 'updateAddress'])->name('address.store');
+
+    Route::resource('review', \App\Http\Controllers\ReviewController::class)->only('store');
 });
 
 Route::get('login', function () {

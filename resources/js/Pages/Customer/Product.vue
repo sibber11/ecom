@@ -1,6 +1,7 @@
 <script setup>
 import {InertiaLink, useForm} from "@inertiajs/inertia-vue3";
 import CustomerLayout from "@/Layouts/CustomerLayout.vue"
+import Review from "@/Pages/Product/Partials/Review.vue";
 
 defineProps({
     product: Object
@@ -23,7 +24,7 @@ const form = useForm({
             <span class="text-sm text-gray-400">
             <i class="fa-solid fa-chevron-right"></i>
         </span>
-            <p class="text-gray-600 font-medium">Category</p>
+            <p class="text-gray-600 font-medium">{{product.category.name}}</p>
         </div>
         <!-- ./breadcrumb -->
 
@@ -200,6 +201,7 @@ const form = useForm({
         </div>
         <!-- ./description -->
 
+        <Review :reviews="product.latest_reviews" :product="product"></Review>
         <!-- related product -->
         <!--    <div class="container pb-16">
                 <h2 class="text-2xl font-medium text-gray-800 uppercase mb-6">Related products</h2>

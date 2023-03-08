@@ -25,4 +25,14 @@ class Order extends Model
         'status' => 'pending',
         'shipping' => 0.00,
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function review()
+    {
+        return $this->hasOne(Review::class);
+    }
 }

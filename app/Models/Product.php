@@ -28,6 +28,11 @@ class Product extends Model implements HasMedia, Buyable
         'brand_id',
     ];
 
+    protected $appends = [
+        'avg_rating',
+        'ratings',
+        'rating_count',
+    ];
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
@@ -86,5 +91,32 @@ class Product extends Model implements HasMedia, Buyable
     public function getBuyableWeight($options = null)
     {
         return 0;
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
+
+    public function getRatingsAttribute()
+    {
+        return $this->reviews()->selectRaw('rating, count(*) as rating_count')->groupBy('rating')->get()->pluck('rating_count', 'rating')->toArray();
+    }
+    public function getAvgRatingAttribute()
+    {
+        //return avg rating upto 1 decimal place
+        return round($this->reviews->avg('rating'), 1);
+
+    }
+
+    public function getRatingCountAttribute()
+    {
+        return $this->reviews->count();
+    }
+
+    public function latestReviews()
+    {
+        return $this->reviews()->whereNotNull('body')->latest()->take(3);
     }
 }
