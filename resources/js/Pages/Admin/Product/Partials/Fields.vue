@@ -92,7 +92,7 @@ const imageViewer = ref(null);
             <div>
                 <InputLabel for="slug" value="Slug"/>
 
-                <SlugInput class="mt-1 block w-full" :url="route('products.get_slug')" v-model="form.slug"
+                <SlugInput class="mt-1 block w-full" :url="route('admin.products.get_slug')" v-model="form.slug"
                            ref="slug_input"/>
 
                 <InputError class="mt-2" :message="form.errors.slug"/>
@@ -195,7 +195,7 @@ const imageViewer = ref(null);
 
                 <InputError class="mt-2" :message="form.errors.images"/>
 
-                <PreviewImage ref="imageViewer" :model="product" url-name="products.deleteMedia"/>
+                <PreviewImage ref="imageViewer" :model="product" url-name="admin.products.deleteMedia"/>
 
             </div>
 
