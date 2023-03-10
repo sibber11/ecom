@@ -20,6 +20,7 @@ class Order extends Model
     ];
     protected $casts = [
         'products' => 'array',
+        'created_at' => 'datetime:Y-m-d',
     ];
     protected $attributes = [
         'status' => 'pending',

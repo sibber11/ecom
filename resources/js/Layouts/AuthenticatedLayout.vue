@@ -20,7 +20,7 @@ const showingNavigationDropdown = ref(false);
                         <div class="flex">
                             <!-- Logo -->
                             <div class="shrink-0 flex items-center">
-                                <Link :href="route('dashboard')">
+                                <Link :href="route('admin.dashboard')">
                                     <ApplicationLogo
                                         class="block h-9 w-auto fill-current text-gray-800"
                                     />
@@ -29,20 +29,23 @@ const showingNavigationDropdown = ref(false);
 
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                                <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
+                                <NavLink :href="route('admin.dashboard')" :active="route().current('admin.dashboard')">
                                     Dashboard
                                 </NavLink>
-                                <NavLink :href="route('products.index')" :active="route().current('products.index')">
+                                <NavLink :href="route('admin.products.index')" :active="route().current('admin.products.index')">
                                     Products
                                 </NavLink>
-                                <NavLink :href="route('categories.index')" :active="route().current('categories.index')">
+                                <NavLink :href="route('admin.categories.index')" :active="route().current('admin.categories.index')">
                                     Categories
                                 </NavLink>
-                                <NavLink :href="route('brands.index')" :active="route().current('brands.index')">
+                                <NavLink :href="route('admin.brands.index')" :active="route().current('admin.brands.index')">
                                     Brands
                                 </NavLink>
-                                <NavLink :href="route('users.index')" :active="route().current('users.index')">
+                                <NavLink :href="route('admin.users.index')" :active="route().current('admin.users.index')">
                                     Users
+                                </NavLink>
+                                <NavLink :href="route('admin.orders.index')" :active="route().current('admin.orders.index')">
+                                    Orders
                                 </NavLink>
                             </div>
                         </div>
@@ -76,8 +79,8 @@ const showingNavigationDropdown = ref(false);
                                     </template>
 
                                     <template #content>
-                                        <DropdownLink :href="route('profile')"> Profile </DropdownLink>
-                                        <DropdownLink :href="route('logout')" method="post" as="button">
+                                        <DropdownLink :href="route('admin.profile')"> Profile </DropdownLink>
+                                        <DropdownLink :href="route('admin.logout')" method="post" as="button">
                                             Log Out
                                         </DropdownLink>
                                     </template>
@@ -124,7 +127,7 @@ const showingNavigationDropdown = ref(false);
                     class="sm:hidden"
                 >
                     <div class="pt-2 pb-3 space-y-1">
-                        <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
+                        <ResponsiveNavLink :href="route('admin.dashboard')" :active="route().current('admin.dashboard')">
                             Dashboard
                         </ResponsiveNavLink>
                     </div>
@@ -139,8 +142,8 @@ const showingNavigationDropdown = ref(false);
                         </div>
 
                         <div class="mt-3 space-y-1">
-                            <ResponsiveNavLink :href="route('profile')"> Profile </ResponsiveNavLink>
-                            <ResponsiveNavLink :href="route('logout')" method="post" as="button">
+                            <ResponsiveNavLink :href="route('admin.profile')"> Profile </ResponsiveNavLink>
+                            <ResponsiveNavLink :href="route('admin.logout')" method="post" as="button">
                                 Log Out
                             </ResponsiveNavLink>
                         </div>
