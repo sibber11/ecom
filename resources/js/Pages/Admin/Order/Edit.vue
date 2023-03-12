@@ -1,20 +1,20 @@
 <script setup>
-import Fields from "@/Pages/Admin/User/Partials/Fields.vue";
+import Fields from "@/Pages/Admin/Order/Partials/Fields.vue";
 import CreateEdit from "@/components/CreateEdit.vue";
 
     defineProps
 
 ({
-    user: Object,
+    order: Object,
 });
 </script>
 
 <template>
     <CreateEdit title="Edit User">
         <Fields
-            :user="user"
+            :order="order"
             method="patch"
-            :url="route('admin.orders.update', user)"
+            :url="route('admin.orders.update', order)"
         />
     </CreateEdit>
 </template>

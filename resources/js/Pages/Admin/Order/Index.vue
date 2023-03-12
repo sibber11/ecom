@@ -4,6 +4,7 @@ import {Head} from '@inertiajs/inertia-vue3';
 import FlashMessage from "@/components/FlashMessage.vue";
 import {Table} from "@protonemedia/inertiajs-tables-laravel-query-builder";
 import DeleteButton from "@/components/DeleteButton.vue";
+import EditButton from "@/components/EditButton.vue";
 
 
 defineProps({
@@ -26,6 +27,7 @@ defineProps({
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
                 <Table :resource="orders" :striped="true">
                     <template #cell(actions)="{ item: order}">
+                        <EditButton :url="route('admin.orders.edit', order)"/>
                         <DeleteButton :url="route('admin.orders.destroy', order)"/>
                     </template>
                 </Table>
