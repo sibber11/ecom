@@ -3,6 +3,7 @@
 import {ref} from "vue";
 import {InertiaLink, useForm} from "@inertiajs/inertia-vue3";
 import {Inertia} from "@inertiajs/inertia";
+import RatingStars from "@/Pages/Customer/partial/RatingStars.vue";
 
 const props = defineProps({
     product: {
@@ -23,7 +24,7 @@ function getPercent(star) {
 }
 
 function submitReview() {
-    form.post(route('admin.review.store'), {
+    form.post(route('review.store'), {
         preserveScroll: true,
         onSuccess: (page) => {
             console.log(page)
@@ -38,17 +39,6 @@ function submitReview() {
 //set offset to the number of reviews from the url
 const offset = ref(props.product.latest_reviews.length + 3);
 const loadMore = ref(true);
-// function loadReviews() {
-//     axios.get(route('products.reviews', {product: props.product.slug, offset:offset.value}))
-//         .then((response) => {
-//             if (response.data.length < 3){
-//                 loadMore.value = false;
-//                 return;
-//             }
-//             reviews.value = reviews.value.concat(response.data);
-//             offset.value += 3;
-//         })
-// }
 
 </script>
 
@@ -61,8 +51,7 @@ const loadMore = ref(true);
         <div class="flex mb-3 justify-between">
             <div class="w-1/2">
                 <div class="flex items-center mb-3">
-                    <i v-for="i in 5" :class="{'text-red-600':Math.round(product.avg_rating) >= i}"
-                       class="fa fa-star"></i>
+                    <RatingStars :rating="product.avg_rating"/>
                     <p class="ml-2 text-sm font-medium text-gray-900">{{ product.avg_rating }} out of 5</p>
                 </div>
                 <p class="text-sm font-medium text-gray-500">{{ product.rating_count }} total ratings</p>

@@ -2,6 +2,7 @@
 import {InertiaLink, useForm} from "@inertiajs/inertia-vue3";
 import CustomerLayout from "@/Layouts/CustomerLayout.vue"
 import Review from "@/Pages/Customer/partial/Review.vue";
+import RatingStars from "@/Pages/Customer/partial/RatingStars.vue";
 
 defineProps({
     product: Object
@@ -43,12 +44,8 @@ const form = useForm({
             <div>
                 <h2 class="text-3xl font-medium uppercase mb-2">{{ product.name }}</h2>
                 <div class="flex items-center mb-4">
-                    <div class="flex gap-1 text-sm text-yellow-400">
-                        <span><i class="fa-solid fa-star"></i></span>
-                        <span><i class="fa-solid fa-star"></i></span>
-                        <span><i class="fa-solid fa-star"></i></span>
-                        <span><i class="fa-solid fa-star"></i></span>
-                        <span><i class="fa-solid fa-star"></i></span>
+                    <div class="flex gap-1 text-sm">
+                        <RatingStars :rating="product.avg_rating"/>
                     </div>
                     <div class="text-xs text-gray-500 ml-3">(150 Reviews)</div>
                 </div>

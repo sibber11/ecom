@@ -29,9 +29,9 @@ class Product extends Model implements HasMedia, Buyable
     ];
 
     protected $appends = [
-        'avg_rating',
-        'ratings',
-        'rating_count',
+//        'avg_rating',
+//        'ratings',
+//        'rating_count',
     ];
     public function getSlugOptions(): SlugOptions
     {

@@ -12,7 +12,7 @@ defineProps({
         </slot>
     </h2>
     <div class="grid grid-cols-4 gap-6">
-        <ProductModel v-for="product in products" :product="product" :key="product.id"/>
+        <ProductModel v-for="product in products.data" :product="product" :key="product.id"/>
     </div>
   </div>
 </template>

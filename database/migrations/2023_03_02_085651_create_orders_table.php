@@ -23,6 +23,12 @@ return new class extends Migration
             $table->decimal('discount', 8, 2);
             $table->decimal('shipping', 8, 2);
             $table->string('status')->default('pending');
+            $table->string('payment_method')->default('cash');
+            $table->string('payment_status')->default('pending');
+            $table->string('payment_id')->nullable();
+            $table->string('billing_address')->nullable();
+            $table->string('shipping_address');
+            $table->text('qr_code')->nullable();
             $table->timestamps();
         });
     }

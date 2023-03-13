@@ -2,20 +2,25 @@
 
 namespace App\Http\Resources;
 
+use App\Helper\QRCode;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class OrderResource extends JsonResource
 {
+    public static $wrap = null;
     /**
      * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
     public function toArray($request)
     {
+        //dd($this->products);
         return [
             'id' => $this->id,
+            'customer_name' => $this->user->name,
+            'customer_email' => $this->user->email,
+            'customer_phone' => $this->user->phone,
+            'shipping_address' => $this->shipping_address,
+            'billing_address' => $this->billing_address,
             'user_id' => $this->user_id,
             'total' => $this->total,
             'tax' => $this->tax,
@@ -23,8 +28,17 @@ class OrderResource extends JsonResource
             'discount' => $this->discount,
             'shipping' => $this->shipping,
             'status' => $this->status,
-            'created_at' => $this->created_at->format('d-m-Y'),
-            'updated_at' => $this->updated_at->format('d-m-Y'),
+            'payment_status' => $this->payment_status,
+            'payment_method' => $this->payment_method,
+            'created_at' => $this->created_at->format('d M Y'),
+            'qr_code' => $this->qr_code,
+            'statuses' => [
+                'pending', 'confirmed', 'processing', 'completed', 'declined', 'cancelled'
+            ],
+            'payment_statuses' => [
+                'pending', 'paid', 'failed', 'refunded'
+            ],
+            'products' => $this->products,
         ];
     }
 }

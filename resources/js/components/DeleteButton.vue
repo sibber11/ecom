@@ -9,7 +9,7 @@ defineProps({
 </script>
 
 <template>
-    <InertiaLink :href="url" as="button" method="delete" class="px-2 py-1 border mx-1 rounded bg-red-600 text-white">
-        Delete
+    <InertiaLink :href="url" as="button" method="delete" class="px-1 py-0.5 border rounded bg-red-600 text-white">
+        <i class="fa fa-trash-alt"></i>
     </InertiaLink>
 </template>

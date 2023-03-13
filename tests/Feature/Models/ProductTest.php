@@ -2,10 +2,14 @@
 
 namespace Tests\Feature\Models;
 
+use App\Http\Resources\ProductForCardResource;
 use App\Models\Product;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Storage;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Tests\TestCase;
+use function PHPUnit\Framework\assertCount;
 
 class ProductTest extends TestCase
 {
@@ -28,6 +32,19 @@ class ProductTest extends TestCase
         $this->withoutExceptionHandling();
         Product::factory()->create();
         $this->assertDatabaseCount(Product::class, 1);
+    }
+
+    public function test_product_can_be_serialized()
+    {
+        $this->withoutExceptionHandling();
+        $this->signIn();
+        $product = Product::factory()->hasReviews(3)->create();
+        self::assertCount(3, $product->reviews);
+        assertCount(1, $product->media);
+        $resource = ProductForCardResource::make($product);
+        dump($product->getFirstMediaUrl('product_images'));
+        dump($resource->toArray(request()));
+        $this->assertNotNull($resource);
     }
 }
 

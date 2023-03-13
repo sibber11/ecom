@@ -22,6 +22,11 @@ class CheckoutController extends Controller
     }
     public function store(Request $request)
     {
+        $address = $request->address . ', ' . $request->city . ', ' . $request->country;
+        $request->merge(['shipping_address' => $address]);
+        $request->validate([
+            'shipping_address' => 'required',
+        ]);
         $products = Cart::instance('cart')->content();
         $total = Cart::instance('cart')->totalFloat();
         $tax = Cart::instance('cart')->taxFloat();
@@ -34,6 +39,7 @@ class CheckoutController extends Controller
             'tax' => $tax,
             'subtotal' => $subtotal,
             'discount' => $discount,
+            'shipping_address' => $request->shipping_address,
         ]);
         Cart::instance('cart')->destroy();
         return redirect()->route('orders.index')->with('message', 'Order created successfully');

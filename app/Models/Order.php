@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helper\QRCode;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -17,6 +18,11 @@ class Order extends Model
         'discount',
         'shipping',
         'status',
+        'payment_method',
+        'payment_status',
+        'payment_id',
+        'billing_address',
+        'shipping_address',
     ];
     protected $casts = [
         'products' => 'array',
@@ -27,6 +33,18 @@ class Order extends Model
         'shipping' => 0.00,
     ];
 
+    //when order is created generate qr code
+    protected static function boot()
+    {
+        parent::boot();
+        static::created(function ($order) {
+            $order->update([
+                'qr_code' => QRCode::generate($order->id),
+            ]);
+        });
+    }
+
+    // Relationships
     public function user()
     {
         return $this->belongsTo(User::class);

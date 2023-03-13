@@ -15,12 +15,7 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/', function () {
-    return Inertia::render('Index', [
-        'newArrival' => \App\Models\Product::latest()->limit(4)->get(),
-        'recommended' => \App\Models\Product::limit(8)->get(),
-    ]);
-})->name('home');
+Route::get('/', [\App\Http\Controllers\Customer\HomeController::class, 'index'])->name('home');
 
 
 Route::middleware('auth')->group(function () {
@@ -34,6 +29,8 @@ Route::middleware('auth')->group(function () {
  */
 Route::post('cart/{product}', [\App\Http\Controllers\Customer\CartController::class, 'store'])
     ->name('cart.store');
+Route::patch('cart/{rowId}', [\App\Http\Controllers\Customer\CartController::class, 'update'])
+    ->name('cart.update');
 Route::delete('cart/{rowId}', [\App\Http\Controllers\Customer\CartController::class, 'destroy'])
     ->name('cart.delete');
 Route::get('cart', function () {

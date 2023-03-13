@@ -33,8 +33,7 @@ Route::middleware(['auth','admin'])->group(function (){
 
     Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
 
-    Route::resource('orders', \App\Http\Controllers\Admin\OrderController::class)
-        ->only('index', 'show', 'destroy');
+    Route::resource('orders', \App\Http\Controllers\Admin\OrderController::class);
 });
 
 require __DIR__ . '/admin_auth.php';

@@ -26,7 +26,7 @@ const props = defineProps({
     }
 });
 const user = computed(() => usePage().props.value.auth.user);
-console.log(user.value)
+
 const form = useForm({
     name: user.value.name,
     address: user.value.address,
@@ -55,11 +55,11 @@ const form = useForm({
                     <div>
                         <label for="name" class="text-gray-600">Name <span
                             class="text-primary">*</span></label>
-                        <input type="text" name="name" id="name" class="input-box" v-model="form.name">
+                        <input type="text" name="name" id="name" class="input-box disabled:bg-gray-200" v-model="form.name" disabled>
                     </div>
                     <div>
-                        <label for="region" class="text-gray-600">Country/Region</label>
-                        <input type="text" name="region" id="region" class="input-box" v-model="form.region">
+                        <label for="country" class="text-gray-600">Country/Region</label>
+                        <input type="text" name="country" id="country" class="input-box" v-model="form.country">
                     </div>
                     <div>
                         <label for="address" class="text-gray-600">Street address</label>
@@ -75,7 +75,7 @@ const form = useForm({
                     </div>
                     <div>
                         <label for="email" class="text-gray-600">Email address</label>
-                        <input type="email" name="email" id="email" class="input-box" v-model="form.email">
+                        <input type="email" name="email" id="email" class="input-box disabled:bg-gray-200" disabled v-model="form.email">
                     </div>
                 </div>
 

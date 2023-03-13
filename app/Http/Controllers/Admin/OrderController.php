@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Helper\QRCode;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreOrderRequest;
 use App\Http\Requests\UpdateOrderRequest;
+use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use Inertia\Inertia;
+use Milon\Barcode\Facades\DNS2DFacade;
 use ProtoneMedia\LaravelQueryBuilderInertiaJs\InertiaTable;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -25,10 +28,6 @@ class OrderController extends Controller
         ])->table(function (InertiaTable $table) {
             $table->column('id', sortable: true, searchable: true)
                 ->column('status', sortable: true, searchable: true)
-                ->column('subtotal')
-                ->column('tax')
-                ->column('discount')
-                ->column('shipping')
                 ->column('total')
                 ->column('created_at')
                 ->column('actions')
@@ -36,41 +35,14 @@ class OrderController extends Controller
         });
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return Inertia::render('Admin/Order/Create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreOrderRequest $request)
-    {
-        $order = new Order();
-        $order->fill($request->validated());
-        $order->save();
-        return to_route('.index')
-            ->with('message', 'Order created successfully');
-    }
 
     /**
      * Display the specified resource.
      */
     public function show(Order $order)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Order $order)
-    {
-        return Inertia::render('Admin/Order/Edit',[
-            'order' => $order
+        return Inertia::render('Admin/Order/Show',[
+            'order' => OrderResource::make($order)
         ]);
     }
 
@@ -80,7 +52,7 @@ class OrderController extends Controller
     public function update(UpdateOrderRequest $request, Order $order)
     {
         $order->update($request->validated());
-        return to_route('.index')
+        return back()
             ->with('message', 'Order updated successfully');
     }
 

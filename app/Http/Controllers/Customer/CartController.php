@@ -21,9 +21,9 @@ class CartController extends Controller
         return back();
     }
 
-    public function update(Request $request, Product $product)
+    public function update(Request $request, $rowId)
     {
-        Cart::instance('cart')->add($product, $request->quantity);
+        Cart::instance('cart')->update($rowId, $request->qty);
         return back();
     }
 }

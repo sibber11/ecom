@@ -1,5 +1,6 @@
 <script setup>
 import {InertiaLink, useForm} from "@inertiajs/inertia-vue3";
+import RatingStars from "@/Pages/Customer/partial/RatingStars.vue";
 defineProps({
     product:Object
 })
@@ -9,9 +10,9 @@ const form = useForm({
 })
 </script>
 <template>
-    <div class="bg-white shadow rounded overflow-hidden group">
+    <div class="bg-white shadow rounded overflow-hidden group flex flex-col justify-between">
         <div class="relative">
-            <img :src="product.media[0]?.original_url" :alt="product.media[0]?.name" class="w-full">
+            <img :src="product.first_media" :alt="product.first_media_name" class="w-full">
             <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center
                     justify-center gap-2 opacity-0 group-hover:opacity-100 transition">
                 <InertiaLink :href="route('products.show', product)"
@@ -37,14 +38,10 @@ const form = useForm({
                 <p class="text-sm text-gray-400 line-through">${{ product.old_price }}</p>
             </div>
             <div class="flex items-center">
-                <div class="flex gap-1 text-sm text-yellow-400">
-                    <span><i class="fa fa-star"></i></span>
-                    <span><i class="fa fa-star"></i></span>
-                    <span><i class="fa fa-star"></i></span>
-                    <span><i class="fa fa-star"></i></span>
-                    <span><i class="fa fa-star"></i></span>
+                <div class="flex gap-1 text-sm">
+                    <RatingStars :rating="product.avg_rating"/>
                 </div>
-                <div class="text-xs text-gray-500 ml-3">(150)</div>
+                <div class="text-xs text-gray-500 ml-3">({{product.rating_count}})</div>
             </div>
         </div>
         <button type="button" @click="form.post(route('cart.store', product),{preserveScroll: true})"

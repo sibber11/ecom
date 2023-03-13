@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Brand;
+use App\Models\Category;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -22,8 +24,9 @@ return new class extends Migration
             $table->integer('price');
             $table->integer('old_price');
             $table->integer('quantity');
-            $table->foreignIdFor(\App\Models\Category::class);
-            $table->foreignIdFor(\App\Models\Brand::class);
+            $table->foreignIdFor(Category::class);
+            $table->foreignIdFor(Brand::class);
+            $table->integer('stock')->default(0);
             $table->timestamps();
         });
     }

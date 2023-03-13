@@ -13,7 +13,7 @@ class UpdateOrderRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,8 @@ class UpdateOrderRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'status' => 'required|string|in:pending,confirmed,processing,completed,cancelled',
+            'payment_status' => 'required|string|in:pending,processing,completed,cancelled',
         ];
     }
 }

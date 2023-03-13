@@ -27,6 +27,7 @@ class CategoryFactory extends Factory
     {
         return $this->afterCreating(function (Category $category){
             $image_names = glob('storage/temp/category/*.jpg');
+            dump(count($image_names));
             $random = random_int(0, count($image_names) - 1);
             $category->addMedia($image_names[$random])->preservingOriginal()->toMediaCollection('category_images');
         })->afterMaking(function (Category $category){

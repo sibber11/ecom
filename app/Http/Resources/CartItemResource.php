@@ -17,10 +17,8 @@ class CartItemResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
         return [
             'rowId'    => $this->rowId,
@@ -33,7 +31,7 @@ class CartItemResource extends JsonResource
             'discount' => $this->discount,
             'tax'      => $this->tax,
             'subtotal' => $this->subtotal,
-            'resource' => Product::whereSlug($this->id)->first(),
+            'resource' => ProductForCartResource::make(Product::whereSlug($this->id)->first()),
         ];
     }
 }
