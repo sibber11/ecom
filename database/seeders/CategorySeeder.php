@@ -76,13 +76,16 @@ class CategorySeeder extends Seeder
      */
     public function run()
     {
+        $image_names = glob('storage/temp/category/*.jpg');
+        $image_count = count($image_names) - 1;
         foreach ($this->categories as $category => $subcategories) {
             $parent = Category::create([
                 'name' => $category
             ]);
-            $image_names = glob('storage/temp/category/*.jpg');
-            $random = random_int(0, count($image_names) - 1);
-            $parent->addMedia($image_names[$random])->preservingOriginal()->toMediaCollection('category_images');
+            $random = random_int(0, $image_count);
+            $parent->addMedia($image_names[$random])
+                ->preservingOriginal()
+                ->toMediaCollection(Category::MEDIA_COLLECTION);
 
             foreach ($subcategories as $subcategory) {
                 Category::create([

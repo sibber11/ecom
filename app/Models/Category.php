@@ -24,6 +24,8 @@ class Category extends Model implements HasMedia
 
     protected $with = ['media'];
 
+    public const MEDIA_COLLECTION = 'category';
+
     public function products()
     {
         return $this->hasMany(Product::class);

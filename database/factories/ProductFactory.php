@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -43,7 +44,9 @@ class ProductFactory extends Factory
             }
             $image_names = glob('storage/temp/product/*.jpg');
             $random = random_int(0, count($image_names) - 1);
-            $product->addMedia($image_names[$random])->preservingOriginal()->toMediaCollection('product_images');
+            $product->addMedia($image_names[$random])
+                ->preservingOriginal()
+                ->toMediaCollection(Product::MEDIA_COLLECTION);
         });
     }
 

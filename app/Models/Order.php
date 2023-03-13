@@ -32,6 +32,13 @@ class Order extends Model
         'status' => 'pending',
         'shipping' => 0.00,
     ];
+    public const STATUSES = [
+        'pending' => 'Pending',
+        'confirmed' => 'Confirmed',
+        'processing' => 'Processing',
+        'completed' => 'Completed',
+        'cancelled' => 'Cancelled',
+    ];
 
     //when order is created generate qr code
     protected static function boot()

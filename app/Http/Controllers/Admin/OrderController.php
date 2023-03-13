@@ -21,6 +21,9 @@ class OrderController extends Controller
     public function index()
     {
         $orders = QueryBuilder::for(Order::class)
+            ->defaultSort('id')
+            ->allowedSorts(['id', 'status', 'total', 'created_at'])
+            ->allowedFilters(['status'])
             ->paginate()
             ->withQueryString();
         return Inertia::render('Admin/Order/Index', [
@@ -30,7 +33,8 @@ class OrderController extends Controller
                 ->column('status', sortable: true, searchable: true)
                 ->column('total')
                 ->column('created_at')
-                ->column('actions')
+                ->column('actions', canBeHidden: false)
+                ->selectFilter('status', Order::STATUSES, label: 'Status')
                 ->withGlobalSearch();
         });
     }

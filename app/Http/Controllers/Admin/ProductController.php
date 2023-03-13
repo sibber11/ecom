@@ -142,7 +142,7 @@ class ProductController extends Controller
         if ($request->hasFile('images')) {
             $product->addMultipleMediaFromRequest(['images'])
                 ->each(function ($fileAdder) {
-                    $fileAdder->toMediaCollection('product_images');
+                    $fileAdder->toMediaCollection(Product::MEDIA_COLLECTION);
                 });
         }
     }

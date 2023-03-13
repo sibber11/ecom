@@ -33,6 +33,8 @@ class Product extends Model implements HasMedia, Buyable
 //        'ratings',
 //        'rating_count',
     ];
+    public const MEDIA_COLLECTION = 'product';
+
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()

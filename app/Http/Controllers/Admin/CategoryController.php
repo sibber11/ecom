@@ -141,7 +141,8 @@ class CategoryController extends Controller
         }
         $category->save();
         if ($request->hasFile('images')) {
-            $category->addMediaFromRequest('images')->toMediaCollection('category_images');
+            $category->addMediaFromRequest('images')
+                ->toMediaCollection(Category::MEDIA_COLLECTION);
         }
     }
 

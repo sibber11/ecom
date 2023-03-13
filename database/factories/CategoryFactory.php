@@ -29,7 +29,9 @@ class CategoryFactory extends Factory
             $image_names = glob('storage/temp/category/*.jpg');
             dump(count($image_names));
             $random = random_int(0, count($image_names) - 1);
-            $category->addMedia($image_names[$random])->preservingOriginal()->toMediaCollection('category_images');
+            $category->addMedia($image_names[$random])
+                ->preservingOriginal()
+                ->toMediaCollection(Category::MEDIA_COLLECTION);
         })->afterMaking(function (Category $category){
             $category->parent_id = Category::inRandomOrder()->first()->id ?? null;
         });

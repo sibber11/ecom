@@ -2,10 +2,8 @@
 
 namespace Database\Factories;
 
-use App\Helper\QRCode;
+use App\Models\Order;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Milon\Barcode\DNS1D;
-use Milon\Barcode\DNS2D;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Order>
@@ -21,7 +19,7 @@ class OrderFactory extends Factory
     {
         return [
             'user_id' => 1,
-            'status' => 'pending',
+            'status' => fake()->randomElement(Order::STATUSES),
             'subtotal' => fake()->numberBetween(100, 1000),
             'tax' => 0,
             'shipping' => 0,
@@ -31,7 +29,7 @@ class OrderFactory extends Factory
 
             ],
             'payment_method' => 'cash',
-            'payment_status' => 'pending',
+            'payment_status' => fake()->randomElement(['paid', 'unpaid']),
             'payment_id' => null,
             'billing_address' => null,
             'shipping_address' => fake()->address,

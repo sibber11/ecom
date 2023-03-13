@@ -42,8 +42,6 @@ class ProductTest extends TestCase
         self::assertCount(3, $product->reviews);
         assertCount(1, $product->media);
         $resource = ProductForCardResource::make($product);
-        dump($product->getFirstMediaUrl('product_images'));
-        dump($resource->toArray(request()));
         $this->assertNotNull($resource);
     }
 }
