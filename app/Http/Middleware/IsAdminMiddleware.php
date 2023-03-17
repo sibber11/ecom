@@ -15,7 +15,7 @@ class IsAdminMiddleware
     public function handle(Request $request, Closure $next)
     {
         if (!auth()->user()->isAdmin()) {
-            return redirect()->route('');
+            return redirect('/');
         }
         return $next($request);
     }
