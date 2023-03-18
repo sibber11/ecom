@@ -10,8 +10,6 @@ class DatabaseSeeder extends Seeder
 {
     /**
      * Seed the application's database.
-     *
-     * @return void
      */
     public function run()
     {
@@ -25,7 +23,8 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
             BrandSeeder::class,
             ProductSeeder::class,
-            OrderSeeder::class
+            OrderSeeder::class,
+            AttributeSeeder::class,
         ]);
 
         // \App\Models\User::factory(10)->create();

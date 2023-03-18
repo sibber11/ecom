@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('body')->nullable();
             $table->string('rating');
-            $table->foreignIdFor(\App\Models\Product::class)->constrained();
+            $table->foreignIdFor(\App\Models\Product::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(\App\Models\User::class)->constrained();
             $table->foreignIdFor(\App\Models\Order::class);
             $table->timestamps();

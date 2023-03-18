@@ -1,6 +1,6 @@
 <script setup>
 import {useForm} from '@inertiajs/inertia-vue3';
-import {onMounted, ref, watch} from "vue";
+import { onMounted, ref, watch} from "vue";
 import {submitForm} from "@/helper";
 import InputError from '@/components/InputError.vue';
 import InputLabel from '@/components/InputLabel.vue';
@@ -11,6 +11,7 @@ import SelectModels from '@/components/SelectModels.vue'
 import SlugInput from '@/components/SlugInput.vue'
 import PreviewImage from "@/components/PreviewImage.vue";
 import CancelButton from "@/components/CancelButton.vue"
+import Multiselect from "@vueform/multiselect/src/Multiselect.vue";
 
 const props = defineProps({
     method: {
@@ -18,7 +19,8 @@ const props = defineProps({
         type: String
     },
     url: String,
-    product: Object
+    product: Object,
+    options: Array,
 });
 
 const form = useForm({
@@ -32,6 +34,7 @@ const form = useForm({
     brand: '',
     tags: [],
     images: null,
+    attributes: [],
 });
 onMounted(() => {
 
@@ -47,6 +50,7 @@ onMounted(() => {
     form.category = props.product.category.name;
     form.brand = props.product.brand.name;
     form.tags = tags.value;
+    form.attributes = props.product.attributes;
 })
 const tags = ref(props.product?.tags.length > 0 ? props.product.tags.map(tag => tag.name.en) : '');
 
@@ -99,50 +103,6 @@ const imageViewer = ref(null);
             </div>
 
             <div>
-                <InputLabel for="category_name" value="Category"/>
-
-                <SelectModels v-model="form.category" :url="route('admin.categories.get_names')" model-name="Category"/>
-
-                <InputError class="mt-2" :message="form.errors.category"/>
-            </div>
-
-            <div>
-                <InputLabel for="category_name" value="Brand"/>
-
-                <SelectModels v-model="form.brand" :url="route('admin.brands.get_names')" model-name="Brand"/>
-
-                <InputError class="mt-2" :message="form.errors.brand"/>
-            </div>
-
-            <div>
-                <InputLabel for="price" value="Price"/>
-
-                <TextInput
-                    id="price"
-                    type="number"
-                    class="mt-1 block w-full"
-                    v-model="form.price"
-                    placeholder="Product Price"
-                />
-
-                <InputError class="mt-2" :message="form.errors.price"/>
-            </div>
-
-            <div>
-                <InputLabel for="quantity" value="Quantity"/>
-
-                <TextInput
-                    id="quantity"
-                    type="number"
-                    class="mt-1 block w-full"
-                    v-model="form.quantity"
-                    placeholder="Product quantity"
-                />
-
-                <InputError class="mt-2" :message="form.errors.quantity"/>
-            </div>
-
-            <div>
                 <InputLabel for="sku" value="SKU"/>
 
                 <TextInput
@@ -155,6 +115,54 @@ const imageViewer = ref(null);
                 />
 
                 <InputError class="mt-2" :message="form.errors.sku"/>
+            </div>
+
+            <div class="sm:grid grid-cols-2 gap-4">
+                <div>
+                    <InputLabel for="category_name" value="Category"/>
+
+                    <SelectModels v-model="form.category" :url="route('admin.categories.get_names')" model-name="Category"/>
+
+                    <InputError class="mt-2" :message="form.errors.category"/>
+                </div>
+
+                <div>
+                    <InputLabel for="category_name" value="Brand"/>
+
+                    <SelectModels v-model="form.brand" :url="route('admin.brands.get_names')" model-name="Brand"/>
+
+                    <InputError class="mt-2" :message="form.errors.brand"/>
+                </div>
+            </div>
+
+            <div class="sm:grid grid-cols-2 gap-4">
+                <div>
+                    <InputLabel for="price" value="Price"/>
+
+                    <TextInput
+                        id="price"
+                        type="number"
+                        class="mt-1 block w-full"
+                        v-model="form.price"
+                        placeholder="Product Price"
+                    />
+
+                    <InputError class="mt-2" :message="form.errors.price"/>
+                </div>
+
+                <div>
+                    <InputLabel for="quantity" value="Quantity"/>
+
+                    <TextInput
+                        id="quantity"
+                        type="number"
+                        class="mt-1 block w-full"
+                        v-model="form.quantity"
+                        placeholder="Product quantity"
+                    />
+
+                    <InputError class="mt-2" :message="form.errors.quantity"/>
+                </div>
             </div>
 
             <div>
@@ -170,6 +178,22 @@ const imageViewer = ref(null);
                 />
 
                 <InputError class="mt-2" :message="form.errors.description"/>
+            </div>
+
+            <div>
+                <InputLabel for="options" :value="'Options'"/>
+                <div class="flex gap-3">
+                    <Multiselect
+                        :close-on-select="false"
+                        :options="options"
+                        label="name"
+                        value-prop="id"
+                        v-model="form.attributes"
+                        mode="multiple"
+                    />
+                </div>
+
+                <InputError class="mt-2" :message="form.errors.attributes"/>
             </div>
 
             <div>

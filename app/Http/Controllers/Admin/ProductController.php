@@ -9,6 +9,8 @@ use App\Http\Requests\UpdateProductRequest;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Attribute;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -42,7 +44,7 @@ class ProductController extends Controller
                 ->column('sku')
                 ->column('brand')
                 ->column('category')
-                ->column('quantity')
+                ->column('quantity', 'stock')
                 ->column(label: 'actions')
                 ->defaultSort('name');
         });
@@ -53,11 +55,17 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Admin/Product/Create');
+        $options =  Attribute::all();
+        return Inertia::render('Admin/Product/Create',
+            [
+                'options' =>$options
+            ]
+        );
     }
 
     /**
      * Store a newly created resource in storage.
+     * @throws \Throwable
      */
     public function store(StoreProductRequest $request)
     {
@@ -66,7 +74,7 @@ class ProductController extends Controller
         $this->fill_n_save($request, $product);
 
         DB::commit();
-        return to_route('products.index')
+        return to_route('admin.products.index')
             ->with('success', 'Product created successfully');
     }
 
@@ -90,13 +98,14 @@ class ProductController extends Controller
 
     /**
      * Update the specified resource in storage.
+     * @throws \Throwable
      */
     public function update(UpdateProductRequest $request, Product $product)
     {
         DB::beginTransaction();
         $this->fill_n_save($request, $product);
         DB::commit();
-        return to_route('products.index')
+        return to_route('admin.products.index')
             ->with('success', 'Product updated successfully');
     }
 
@@ -107,7 +116,7 @@ class ProductController extends Controller
     {
         //todo check relation before deleting
         $product->delete();
-        return to_route('products.index')
+        return to_route('admin.products.index')
             ->with('success', 'Product deleted successfully');
     }
 
@@ -125,11 +134,12 @@ class ProductController extends Controller
      * @throws FileIsTooBig
      * @throws FileDoesNotExist
      */
-    public function fill_n_save(Request $request, Product $product): void
+    public function fill_n_save(UpdateProductRequest|StoreProductRequest $request, Product $product): void
     {
         $product->fill($request->validated());
         $product->category()->associate(Category::whereName($request->category)->first());
         $product->brand()->associate(Brand::whereName($request->input('brand'))->first());
+        $product->old_price = 0;
         $product->save();
         //extract tags from request
         if (is_string($request->tags)){
@@ -145,9 +155,12 @@ class ProductController extends Controller
                     $fileAdder->toMediaCollection(Product::MEDIA_COLLECTION);
                 });
         }
+        if ($request->has('attributes')) {
+            $product->syncAttributes($request->input('attributes'));
+        }
     }
 
-    public function deleteMedia(Product $product, Media $media)
+    public function deleteMedia(Product $product, Media $media): RedirectResponse
     {
         $product->deleteMedia($media);
         return back()

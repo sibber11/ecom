@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProductAttributeRequest;
 use App\Http\Requests\UpdateProductAttributeRequest;
-use App\Models\ProductAttribute;
+use App\Models\Attribute;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -19,7 +19,7 @@ class ProductAttributeController extends Controller
      */
     public function index()
     {
-        $product_attributes = QueryBuilder::for(ProductAttribute::class)
+        $product_attributes = QueryBuilder::for(Attribute::class)
             ->defaultSort('name')
             ->allowedSorts(['name', 'type', 'id'])
             ->allowedFilters(['type'])
@@ -35,7 +35,7 @@ class ProductAttributeController extends Controller
                 ->column('options')
                 ->column(label: 'actions')
                 ->defaultSort('name')
-                ->selectFilter('type', ProductAttribute::TYPES);
+                ->selectFilter('type', Attribute::TYPES);
         });
     }
 
@@ -52,7 +52,7 @@ class ProductAttributeController extends Controller
      */
     public function store(StoreProductAttributeRequest $request): RedirectResponse
     {
-        $product_attribute = new ProductAttribute();
+        $product_attribute = new Attribute();
         $product_attribute->fill($request->validated());
         $product_attribute->save();
 
@@ -62,7 +62,7 @@ class ProductAttributeController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(ProductAttribute $productAttribute)
+    public function show(Attribute $productAttribute)
     {
         //
     }
@@ -70,7 +70,7 @@ class ProductAttributeController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(ProductAttribute $attribute): Response
+    public function edit(Attribute $attribute): Response
     {
         return Inertia::render('Admin/ProductAttribute/Edit', [
             'attribute' => $attribute
@@ -80,7 +80,7 @@ class ProductAttributeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateProductAttributeRequest $request, ProductAttribute $attribute): RedirectResponse
+    public function update(UpdateProductAttributeRequest $request, Attribute $attribute): RedirectResponse
     {
         $attribute->fill($request->validated());
         $attribute->save();
@@ -91,7 +91,7 @@ class ProductAttributeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ProductAttribute $attribute): RedirectResponse
+    public function destroy(Attribute $attribute): RedirectResponse
     {
         $attribute->delete();
         return to_route('admin.attributes.index')->with('success', 'Product Attribute deleted successfully.');

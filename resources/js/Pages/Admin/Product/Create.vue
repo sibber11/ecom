@@ -4,7 +4,7 @@ import Fields from "@/Pages/Admin/Product/Partials/Fields.vue";
 import CreateEdit from "@/components/CreateEdit.vue";
 
 defineProps({
-    product: Object,
+    options: Array,
 });
 </script>
 
@@ -13,6 +13,7 @@ defineProps({
         <Fields
             method="post"
             :url="route('admin.products.store')"
+            :options="options"
         />
     </CreateEdit>
 </template>

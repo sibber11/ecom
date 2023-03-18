@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Models\ProductAttribute;
+use App\Models\Attribute;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreProductAttributeRequest extends FormRequest
@@ -26,7 +26,7 @@ class StoreProductAttributeRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'type' => 'required|string|max:255|in:' . implode(',', array_keys(ProductAttribute::TYPES)),
+            'type' => 'required|string|max:255|in:' . implode(',', array_keys(Attribute::TYPES)),
             'options.*' => 'required|array:index,name',
         ];
     }

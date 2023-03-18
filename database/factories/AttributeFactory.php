@@ -2,19 +2,23 @@
 
 namespace Database\Factories;
 
-use App\Models\ProductAttribute;
+use App\Models\Attribute;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\ProductAttribute>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Attribute>
  */
-class ProductAttributeFactory extends Factory
+class AttributeFactory extends Factory
 {
     /**
      * Define the model's default state.
-     *
-     * @return array<string, mixed>
      */
+    private $attribute_names = [
+        'color',
+        'size',
+        'material',
+        'weight',
+    ];
     public function definition()
     {
         $options = fake()->words(fake()->numberBetween(2, 5));
@@ -26,8 +30,8 @@ class ProductAttributeFactory extends Factory
             ];
         }, $options, range(0, count($options) - 1));
         return [
-            'name' => fake()->name,
-            'type' => fake()->randomElement(array_keys(ProductAttribute::TYPES)),
+            'name' => fake()->unique()->randomElement($this->attribute_names),
+            'type' => fake()->randomElement(array_keys(Attribute::TYPES)),
             'options' => $options,
         ];
     }
