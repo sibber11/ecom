@@ -32,6 +32,14 @@ function updateItemQuantity(rowId, qty) {
                             <span class="text-green-600" v-if="product.stock > 0">In Stock</span>
                             <span v-else class="text-red-600">Out of Stock</span></p>
                     </div>
+                    <ul>
+                        <li v-for="(option, name) in product.options">
+<!--                            {{product.options}}-->
+                            {{ name }}:
+                            {{ option }}
+
+                        </li>
+                    </ul>
                     <div class="text-primary text-lg font-semibold">${{ product.price }}</div>
                     <p class="text-sm text-gray-800 mb-1">Quantity</p>
                     <form>

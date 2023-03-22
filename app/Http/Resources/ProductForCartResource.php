@@ -21,9 +21,10 @@ class ProductForCartResource extends JsonResource
             'url' => route('products.show', $this->slug),
             'price' => $this->price,
             'first_media' => $this->getFirstMediaUrl(Product::MEDIA_COLLECTION),
-            'first_media_name' => $this->getFirstMedia(Product::MEDIA_COLLECTION)->name,
+            'first_media_name' => $this->getFirstMedia(Product::MEDIA_COLLECTION)?->name,
             'rating' => $this->rating,
             'stock' => $this->stock,
+            'options' => $this->options,
         ];
     }
 }

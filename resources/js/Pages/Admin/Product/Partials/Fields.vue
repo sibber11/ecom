@@ -1,6 +1,6 @@
 <script setup>
 import {useForm} from '@inertiajs/inertia-vue3';
-import { onMounted, ref, watch} from "vue";
+import {onMounted, ref, watch} from "vue";
 import {submitForm} from "@/helper";
 import InputError from '@/components/InputError.vue';
 import InputLabel from '@/components/InputLabel.vue';
@@ -50,7 +50,7 @@ onMounted(() => {
     form.category = props.product.category.name;
     form.brand = props.product.brand.name;
     form.tags = tags.value;
-    form.attributes = props.product.attributes;
+    form.attributes = props.product.attributes.map((item)=>item.id);
 })
 const tags = ref(props.product?.tags.length > 0 ? props.product.tags.map(tag => tag.name.en) : '');
 
@@ -74,32 +74,32 @@ const imageViewer = ref(null);
             </p>
         </header>
 
-        <form @submit.prevent="submitForm(method,form,url)" class="mt-6 space-y-6">
+        <form class="mt-6 space-y-6" @submit.prevent="submitForm(method,form,url)">
             <div>
                 <InputLabel for="name" value="Name"/>
 
                 <TextInput
                     id="name"
-                    type="text"
-                    class="mt-1 block w-full"
-                    autocomplete="name"
-                    placeholder="Product Name"
                     v-model="form.name"
-                    @input="slug_input.get_slug($event.target.value)"
-                    required
+                    autocomplete="name"
                     autofocus
+                    class="mt-1 block w-full"
+                    placeholder="Product Name"
+                    required
+                    type="text"
+                    @input="slug_input.get_slug($event.target.value)"
                 />
 
-                <InputError class="mt-2" :message="form.errors.name"/>
+                <InputError :message="form.errors.name" class="mt-2"/>
             </div>
 
             <div>
                 <InputLabel for="slug" value="Slug"/>
 
-                <SlugInput class="mt-1 block w-full" :url="route('admin.products.get_slug')" v-model="form.slug"
-                           ref="slug_input"/>
+                <SlugInput ref="slug_input" v-model="form.slug" :url="route('admin.products.get_slug')"
+                           class="mt-1 block w-full"/>
 
-                <InputError class="mt-2" :message="form.errors.slug"/>
+                <InputError :message="form.errors.slug" class="mt-2"/>
             </div>
 
             <div>
@@ -107,23 +107,24 @@ const imageViewer = ref(null);
 
                 <TextInput
                     id="sku"
-                    type="text"
-                    class="mt-1 block w-full"
                     v-model="form.sku"
                     autocomplete="sku"
+                    class="mt-1 block w-full"
                     placeholder="Product SKU"
+                    type="text"
                 />
 
-                <InputError class="mt-2" :message="form.errors.sku"/>
+                <InputError :message="form.errors.sku" class="mt-2"/>
             </div>
 
             <div class="sm:grid grid-cols-2 gap-4">
                 <div>
                     <InputLabel for="category_name" value="Category"/>
 
-                    <SelectModels v-model="form.category" :url="route('admin.categories.get_names')" model-name="Category"/>
+                    <SelectModels v-model="form.category" :url="route('admin.categories.get_names')"
+                                  model-name="Category"/>
 
-                    <InputError class="mt-2" :message="form.errors.category"/>
+                    <InputError :message="form.errors.category" class="mt-2"/>
                 </div>
 
                 <div>
@@ -131,7 +132,7 @@ const imageViewer = ref(null);
 
                     <SelectModels v-model="form.brand" :url="route('admin.brands.get_names')" model-name="Brand"/>
 
-                    <InputError class="mt-2" :message="form.errors.brand"/>
+                    <InputError :message="form.errors.brand" class="mt-2"/>
                 </div>
             </div>
 
@@ -141,13 +142,13 @@ const imageViewer = ref(null);
 
                     <TextInput
                         id="price"
-                        type="number"
-                        class="mt-1 block w-full"
                         v-model="form.price"
+                        class="mt-1 block w-full"
                         placeholder="Product Price"
+                        type="number"
                     />
 
-                    <InputError class="mt-2" :message="form.errors.price"/>
+                    <InputError :message="form.errors.price" class="mt-2"/>
                 </div>
 
                 <div>
@@ -155,13 +156,13 @@ const imageViewer = ref(null);
 
                     <TextInput
                         id="quantity"
-                        type="number"
-                        class="mt-1 block w-full"
                         v-model="form.quantity"
+                        class="mt-1 block w-full"
                         placeholder="Product quantity"
+                        type="number"
                     />
 
-                    <InputError class="mt-2" :message="form.errors.quantity"/>
+                    <InputError :message="form.errors.quantity" class="mt-2"/>
                 </div>
             </div>
 
@@ -170,30 +171,30 @@ const imageViewer = ref(null);
 
                 <TextArea
                     id="description"
-                    class="mt-1 block w-full"
                     v-model="form.description"
                     autocomplete="description"
+                    class="mt-1 block w-full"
                     placeholder="Product Description"
                     required
                 />
 
-                <InputError class="mt-2" :message="form.errors.description"/>
+                <InputError :message="form.errors.description" class="mt-2"/>
             </div>
 
             <div>
-                <InputLabel for="options" :value="'Options'"/>
+                <InputLabel :value="'Options'" for="options"/>
                 <div class="flex gap-3">
                     <Multiselect
+                        v-model="form.attributes"
                         :close-on-select="false"
                         :options="options"
                         label="name"
-                        value-prop="id"
-                        v-model="form.attributes"
                         mode="multiple"
+                        value-prop="id"
                     />
                 </div>
 
-                <InputError class="mt-2" :message="form.errors.attributes"/>
+                <InputError :message="form.errors.attributes" class="mt-2"/>
             </div>
 
             <div>
@@ -201,23 +202,23 @@ const imageViewer = ref(null);
 
                 <TextInput
                     id="tags"
-                    type="text"
-                    class="mt-1 block w-full"
                     v-model="tags"
                     autocomplete="tags"
+                    class="mt-1 block w-full"
                     placeholder="Enter tags separated by comma"
+                    type="text"
                 />
 
-                <InputError class="mt-2" :message="form.errors.tags"/>
+                <InputError :message="form.errors.tags" class="mt-2"/>
             </div>
 
             <div>
                 <InputLabel for="images" value="Images"/>
 
-                <input type="file" id="images" @change="form.images = $event.target.files; imageViewer.preview($event)"
-                       multiple>
+                <input id="images" multiple type="file"
+                       @change="form.images = $event.target.files; imageViewer.preview($event)">
 
-                <InputError class="mt-2" :message="form.errors.images"/>
+                <InputError :message="form.errors.images" class="mt-2"/>
 
                 <PreviewImage ref="imageViewer" :model="product" url-name="admin.products.deleteMedia"/>
 
@@ -225,9 +226,9 @@ const imageViewer = ref(null);
 
             <div class="flex items-center gap-4">
                 <PrimaryButton :disabled="form.processing">Save</PrimaryButton>
-                <CancelButton :url="route('admin.products.index')" />
+                <CancelButton :url="route('admin.products.index')"/>
 
-                <Transition enter-from-class="opacity-0" leave-to-class="opacity-0" class="transition ease-in-out">
+                <Transition class="transition ease-in-out" enter-from-class="opacity-0" leave-to-class="opacity-0">
                     <p v-if="form.recentlySuccessful" class="text-sm text-gray-600">Product Added.</p>
                 </Transition>
             </div>

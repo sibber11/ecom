@@ -5,6 +5,7 @@ import CreateEdit from "@/components/CreateEdit.vue";
 
 defineProps({
     product: Object,
+    options: Array,
 });
 </script>
 
@@ -14,6 +15,7 @@ defineProps({
             :product="product"
             method="patch"
             :url="route('admin.products.update', product)"
+            :options="options"
         />
     </CreateEdit>
 </template>

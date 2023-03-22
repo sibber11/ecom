@@ -61,9 +61,9 @@ Route::middleware('auth')->group(function () {
     Route::get('checkout', [\App\Http\Controllers\Customer\CheckoutController::class, 'show'])->name('checkout.show');
 
 
-    Route::get('orders', [\App\Http\Controllers\Admin\OrderController::class, 'index'])->name('orders.index');
-    Route::get('orders/{order}', [\App\Http\Controllers\Admin\OrderController::class, 'show'])->name('orders.show');
-    Route::delete('orders/{order}', [\App\Http\Controllers\Admin\OrderController::class, 'destroy'])->name('orders.destroy');
+    Route::get('orders', [\App\Http\Controllers\Customer\OrderController::class, 'index'])->name('orders.index');
+    Route::get('orders/{order}', [\App\Http\Controllers\Customer\OrderController::class, 'show'])->name('orders.show');
+    Route::delete('orders/{order}', [\App\Http\Controllers\Customer\OrderController::class, 'destroy'])->name('orders.destroy');
 
     /**
      * profile routes

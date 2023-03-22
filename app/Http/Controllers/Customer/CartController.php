@@ -11,7 +11,7 @@ class CartController extends Controller
 {
     public function store(Request $request, Product $product)
     {
-        Cart::instance('cart')->add($product, $request->quantity);
+        Cart::instance('cart')->add($product, $request->quantity, $request->options);
         return back();
     }
 

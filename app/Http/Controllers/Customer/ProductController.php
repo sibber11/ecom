@@ -25,6 +25,7 @@ class ProductController extends Controller
             'ratings',
             'rating_count'
         ]);
+        $product->load('attributes');
         return Inertia::render('Customer/Product', [
             'product' => $product,
         ]);
