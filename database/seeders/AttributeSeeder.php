@@ -25,11 +25,11 @@ class AttributeSeeder extends Seeder
             'silver',
         ],
         'size' => [
-            'small',
-            'medium',
-            'large',
-            'extra large',
-            'extra extra large',
+            'XS',
+            'S',
+            'M',
+            'L',
+            'XL',
         ],
         'material' => [
             'cotton',
@@ -90,17 +90,13 @@ class AttributeSeeder extends Seeder
     public function run()
     {
         foreach ($this->attributes as $name => $options) {
-            $options = array_map(function ($option, $index) {
-                return [
-                    'index' => $index,
-                    'name' => $option,
-                ];
-            }, $options, range(0, count($options) - 1));
-            $attribute = Attribute::factory()->create([
+            $attribute = Attribute::create([
                 'name' => $name,
-                'options' => $options,
+                'type' => 'select',
             ]);
-
+            $attribute->options()->createMany(
+                collect($options)->map(fn ($option) => ['name' => $option, 'value' => $option])->toArray()
+            );
         }
     }
 }
