@@ -29,6 +29,8 @@ use Illuminate\Database\Eloquent\Model;
 class Attribute extends Model
 {
     use HasFactory;
+
+    public $timestamps = false;
     public const TYPES = [
         'select' => 'Select',
         'checkbox' => 'Checkbox',

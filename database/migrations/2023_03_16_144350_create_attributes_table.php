@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string('name');
             $table->string('type');
             $table->json('options')->nullable();
-            $table->timestamps();
         });
         // create table to store product attributes for many-to-many relationship
         Schema::create('attribute_product', function (Blueprint $table) {
