@@ -1,12 +1,9 @@
 <?php
 
-namespace Tests\Feature;
+namespace Models;
 
 use App\Models\Order;
-use Database\Factories\OrderFactory;
-use Database\Seeders\OrderSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class OrderTest extends TestCase
