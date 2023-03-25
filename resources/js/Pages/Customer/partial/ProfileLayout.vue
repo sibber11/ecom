@@ -18,7 +18,7 @@ import {InertiaLink} from "@inertiajs/inertia-vue3";
                     </div>
                     <div class="flex-grow">
                         <p class="text-gray-600">Hello,</p>
-                        <h4 class="text-gray-800 font-medium">John Doe</h4>
+                        <h4 class="text-gray-800 font-medium">{{$page.props.auth.user.name}}</h4>
                     </div>
                 </div>
 

@@ -41,7 +41,7 @@ const cancelOrder = (order) => {
                         <td class="px-6 py-4">{{order.total}}</td>
                         <td class="px-6 py-4 text-right">{{order.status}}</td>
                         <td class="px-6 py-4 text-right">
-                            <InertiaLink :href="route('orders.show', order)" class="px-2 text-blue-500 hover:text-primary-dark">View</InertiaLink>
+                            <a :href="route('orders.show', order)" class="px-2 text-blue-500 hover:text-primary-dark" target="_blank">View</a>
                             <button v-if="order.status  !== 'Cancelled' && order.status !== 'Completed'" type="button" class="px-2 text-red-600 hover:text-primary-dark" @click="cancelOrder(order)">
                                 Cancel
                             </button>
