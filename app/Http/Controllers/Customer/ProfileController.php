@@ -26,7 +26,7 @@ class ProfileController extends Controller
         ]);
     }
 
-    public function editAddress()
+    public function editAddress(): Response
     {
         $address = Auth::user()->address;
         $address = explode(', ', $address);
@@ -35,13 +35,9 @@ class ProfileController extends Controller
         ]);
     }
 
-    public function updateAddress(AddressUpdateRequest $request)
+    public function updateAddress(AddressUpdateRequest $request): RedirectResponse
     {
-        $address = $request->address . ', ' . $request->city . ', ' . $request->state . ', ' . $request->zip . ', ' . $request->country;
-        $request->user()->update([
-            'address' => $address,
-        ]);
-
+        $request->update();
         return Redirect::route('address')->with('status', 'address-updated');
     }
 
@@ -82,7 +78,7 @@ class ProfileController extends Controller
         return Redirect::to('/');
     }
 
-    public function showReviews()
+    public function showReviews(): Response
     {
         $reviews = Auth::user()->reviews()->with(['product:id,name'=>[
             'media'
@@ -92,7 +88,7 @@ class ProfileController extends Controller
         ]);
     }
 
-    public function editPassword()
+    public function editPassword(): Response
     {
         return Inertia::render('Customer/Password');
     }

@@ -11,7 +11,7 @@ class AddressUpdateRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
@@ -21,7 +21,7 @@ class AddressUpdateRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'address' => ['required', 'string', 'max:255'],
@@ -30,5 +30,19 @@ class AddressUpdateRequest extends FormRequest
             'zip' => ['required', 'string', 'max:255'],
             'country' => ['required', 'string', 'max:255'],
         ];
+    }
+
+    public function update()
+    {
+        $address = [
+            'address' => $this->address,
+            'city' => $this->city,
+            'state' => $this->state,
+            'zip' => $this->zip,
+            'country' => $this->country,
+        ];
+        $this->user()->update([
+            'address' => $address,
+        ]);
     }
 }
