@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Order;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateOrderRequest extends FormRequest
@@ -24,8 +25,16 @@ class UpdateOrderRequest extends FormRequest
     public function rules()
     {
         return [
-            'status' => 'required|string|in:pending,confirmed,processing,completed,cancelled',
-            'payment_status' => 'required|string|in:pending,processing,completed,cancelled',
+            'status' => 'required|string|in:' . implode(',', array_keys(Order::STATUSES)),
+            'payment_status' => 'required|string|in:'. implode(',', array_keys(Order::PAYMENT_STATUSES))
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'status.in' => 'Status must be one of the following: ' . implode(',', array_keys(Order::STATUSES)),
+            'payment_status.in' => 'Payment status must be one of the following: ' . implode(',', array_keys(Order::PAYMENT_STATUSES))
         ];
     }
 }

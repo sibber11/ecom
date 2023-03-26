@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources;
 
-use App\Helper\QRCode;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class OrderResource extends JsonResource
@@ -13,7 +12,6 @@ class OrderResource extends JsonResource
      */
     public function toArray($request)
     {
-        //dd($this->products);
         return [
             'id' => $this->id,
             'customer_name' => $this->user->name,
