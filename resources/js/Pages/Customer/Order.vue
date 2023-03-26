@@ -1,7 +1,5 @@
 <script setup>
-import ProfileLayout from "@/Pages/Customer/partial/ProfileLayout.vue";
 import {useForm} from "@inertiajs/inertia-vue3";
-import {InertiaLink} from "@inertiajs/inertia-vue3";
 const props = defineProps({
     order: {
         type: Object,
@@ -17,30 +15,10 @@ const form = useForm({
 function printComponent() {
     window.print();
 }
-
-function updateStatus() {
-    form.patch(route('admin.orders.update', props.order.id), {
-        preserveScroll: true,
-        onSuccess: () => {
-            $refs.flashMessage.show('Order status updated successfully', 'success');
-        },
-        onError: () => {
-            $refs.flashMessage.show('Something went wrong', 'error');
-        }
-    });
-}
-const cancelOrder = (order) => {
-    useForm({
-        id: order.id,
-        _method: 'DELETE'
-    }).post(route('orders.destroy', order.id), {
-        preserveState: true,
-    });
-}
 </script>
 
 <template>
-    <section class="col-span-9">
+    <section class="w-[210mm] h-[297mm] mx-auto">
 <!--        <h2 class="text-lg font-medium text-gray-800 mb-4 print:hidden">Order History</h2>-->
         <div class="py-5" id="print">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6" >
@@ -99,7 +77,7 @@ const cancelOrder = (order) => {
                         <div class="col-span-2 m-2">
                             <h3 class="text-2xl text-teal-600">Ultimate Ecommerce</h3>
                             <p>
-                                123, Main Street, New York, USA
+                                todo: add company address
                             </p>
                         </div>
                         <div class="border-teal-600 border-r-2 m-2">
@@ -107,14 +85,18 @@ const cancelOrder = (order) => {
                             <div class="font-bold">{{order.customer_name}}</div>
                             <div>{{order.customer_email}}</div>
                             <div>{{order.customer_phone}}</div>
-                            <div>{{order.billing_address ?? order.shipping_address}}</div>
+                            <div>
+                                {{order.shipping_address.address}} , {{order.shipping_address.city}} , {{order.shipping_address.state}} , {{order.shipping_address.country}} , {{order.shipping_address.zip}}
+                            </div>
                         </div>
                         <div class="m-2">
                             <div class="text-teal-600 font-bold">Ship To</div>
                             <div class="font-bold">{{order.customer_name}}</div>
                             <div>{{order.customer_email}}</div>
                             <div>{{order.customer_phone}}</div>
-                            <div>{{order.shipping_address}}</div>
+                            <div>
+                                {{order.shipping_address.address}} , {{order.shipping_address.city}} , {{order.shipping_address.state}} , {{order.shipping_address.country}} , {{order.shipping_address.zip}}
+                            </div>
                         </div>
                     </section>
                     <section class="p-6">
@@ -130,18 +112,8 @@ const cancelOrder = (order) => {
                             <tbody>
                             <tr v-for="item in order.products" :key="item.id" class="pb-2">
                                 <td class="border-b border-gray-200 pt-2">
-                                    <div class="flex">
-                                        <div class="flex-shrink-0 h-10 w-10">
-                                            <img class="h-10 w-10 rounded-full" :src="item.image" alt="">
-                                        </div>
-                                        <div class="ml-4">
-                                            <div class="text-sm font-medium text-gray-900">
-                                                {{item.name}}
-                                            </div>
-                                            <div class="text-sm text-gray-500">
-                                                {{item.sku}}
-                                            </div>
-                                        </div>
+                                    <div class="text-sm font-medium text-gray-900 text-left">
+                                        {{item.name}}
                                     </div>
                                 </td>
                                 <td class="border-b border-gray-200 pt-2">
