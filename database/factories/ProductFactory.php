@@ -25,7 +25,7 @@ class ProductFactory extends Factory
         $price = fake()->numberBetween(100, 1000);
         $old_price = $price * 1.2;
         return [
-            'name' => fake()->name,
+            'name' => fake()->word,
             'sku' => Str::random(8),
             'description' => fake()->text(32),
             'price' => $price,
