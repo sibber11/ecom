@@ -71,6 +71,8 @@ class Order extends Model
     ];
     protected $casts = [
         'products' => 'array',
+        'shipping_address' => 'array',
+        'billing_address' => 'array',
         'created_at' => 'datetime:Y-m-d',
     ];
     protected $attributes = [
@@ -83,6 +85,18 @@ class Order extends Model
         'processing' => 'Processing',
         'completed' => 'Completed',
         'cancelled' => 'Cancelled',
+    ];
+
+    public const PAYMENT_METHODS = [
+        'cash' => 'Cash',
+        'card' => 'Card',
+        'paypal' => 'Paypal',
+        'stripe' => 'Stripe',
+    ];
+
+    public const PAYMENT_STATUSES = [
+        'paid' => 'Paid',
+        'unpaid' => 'Unpaid',
     ];
 
     //when order is created generate qr code
