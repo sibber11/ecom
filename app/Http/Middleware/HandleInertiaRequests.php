@@ -41,16 +41,16 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
+            'cart' => Cart::instance('cart')->count(),
+            'categories' => Category::where('parent_id')->limit(6)->get(),
+            'env' => App::environment(),
+            'flash' => session()->all(),
+            'wishlist' => Cart::instance('wishlist')->countItems(),
             'ziggy' => function () use ($request) {
                 return array_merge((new Ziggy)->toArray(), [
                     'location' => $request->url(),
                 ]);
             },
-            'flash' => session()->all(),
-            'env' => App::environment(),
-            'cart' => Cart::instance('cart')->count(),
-            'wishlist' => Cart::instance('wishlist')->countItems(),
-            'categories' => Category::where('parent_id', null)->limit(6)->get(),
         ]);
     }
 }
