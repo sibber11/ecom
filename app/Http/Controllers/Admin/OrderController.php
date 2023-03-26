@@ -57,7 +57,7 @@ class OrderController extends Controller
     {
         $order->update($request->validated());
         return back()
-            ->with('message', 'Order updated successfully');
+            ->with('success', 'Order updated successfully');
     }
 
     /**
