@@ -29,17 +29,17 @@ const user = computed(() => usePage().props.value.auth.user);
 
 const form = useForm({
     name: user.value.name,
-    address: user.value.address,
-    city: '',
-    state: '',
-    zip: '',
-    country: '',
+    address: user.value.address.address,
+    city: user.value.address.city,
+    state: user.value.address.state,
+    zip: user.value.address.zip,
+    country: user.value.address.country,
     phone: user.value.phone,
     email: user.value.email,
     notes: '',
     payment_method: 'cash_on_delivery',
     shipping_method: 'free_shipping',
-    terms: false
+    terms: null,
 });
 
 </script>
@@ -47,35 +47,73 @@ const form = useForm({
 <template>
     <!-- wrapper -->
     <CustomerLayout>
+        {{ user }}
         <div class="container grid grid-cols-12 items-start pb-16 pt-4 gap-6">
 
-            <form @submit.prevent="form.post(route('checkout.store'))" class="col-span-8 border border-gray-200 p-4 rounded">
+            <form class="col-span-8 border border-gray-200 p-4 rounded"
+                  @submit.prevent="form.post(route('checkout.store'))">
                 <h3 class="text-lg font-medium capitalize mb-4">Checkout</h3>
                 <div class="space-y-4">
                     <div>
-                        <label for="name" class="text-gray-600">Name <span
+                        <label class="text-gray-600" for="name">Name <span
                             class="text-primary">*</span></label>
-                        <input type="text" name="name" id="name" class="input-box disabled:bg-gray-200" v-model="form.name" disabled>
+                        <input id="name" v-model="form.name" class="input-box disabled:bg-gray-200" disabled
+                               name="name" type="text">
+                    </div>
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label for="country">Country</label>
+                                <input id="country" v-model="form.country" class="input-box" name="country" type="text">
+                                <template v-if="form.errors.country">
+                                    <span class="text-red-500 text-xs italic">{{ form.errors.country }}</span>
+                                </template>
+                            </div>
+                            <div>
+                                <label for="city">City</label>
+                                <input id="city" v-model="form.city" class="input-box" name="city" type="text">
+                                <template v-if="form.errors.city">
+                                    <span class="text-red-500 text-xs italic">{{ form.errors.city }}</span>
+                                </template>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label for="state">State</label>
+                                <input id="state" v-model="form.state" class="input-box" name="state" type="text">
+                                <template v-if="form.errors.state">
+                                    <span class="text-red-500 text-xs italic">{{ form.errors.state }}</span>
+                                </template>
+                            </div>
+                            <div>
+                                <label for="zip">Zip Code</label>
+                                <input id="zip" v-model="form.zip" class="input-box" name="zip" type="text">
+                                <template v-if="form.errors.zip">
+                                    <span class="text-red-500 text-xs italic">{{ form.errors.zip }}</span>
+                                </template>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="address">Street</label>
+                            <input id="address" v-model="form.address" class="input-box" name="address" type="text">
+                            <template v-if="form.errors.address">
+                                <span class="text-red-500 text-xs italic">{{ form.errors.address }}</span>
+                            </template>
+                        </div>
                     </div>
                     <div>
-                        <label for="country" class="text-gray-600">Country/Region</label>
-                        <input type="text" name="country" id="country" class="input-box" v-model="form.country">
+                        <label class="text-gray-600" for="phone">Phone number</label>
+                        <input id="phone" v-model="form.phone" class="input-box" name="phone" type="text">
                     </div>
                     <div>
-                        <label for="address" class="text-gray-600">Street address</label>
-                        <input type="text" name="address" id="address" class="input-box" v-model="form.address">
+                        <label class="text-gray-600" for="email">Email address</label>
+                        <input id="email" v-model="form.email" class="input-box disabled:bg-gray-200" disabled
+                               name="email"
+                               type="email">
                     </div>
                     <div>
-                        <label for="city" class="text-gray-600">City</label>
-                        <input type="text" name="city" id="city" class="input-box" v-model="form.city">
-                    </div>
-                    <div>
-                        <label for="phone" class="text-gray-600">Phone number</label>
-                        <input type="text" name="phone" id="phone" class="input-box" v-model="form.phone">
-                    </div>
-                    <div>
-                        <label for="email" class="text-gray-600">Email address</label>
-                        <input type="email" name="email" id="email" class="input-box disabled:bg-gray-200" disabled v-model="form.email">
+                        <label class="text-gray-600" for="phone">notes</label>
+                        <textarea v-model="form.notes" class="input-box" cols="30" rows="10"></textarea>
                     </div>
                 </div>
 
@@ -89,15 +127,15 @@ const form = useForm({
                         <div class="flex justify-between">
                             <div>
                                 <h5 class="text-gray-800 font-medium">
-                                    {{product.name}}
+                                    {{ product.name }}
                                 </h5>
                                 <p class="text-sm text-gray-600">Size: M</p>
                             </div>
                             <p class="text-gray-600">
-                                {{product.quantity}}
+                                {{ product.quantity }}
                             </p>
                             <p class="text-gray-800 font-medium">
-                                ${{product.price}}
+                                ${{ product.price }}
                             </p>
                         </div>
                     </template>
@@ -123,18 +161,22 @@ const form = useForm({
 
                 <div class="flex justify-between text-gray-800 font-medium py-3 uppercas">
                     <p class="font-semibold">Total</p>
-                    <p>${{total}}</p>
+                    <p>${{ total }}</p>
                 </div>
 
                 <div class="flex items-center mb-4 mt-2">
-                    <input type="checkbox" name="aggrement" id="aggrement"
-                           class="text-primary focus:ring-0 rounded-sm cursor-pointer w-3 h-3">
-                    <label for="aggrement" class="text-gray-600 ml-3 cursor-pointer text-sm">I agree to the <a href="#"
-                                                                                                               class="text-primary">terms & conditions</a></label>
+                    <input id="agreement" v-model="form.terms"
+                           class="text-primary focus:ring-0 rounded-sm cursor-pointer w-3 h-3" name="agreement"
+                           type="checkbox">
+                    <label class="text-gray-600 ml-3 cursor-pointer text-sm" for="agreement">
+                        I agree to the <a class="text-primary" href="#">terms & conditions</a>
+                    </label>
                 </div>
 
-                <button type="submit" @click="form.post(route('checkout.store'))"
-                   class="block w-full py-3 px-4 text-center text-white bg-primary border border-primary rounded-md hover:bg-transparent hover:text-primary transition font-medium">
+                <button
+                    class="block w-full py-3 px-4 text-center text-white bg-primary border border-primary rounded-md hover:bg-transparent hover:text-primary transition font-medium"
+                    type="submit"
+                    @click="form.post(route('checkout.store'))">
                     Place order
                 </button>
             </div>
