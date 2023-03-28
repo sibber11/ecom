@@ -29,7 +29,6 @@ class ProfileController extends Controller
     public function editAddress(): Response
     {
         $address = Auth::user()->address;
-        $address = explode(', ', $address);
         return Inertia::render('Customer/Address',[
             'address' => $address,
         ]);

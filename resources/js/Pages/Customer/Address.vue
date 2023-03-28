@@ -5,11 +5,11 @@ const props = defineProps({
     address: Object,
 })
 const form = useForm({
-    country: props.address[0],
-    city: props.address[1],
-    state: props.address[2],
-    zip: props.address[3],
-    address: props.address[4],
+    country: props.address.country,
+    city: props.address.city,
+    state: props.address.state,
+    zip: props.address.zip,
+    address: props.address.address,
 })
 </script>
 
