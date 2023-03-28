@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Customer;
 
+use App\Events\ProductViewed;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use Inertia\Inertia;
@@ -10,6 +11,7 @@ class ProductController extends Controller
 {
     public function show(Product $product)
     {
+        ProductViewed::dispatch($product);
         request()->validate([
             'reviews' => 'integer|min:3'
         ]);
