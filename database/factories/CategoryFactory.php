@@ -6,7 +6,7 @@ use App\Models\Category;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Category>
+ * @extends Factory<Category>
  */
 class CategoryFactory extends Factory
 {
@@ -25,9 +25,11 @@ class CategoryFactory extends Factory
     //after creating the model associate to a random parent
     public function configure()
     {
-        return $this->afterCreating(function (Category $category){
-            $image_names = glob('storage/temp/category/*.jpg');
-            dump(count($image_names));
+        $image_names = glob('storage/temp/category/*.jpg');
+        return $this->afterCreating(function (Category $category) use ($image_names) {
+            if (count($image_names) == 0){
+                return;
+            }
             $random = random_int(0, count($image_names) - 1);
             $category->addMedia($image_names[$random])
                 ->preservingOriginal()
