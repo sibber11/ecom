@@ -9,12 +9,9 @@ import {provide} from "vue";
 import ProductCluster from "@/Pages/Partials/ProductCluster.vue"
 
 const props = defineProps({
-    categories: Object,
-    canLogin: Boolean,
-    canRegister: Boolean,
     newArrival: Object,
     recommended: Object,
-    cart: Number
+    popular: Object,
 })
 
 provide('categories', props.categories);
@@ -23,6 +20,13 @@ provide('categories', props.categories);
 <template>
     <CustomerLayout>
         <Head title="Ecommerce Tailwind"/>
+        <!-- product -->
+        <div class="pt-16">
+            <ProductCluster :products="recommended">
+                recommended for you
+            </ProductCluster>
+        </div>
+        <!-- ./product -->
 
         <!-- banner -->
         <Banner/>
@@ -47,8 +51,8 @@ provide('categories', props.categories);
         <!-- ./ads -->
 
         <!-- product -->
-        <ProductCluster :products="recommended">
-            recommended for you
+        <ProductCluster :products="popular">
+            Most Popular
         </ProductCluster>
         <!-- ./product -->
 

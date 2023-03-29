@@ -24,8 +24,12 @@ class StoreClick
      */
     public function handle(ProductViewed $event):void
     {
-        Click::create([
+        $click = Click::make([
             'product_id' => $event->product->id,
         ]);
+        if (auth()->check()) {
+            $click->user()->associate(auth()->user());
+        }
+        $click->save();
     }
 }

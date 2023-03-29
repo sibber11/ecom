@@ -89,11 +89,6 @@ class Product extends Model implements HasMedia, Buyable
         'brand_id',
     ];
 
-    protected $appends = [
-//        'avg_rating',
-//        'ratings',
-//        'rating_count',
-    ];
     public const MEDIA_COLLECTION = 'product';
 
     public function getSlugOptions(): SlugOptions
@@ -102,10 +97,12 @@ class Product extends Model implements HasMedia, Buyable
             ->generateSlugsFrom(['name'])
             ->saveSlugsTo('slug');
     }
+
     public function getRouteKeyName(): string
     {
         return 'slug';
     }
+
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
@@ -118,8 +115,6 @@ class Product extends Model implements HasMedia, Buyable
 
     /**
      * Get the identifier of the Buyable item.
-     *
-     * @return int|string
      */
     public function getBuyableIdentifier($options = null): int|string
     {
@@ -128,8 +123,6 @@ class Product extends Model implements HasMedia, Buyable
 
     /**
      * Get the description or title of the Buyable item.
-     *
-     * @return string
      */
     public function getBuyableDescription($options = null): string
     {
@@ -138,8 +131,6 @@ class Product extends Model implements HasMedia, Buyable
 
     /**
      * Get the price of the Buyable item.
-     *
-     * @return float
      */
     public function getBuyablePrice($options = null): float|int
     {
@@ -148,8 +139,6 @@ class Product extends Model implements HasMedia, Buyable
 
     /**
      * Get the weight of the Buyable item.
-     *
-     * @return float
      */
     public function getBuyableWeight($options = null): float|int
     {
@@ -166,6 +155,7 @@ class Product extends Model implements HasMedia, Buyable
     {
         return $this->reviews()->selectRaw('rating, count(*) as rating_count')->groupBy('rating')->get()->pluck('rating_count', 'rating')->toArray();
     }
+
     public function getAvgRatingAttribute(): float
     {
         //return avg rating upto 1 decimal place
@@ -196,5 +186,13 @@ class Product extends Model implements HasMedia, Buyable
     public function clicks(): HasMany
     {
         return $this->hasMany(Click::class);
+    }
+
+    public function similarProducts(int $limit = 4): array|Collection|\Illuminate\Support\Collection
+    {
+        return Product::withAnyTags($this->tags)
+            ->where('id', '!=', $this->id)
+            ->take($limit)
+            ->get();
     }
 }

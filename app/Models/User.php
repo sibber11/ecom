@@ -60,8 +60,6 @@ class User extends Authenticatable
 
     /**
      * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
      */
     protected $fillable = [
         'name',
@@ -73,8 +71,6 @@ class User extends Authenticatable
 
     /**
      * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
      */
     protected $hidden = [
         'password',
@@ -83,8 +79,6 @@ class User extends Authenticatable
 
     /**
      * The attributes that should be cast.
-     *
-     * @var array<string, string>
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
@@ -109,5 +103,23 @@ class User extends Authenticatable
     public function clicks(): HasMany
     {
         return $this->hasMany(Click::class);
+    }
+
+    public function recommendedProducts($limit = 4): array|Collection|\Illuminate\Support\Collection
+    {
+        // here we get the tags of the last 5 products the user has clicked on
+        $tags = $this
+            ->clicks()
+            ->distinct('product_id')
+            ->latest()
+            ->limit(5)
+            ->with(['product' => function ($query) {
+                $query->select('id')->without('media')->with('tags:id');
+            }])
+            ->get()
+            ->pluck('product.tags')
+            ->unique('id')
+            ->flatten();
+        return Product::withAnyTags($tags)->with('tags')->limit($limit)->get();
     }
 }

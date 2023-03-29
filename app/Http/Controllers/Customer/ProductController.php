@@ -4,12 +4,14 @@ namespace App\Http\Controllers\Customer;
 
 use App\Events\ProductViewed;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ProductForCardResource;
 use App\Models\Product;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class ProductController extends Controller
 {
-    public function show(Product $product)
+    public function show(Product $product): Response
     {
         ProductViewed::dispatch($product);
         request()->validate([
@@ -28,8 +30,10 @@ class ProductController extends Controller
             'rating_count'
         ]);
         $product->load('attributes');
+        $similar_products = ProductForCardResource::collection($product->similarProducts());
         return Inertia::render('Customer/Product', [
             'product' => $product,
+            'relatedProducts' => $similar_products,
         ]);
     }
 }
