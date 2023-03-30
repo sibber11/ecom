@@ -3,6 +3,7 @@
 namespace Models;
 
 use App\Models\Order;
+use App\Models\Product;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -25,14 +26,6 @@ class OrderTest extends TestCase
             'shipping' => 0,
             'discount' => 0,
             'total' => 100,
-            'products' => [
-                [
-                    'id' => 1,
-                    'name' => 'Product 1',
-                    'price' => 100,
-                    'quantity' => 1,
-                ]
-            ]
         ]);
         $this->assertDatabaseHas('orders', [
             'user_id' => 1,
@@ -42,14 +35,36 @@ class OrderTest extends TestCase
             'shipping' => 0,
             'discount' => 0,
             'total' => 100,
-            'products' => json_encode([
-                [
-                    'id' => 1,
-                    'name' => 'Product 1',
-                    'price' => 100,
-                    'quantity' => 1,
-                ]
-            ])
         ]);
+    }
+
+    public function test_order_can_be_placed()
+    {
+        $this->withoutExceptionHandling();
+        $this->signIn();
+        $product = Product::factory()->create();
+
+        $response = $this->post(route('cart.store', $product),[
+            'quantity' => 1,
+            'options' => [
+                'size' => 'large',
+                'color' => 'red',
+            ]
+        ]);
+        $response->assertRedirect();
+
+        $response = $this->post(route('checkout.store'), [
+            'payment_method' => 'cash',
+            'address' => "Address",
+            'city' => "City",
+            'state' => "State",
+            'country' => "Country",
+            'zip' => "Zip",
+            'phone' => "Phone",
+            'email' => "Email",
+            'notes' => "Notes",
+            'terms' => 'on',
+            ]);
+        $response->assertRedirect();
     }
 }

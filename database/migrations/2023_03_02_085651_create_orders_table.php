@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Order;
+use App\Models\Product;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,7 +18,7 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
-            $table->json('products');
+//            $table->json('products');
             $table->decimal('total', 8, 2);
             $table->decimal('tax', 8, 2);
             $table->decimal('subtotal', 8, 2);
@@ -30,6 +32,15 @@ return new class extends Migration
             $table->json('shipping_address');
             $table->text('qr_code')->nullable();
             $table->timestamps();
+        });
+
+        Schema::create('order_product', function (Blueprint $table){
+            $table->foreignIdFor(Order::class)->constrained();
+            $table->foreignIdFor(Product::class)->constrained();
+            $table->integer('quantity');
+            $table->decimal('price', 8, 2);
+            $table->decimal('total', 8, 2);
+            $table->json('options')->nullable();
         });
     }
 

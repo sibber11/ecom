@@ -3,8 +3,16 @@
 namespace App\Models;
 
 use App\Helper\QRCode;
+use Database\Factories\OrderFactory;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 
 /**
  * App\Models\Order
@@ -24,32 +32,32 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $billing_address
  * @property string $shipping_address
  * @property string|null $qr_code
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\Review|null $review
- * @property-read \App\Models\User $user
- * @method static \Database\Factories\OrderFactory factory($count = null, $state = [])
- * @method static \Illuminate\Database\Eloquent\Builder|Order newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Order newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Order query()
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereBillingAddress($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereDiscount($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order wherePaymentId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order wherePaymentMethod($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order wherePaymentStatus($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereProducts($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereQrCode($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereShipping($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereShippingAddress($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereStatus($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereSubtotal($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereTax($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereTotal($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereUserId($value)
- * @mixin \Eloquent
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Review|null $review
+ * @property-read User $user
+ * @method static OrderFactory factory($count = null, $state = [])
+ * @method static Builder|Order newModelQuery()
+ * @method static Builder|Order newQuery()
+ * @method static Builder|Order query()
+ * @method static Builder|Order whereBillingAddress($value)
+ * @method static Builder|Order whereCreatedAt($value)
+ * @method static Builder|Order whereDiscount($value)
+ * @method static Builder|Order whereId($value)
+ * @method static Builder|Order wherePaymentId($value)
+ * @method static Builder|Order wherePaymentMethod($value)
+ * @method static Builder|Order wherePaymentStatus($value)
+ * @method static Builder|Order whereProducts($value)
+ * @method static Builder|Order whereQrCode($value)
+ * @method static Builder|Order whereShipping($value)
+ * @method static Builder|Order whereShippingAddress($value)
+ * @method static Builder|Order whereStatus($value)
+ * @method static Builder|Order whereSubtotal($value)
+ * @method static Builder|Order whereTax($value)
+ * @method static Builder|Order whereTotal($value)
+ * @method static Builder|Order whereUpdatedAt($value)
+ * @method static Builder|Order whereUserId($value)
+ * @mixin Eloquent
  */
 class Order extends Model
 {
@@ -70,7 +78,6 @@ class Order extends Model
         'shipping_address',
     ];
     protected $casts = [
-        'products' => 'array',
         'shipping_address' => 'array',
         'billing_address' => 'array',
         'created_at' => 'datetime:Y-m-d',
@@ -79,6 +86,7 @@ class Order extends Model
         'status' => 'pending',
         'shipping' => 0.00,
     ];
+    protected $with = ['products'];
     public const STATUSES = [
         'pending' => 'Pending',
         'confirmed' => 'Confirmed',
@@ -111,13 +119,26 @@ class Order extends Model
     }
 
     // Relationships
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function review()
+    public function review(): HasOne
     {
         return $this->hasOne(Review::class);
+    }
+
+    public function products(): BelongsToMany
+    {
+        return $this->belongsToMany(Product::class);
+    }
+    public function addProducts(Collection $content)
+    {
+        $products = Product::whereIn('slug', $content->pluck('id'))->get();
+        $content->each(function ($item) use ($products) {
+            $product_id = $products->where('slug', $item->id)->first()->id;
+            $this->products()->attach($product_id, ['quantity' => $item->qty, 'price' => $item->price, 'total' => $item->total, 'options' => $item->options]);
+        });
     }
 }

@@ -3,11 +3,12 @@
 namespace Database\Factories;
 
 use App\Models\Order;
+use App\Models\Product;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Order>
+ * @extends Factory<Order>
  */
 class OrderFactory extends Factory
 {
@@ -18,7 +19,8 @@ class OrderFactory extends Factory
     {
         Cart::instance('cart')->destroy();
         for ($i = 1; $i < fake()->numberBetween(2,10); $i++){
-            Cart::add($i, fake()->word, fake()->numberBetween(1,10), fake()->numberBetween(100,1000));
+            $product = Product::inRandomOrder()->first() ?? Product::factory()->create();
+            Cart::add($product->slug, $product->name, fake()->numberBetween(1,10), fake()->numberBetween(100,1000));
         }
         return [
             'user_id' => 1,
@@ -28,7 +30,7 @@ class OrderFactory extends Factory
             'shipping' => 0,
             'discount' => 0,
             'total' => Cart::totalFloat(),
-            'products' => Cart::instance('cart')->content(),
+//            'products' => Cart::instance('cart')->content(),
             'payment_method' => 'cash',
             'payment_status' => fake()->randomElement(array_keys(Order::PAYMENT_STATUSES)),
             'payment_id' => null,
@@ -40,5 +42,12 @@ class OrderFactory extends Factory
                 'country' => fake()->country,
                 'zip' => fake()->postcode,],
         ];
+    }
+
+    public function configure()
+    {
+        return $this->afterCreating(function (Order $order) {
+            $order->addProducts(Cart::instance('cart')->content());
+        });
     }
 }

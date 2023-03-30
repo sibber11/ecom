@@ -117,7 +117,7 @@ function printComponent() {
                                     </div>
                                 </td>
                                 <td class="border-b border-gray-200 pt-2">
-                                    <div class="text-sm text-gray-900">{{item.qty}}</div>
+                                    <div class="text-sm text-gray-900">{{item.quantity}}</div>
                                 </td>
                                 <td class="border-b border-gray-200 pt-2">
                                     <div class="text-sm text-gray-900">{{item.price}} $</div>
