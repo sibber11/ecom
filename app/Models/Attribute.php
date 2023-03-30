@@ -2,10 +2,14 @@
 
 namespace App\Models;
 
+use Database\Factories\AttributeFactory;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\ProductAttribute
@@ -14,19 +18,19 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $name
  * @property string $type
  * @property array|null $options
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @method static \Database\Factories\AttributeFactory factory($count = null, $state = [])
- * @method static \Illuminate\Database\Eloquent\Builder|Attribute newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Attribute newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Attribute query()
- * @method static \Illuminate\Database\Eloquent\Builder|Attribute whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Attribute whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Attribute whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Attribute whereOptions($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Attribute whereType($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Attribute whereUpdatedAt($value)
- * @mixin \Eloquent
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @method static AttributeFactory factory($count = null, $state = [])
+ * @method static Builder|Attribute newModelQuery()
+ * @method static Builder|Attribute newQuery()
+ * @method static Builder|Attribute query()
+ * @method static Builder|Attribute whereCreatedAt($value)
+ * @method static Builder|Attribute whereId($value)
+ * @method static Builder|Attribute whereName($value)
+ * @method static Builder|Attribute whereOptions($value)
+ * @method static Builder|Attribute whereType($value)
+ * @method static Builder|Attribute whereUpdatedAt($value)
+ * @mixin Eloquent
  */
 class Attribute extends Model
 {

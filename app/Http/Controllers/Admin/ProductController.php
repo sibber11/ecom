@@ -19,6 +19,7 @@ use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\QueryBuilder\QueryBuilder;
+use Throwable;
 
 class ProductController extends Controller
 {
@@ -65,7 +66,7 @@ class ProductController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function store(StoreProductRequest $request)
     {
@@ -99,7 +100,7 @@ class ProductController extends Controller
 
     /**
      * Update the specified resource in storage.
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function update(UpdateProductRequest $request, Product $product)
     {

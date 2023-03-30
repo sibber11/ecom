@@ -2,8 +2,12 @@
 
 namespace App\Models;
 
+use Database\Factories\ReviewFactory;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Review
@@ -14,24 +18,24 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $product_id
  * @property int $user_id
  * @property int $order_id
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\Order|null $order
- * @property-read \App\Models\Product $product
- * @property-read \App\Models\User $user
- * @method static \Database\Factories\ReviewFactory factory($count = null, $state = [])
- * @method static \Illuminate\Database\Eloquent\Builder|Review newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Review newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Review query()
- * @method static \Illuminate\Database\Eloquent\Builder|Review whereBody($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Review whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Review whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Review whereOrderId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Review whereProductId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Review whereRating($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Review whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Review whereUserId($value)
- * @mixin \Eloquent
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Order|null $order
+ * @property-read Product $product
+ * @property-read User $user
+ * @method static ReviewFactory factory($count = null, $state = [])
+ * @method static Builder|Review newModelQuery()
+ * @method static Builder|Review newQuery()
+ * @method static Builder|Review query()
+ * @method static Builder|Review whereBody($value)
+ * @method static Builder|Review whereCreatedAt($value)
+ * @method static Builder|Review whereId($value)
+ * @method static Builder|Review whereOrderId($value)
+ * @method static Builder|Review whereProductId($value)
+ * @method static Builder|Review whereRating($value)
+ * @method static Builder|Review whereUpdatedAt($value)
+ * @method static Builder|Review whereUserId($value)
+ * @mixin Eloquent
  */
 class Review extends Model
 {
