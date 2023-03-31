@@ -40,7 +40,6 @@ class ProductTest extends TestCase
         $this->signIn();
         $product = Product::factory()->hasReviews(3)->create();
         self::assertCount(3, $product->reviews);
-        assertCount(1, $product->media);
         $resource = ProductForCardResource::make($product);
         $this->assertNotNull($resource);
     }

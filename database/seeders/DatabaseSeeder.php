@@ -14,7 +14,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->emptyPublicDirectory();
+        dump(env('app_env'));
+        if (env('app_env') != 'testing'){
+            $this->emptyPublicDirectory();
+        }
         DB::beginTransaction();
         User::factory()->create([
             'name' => 'Test User',

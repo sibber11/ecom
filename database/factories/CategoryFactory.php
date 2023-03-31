@@ -27,13 +27,15 @@ class CategoryFactory extends Factory
     {
         $image_names = glob('storage/temp/category/*.jpg');
         return $this->afterCreating(function (Category $category) use ($image_names) {
-            if (count($image_names) == 0){
-                return;
+            if (env('app_env') != 'testing'){
+                if (count($image_names) == 0){
+                    return;
+                }
+                $random = random_int(0, count($image_names) - 1);
+                $category->addMedia($image_names[$random])
+                    ->preservingOriginal()
+                    ->toMediaCollection(Category::MEDIA_COLLECTION);
             }
-            $random = random_int(0, count($image_names) - 1);
-            $category->addMedia($image_names[$random])
-                ->preservingOriginal()
-                ->toMediaCollection(Category::MEDIA_COLLECTION);
         })->afterMaking(function (Category $category){
             $category->parent_id = Category::inRandomOrder()->first()->id ?? null;
         });
