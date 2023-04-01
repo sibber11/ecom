@@ -21,7 +21,7 @@ provide('categories', props.categories);
     <CustomerLayout>
         <Head title="Ecommerce Tailwind"/>
         <!-- product -->
-        <div class="pt-16">
+        <div class="pt-16" v-if="recommended.length !== 0">
             <ProductCluster :products="recommended">
                 recommended for you
             </ProductCluster>
