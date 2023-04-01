@@ -36,17 +36,23 @@ use Spatie\Tags\Tag;
  * @property int $quantity
  * @property int $category_id
  * @property int $brand_id
+ * @property int $stock
+ * @property int $is_active
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property-read Collection<int, Attribute> $attributes
+ * @property-read int|null $attributes_count
  * @property-read Brand|null $brand
  * @property-read Category|null $category
- * @property-read mixed $avg_rating
- * @property-read mixed $rating_count
- * @property-read mixed $ratings
+ * @property-read Collection<int, Click> $clicks
+ * @property-read int|null $clicks_count
+ * @property-read Collection<int, Review> $latestReviews
+ * @property-read int|null $latest_reviews_count
  * @property-read MediaCollection<int, Media> $media
  * @property-read int|null $media_count
  * @property-read Collection<int, Review> $reviews
  * @property-read int|null $reviews_count
+ * @property-read int|null $reviews_avg_rating
  * @property Collection<int, Tag> $tags
  * @property-read int|null $tags_count
  * @method static ProductFactory factory($count = null, $state = [])
@@ -58,12 +64,14 @@ use Spatie\Tags\Tag;
  * @method static Builder|Product whereCreatedAt($value)
  * @method static Builder|Product whereDescription($value)
  * @method static Builder|Product whereId($value)
+ * @method static Builder|Product whereIsActive($value)
  * @method static Builder|Product whereName($value)
  * @method static Builder|Product whereOldPrice($value)
  * @method static Builder|Product wherePrice($value)
  * @method static Builder|Product whereQuantity($value)
  * @method static Builder|Product whereSku($value)
  * @method static Builder|Product whereSlug($value)
+ * @method static Builder|Product whereStock($value)
  * @method static Builder|Product whereUpdatedAt($value)
  * @method static Builder|Product withAllTags(ArrayAccess|Tag|array|string $tags, ?string $type = null)
  * @method static Builder|Product withAllTagsOfAnyType($tags)
@@ -77,6 +85,7 @@ class Product extends Model implements HasMedia, Buyable
     use HasFactory, HasSlug, HasTags, InteractsWithMedia;
 
     protected $with = ['brand', 'category', 'media'];
+    protected $withCount = ['reviews'];
 
     protected $fillable = [
         'name',
@@ -148,24 +157,6 @@ class Product extends Model implements HasMedia, Buyable
     public function reviews(): HasMany
     {
         return $this->hasMany(Review::class);
-    }
-
-
-    public function getRatingsAttribute(): array
-    {
-        return $this->reviews()->selectRaw('rating, count(*) as rating_count')->groupBy('rating')->get()->pluck('rating_count', 'rating')->toArray();
-    }
-
-    public function getAvgRatingAttribute(): float
-    {
-        //return avg rating upto 1 decimal place
-        return round($this->reviews->avg('rating'), 1);
-
-    }
-
-    public function getRatingCountAttribute(): int
-    {
-        return $this->reviews->count();
     }
 
     public function latestReviews(): HasMany

@@ -46,7 +46,7 @@ const form = useForm({
                 <h2 class="text-3xl font-medium uppercase mb-2">{{ product.name }}</h2>
                 <div class="flex items-center mb-4">
                     <div class="flex gap-1 text-sm">
-                        <RatingStars :rating="product.avg_rating"/>
+                        <RatingStars :rating="product.reviews_avg_rating"/>
                     </div>
                     <div class="text-xs text-gray-500 ml-3">(150 Reviews)</div>
                 </div>

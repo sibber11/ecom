@@ -1,5 +1,6 @@
 <script setup>
 import {InertiaLink} from "@inertiajs/inertia-vue3";
+import SearchBar from "@/components/SearchBar.vue";
 </script>
 <template>
     <header class="py-4 shadow-sm bg-white">
@@ -8,14 +9,7 @@ import {InertiaLink} from "@inertiajs/inertia-vue3";
                 <img src="/assets/logo.svg" alt="Logo" class="w-32">
             </InertiaLink>
 
-            <div class="w-full max-w-xl relative flex px-4">
-                <a href="#" class="absolute right-8 top-3 text-lg text-gray-400">
-                    <i class="fa fa-magnifying-glass"></i>
-                </a>
-                <input type="text" name="search" id="search"
-                       class="w-full border border-primary py-3 pr-3 rounded-md focus:outline-none"
-                       placeholder="search">
-            </div>
+            <SearchBar/>
 
             <div class="flex items-center space-x-4">
                 <InertiaLink :href="route('wishlist')" class="text-center text-gray-700 hover:text-primary transition relative">

@@ -20,7 +20,7 @@ const form = useForm({
 });
 
 function getPercent(star) {
-    return Math.round(star / props.product.rating_count * 100);
+    return Math.round(star / props.product.reviews_count * 100);
 }
 
 function submitReview() {
@@ -51,10 +51,10 @@ const loadMore = ref(true);
         <div class="flex mb-3 justify-between">
             <div class="w-1/2">
                 <div class="flex items-center mb-3">
-                    <RatingStars :rating="product.avg_rating"/>
-                    <p class="ml-2 text-sm font-medium text-gray-900">{{ product.avg_rating }} out of 5</p>
+                    <RatingStars :rating="product.reviews_avg_rating"/>
+                    <p class="ml-2 text-sm font-medium text-gray-900">{{ product.reviews_avg_rating }} out of 5</p>
                 </div>
-                <p class="text-sm font-medium text-gray-500">{{ product.rating_count }} total ratings</p>
+                <p class="text-sm font-medium text-gray-500">{{ product.reviews_count }} total ratings</p>
                 <div class="flex flex-col-reverse">
                     <template v-for="(star, i) in product.ratings" :key="i">
                         <div class="flex items-center mt-4">

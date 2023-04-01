@@ -15,6 +15,9 @@ class ProductForCardResource extends JsonResource
      */
     public function toArray($request): array
     {
+        /**
+         * @var Product $this
+         */
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -27,9 +30,8 @@ class ProductForCardResource extends JsonResource
             'brand_name' => $this->brand->name,
             'first_media' => $this->getFirstMediaUrl(Product::MEDIA_COLLECTION),
             'first_media_name' => $this->getFirstMedia(Product::MEDIA_COLLECTION)?->name,
-            'rating' => $this->avg_rating,
-            'rating_count' => $this->rating_count,
-            'avg_rating' => $this->avg_rating,
+            'reviews_count' => $this->reviews_count,
+            'reviews_avg_rating' => $this->reviews_avg_rating,
         ];
     }
 }

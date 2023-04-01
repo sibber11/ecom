@@ -39,9 +39,9 @@ const form = useForm({
             </div>
             <div class="flex items-center">
                 <div class="flex gap-1 text-sm">
-                    <RatingStars :rating="product.avg_rating"/>
+                    <RatingStars :rating="product.reviews_avg_rating"/>
                 </div>
-                <div class="text-xs text-gray-500 ml-3">({{product.rating_count}})</div>
+                <div class="text-xs text-gray-500 ml-3">({{product.reviews_count}})</div>
             </div>
         </div>
         <button type="button" @click="form.post(route('cart.store', product),{preserveScroll: true})"

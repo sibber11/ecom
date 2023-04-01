@@ -1,6 +1,15 @@
 <?php
 
+use App\Http\Controllers\Customer\CartController;
+use App\Http\Controllers\Customer\CheckoutController;
+use App\Http\Controllers\Customer\HomeController;
+use App\Http\Controllers\Customer\OrderController;
+use App\Http\Controllers\Customer\ProductController;
 use App\Http\Controllers\Customer\ProfileController;
+use App\Http\Controllers\Customer\ReviewController;
+use App\Http\Controllers\Customer\SearchController;
+use App\Http\Controllers\Customer\WishlistController;
+use App\Http\Resources\CartItemResource;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -15,7 +24,13 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/', [\App\Http\Controllers\Customer\HomeController::class, 'index'])->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
+
+/**
+ * Search routes
+ */
+
+Route::get('search', [SearchController::class, 'index'])->name('search');
 
 
 Route::middleware('auth')->group(function () {
@@ -27,19 +42,19 @@ Route::middleware('auth')->group(function () {
 /**
  * Cart routes
  */
-Route::post('cart/{product}', [\App\Http\Controllers\Customer\CartController::class, 'store'])
+Route::post('cart/{product}', [CartController::class, 'store'])
     ->name('cart.store');
-Route::patch('cart/{rowId}', [\App\Http\Controllers\Customer\CartController::class, 'update'])
+Route::patch('cart/{rowId}', [CartController::class, 'update'])
     ->name('cart.update');
-Route::delete('cart/{rowId}', [\App\Http\Controllers\Customer\CartController::class, 'destroy'])
+Route::delete('cart/{rowId}', [CartController::class, 'destroy'])
     ->name('cart.delete');
 Route::get('cart', function () {
     return Inertia::render('Customer/Cart', [
-        'products' => \App\Http\Resources\CartItemResource::collection(Cart::instance('cart')->content()),
+        'products' => CartItemResource::collection(Cart::instance('cart')->content()),
     ]);
 })->name('cart');
 
-Route::get('products/{product}', [\App\Http\Controllers\Customer\ProductController::class, 'show'])->name('products.show');
+Route::get('products/{product}', [ProductController::class, 'show'])->name('products.show');
 
 Route::middleware('auth')->group(function () {
     /**
@@ -47,23 +62,23 @@ Route::middleware('auth')->group(function () {
      */
     Route::get('wishlist', function () {
         return Inertia::render('Customer/Wishlist', [
-            'products' => \App\Http\Resources\CartItemResource::collection(Cart::instance('wishlist')->content()),
+            'products' => CartItemResource::collection(Cart::instance('wishlist')->content()),
         ]);
     })->name('wishlist');
-    Route::post('wishlist/{product}', [\App\Http\Controllers\Customer\WishlistController::class, 'store'])->name('wishlist.store');
-    Route::delete('wishlist/{rowId}', [\App\Http\Controllers\Customer\WishlistController::class, 'destroy'])->name('wishlist.delete');
+    Route::post('wishlist/{product}', [WishlistController::class, 'store'])->name('wishlist.store');
+    Route::delete('wishlist/{rowId}', [WishlistController::class, 'destroy'])->name('wishlist.delete');
 
     /**
      * checkout routes
      */
 
-    Route::post('checkout', [\App\Http\Controllers\Customer\CheckoutController::class, 'store'])->name('checkout.store');
-    Route::get('checkout', [\App\Http\Controllers\Customer\CheckoutController::class, 'show'])->name('checkout.show');
+    Route::post('checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+    Route::get('checkout', [CheckoutController::class, 'show'])->name('checkout.show');
 
 
-    Route::get('orders', [\App\Http\Controllers\Customer\OrderController::class, 'index'])->name('orders.index');
-    Route::get('orders/{order}', [\App\Http\Controllers\Customer\OrderController::class, 'show'])->name('orders.show');
-    Route::delete('orders/{order}', [\App\Http\Controllers\Customer\OrderController::class, 'destroy'])->name('orders.destroy');
+    Route::get('orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::get('orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+    Route::delete('orders/{order}', [OrderController::class, 'destroy'])->name('orders.destroy');
 
     /**
      * profile routes
@@ -71,13 +86,13 @@ Route::middleware('auth')->group(function () {
     Route::get('profile', function () {
         return Inertia::render('Customer/Profile');
     })->name('profile');
-    Route::post('profile', [\App\Http\Controllers\Customer\ProfileController::class, 'update'])->name('profile.update');
+    Route::post('profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::get('address', [ProfileController::class, 'editAddress'])->name('address');
-    Route::post('address', [\App\Http\Controllers\Customer\ProfileController::class, 'updateAddress'])->name('address.store');
+    Route::post('address', [ProfileController::class, 'updateAddress'])->name('address.store');
     Route::get('password', [ProfileController::class, 'editPassword'])->name('password');
-    Route::get('reviews', [\App\Http\Controllers\Customer\ProfileController::class, 'showReviews'])->name('reviews.index');
+    Route::get('reviews', [ProfileController::class, 'showReviews'])->name('reviews.index');
 
-    Route::resource('review', \App\Http\Controllers\Customer\ReviewController::class)->only('store');
+    Route::resource('review', ReviewController::class)->only('store');
 });
 
 Route::get('icons', function () {

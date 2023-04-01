@@ -24,12 +24,7 @@ class ProductController extends Controller
         } else {
             $product->load('latestReviews.user:id,name');
         }
-        $product->append([
-            'avg_rating',
-            'ratings',
-            'rating_count'
-        ]);
-        $product->load('attributes');
+        $product->load('attributes')->loadAvg('reviews', 'rating');
         $similar_products = ProductForCardResource::collection($product->similarProducts());
         return Inertia::render('Customer/Product', [
             'product' => $product,

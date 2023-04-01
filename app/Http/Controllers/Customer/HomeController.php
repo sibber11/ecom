@@ -13,6 +13,7 @@ class HomeController extends Controller
     {
         $newArrival = ProductForCardResource::collection(
             Product::latest()
+                ->withAvg('reviews', 'rating')
                 ->limit(4)
                 ->get());
         if (auth()->check()){
