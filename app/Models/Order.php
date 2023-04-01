@@ -14,12 +14,12 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
+
 /**
  * App\Models\Order
  *
  * @property int $id
  * @property int $user_id
- * @property array $products
  * @property string $total
  * @property string $tax
  * @property string $subtotal
@@ -29,11 +29,13 @@ use Illuminate\Support\Collection;
  * @property string $payment_method
  * @property string $payment_status
  * @property string|null $payment_id
- * @property string|null $billing_address
- * @property string $shipping_address
+ * @property array|null $billing_address
+ * @property array $shipping_address
  * @property string|null $qr_code
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Product> $products
+ * @property-read int|null $products_count
  * @property-read Review|null $review
  * @property-read User $user
  * @method static OrderFactory factory($count = null, $state = [])
@@ -47,7 +49,6 @@ use Illuminate\Support\Collection;
  * @method static Builder|Order wherePaymentId($value)
  * @method static Builder|Order wherePaymentMethod($value)
  * @method static Builder|Order wherePaymentStatus($value)
- * @method static Builder|Order whereProducts($value)
  * @method static Builder|Order whereQrCode($value)
  * @method static Builder|Order whereShipping($value)
  * @method static Builder|Order whereShippingAddress($value)

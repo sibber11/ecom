@@ -26,10 +26,12 @@ use Laravel\Sanctum\PersonalAccessToken;
  * @property string|null $phone
  * @property Carbon|null $email_verified_at
  * @property string $password
- * @property string|null $address
+ * @property array|null $address
  * @property string|null $remember_token
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property-read Collection<int, Click> $clicks
+ * @property-read int|null $clicks_count
  * @property-read DatabaseNotificationCollection<int, DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
  * @property-read Collection<int, Order> $orders
@@ -120,6 +122,6 @@ class User extends Authenticatable
             ->pluck('product.tags')
             ->unique('id')
             ->flatten();
-        return Product::withAnyTags($tags)->with('tags')->limit($limit)->get();
+        return Product::withAnyTags($tags)->with('tags')->withAvg('reviews', 'rating')->limit($limit)->get();
     }
 }
