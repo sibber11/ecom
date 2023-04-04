@@ -23,6 +23,8 @@
     "dependencies": {
         "@protonemedia/inertiajs-tables-laravel-query-builder": "^2.1.0",
         "@vueform/multiselect": "^2.6.1",
-        "mini-svg-data-uri": "^1.4.4"
+        "laravel-echo": "^1.15.0",
+        "mini-svg-data-uri": "^1.4.4",
+        "pusher-js": "^8.0.2"
     }
 }
