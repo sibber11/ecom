@@ -23,7 +23,7 @@ class ProductForSearchResource extends JsonResource
             'reviews_avg_rating' => $this->reviews_avg_rating,
             'reviews_count' => $this->reviews_count,
             'price' => $this->price,
-            'image' => $this->getFirstMediaUrl(Product::MEDIA_COLLECTION),
+            'image' => $this->getFirstMedia(Product::MEDIA_COLLECTION)?->getUrl('thumbnail'),
         ];
     }
 }
