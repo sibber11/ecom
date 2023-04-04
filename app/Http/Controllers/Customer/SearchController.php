@@ -12,10 +12,11 @@ class SearchController extends Controller
     public function index(Request $request)
     {
         $request->validate([
-            'query' => 'required|string|min:3',
+            'query' => 'required|string|min:1',
         ]);
         //use spatie query builder to search products
         $products = Product::query()
+            ->withAvg('reviews', 'rating')
             ->where('name', 'like', '%' . $request->input('query') . '%')
             ->orWhere('description', 'like', '%' . $request->input('query') . '%')
             ->paginate(5);
