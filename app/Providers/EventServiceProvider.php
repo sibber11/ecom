@@ -2,7 +2,10 @@
 
 namespace App\Providers;
 
+use App\Events\OrderPlaced;
 use App\Events\ProductViewed;
+use App\Listeners\NotifyAdmin;
+use App\Listeners\SendInvoiceNotification;
 use App\Listeners\StoreClick;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -23,6 +26,10 @@ class EventServiceProvider extends ServiceProvider
         ProductViewed::class => [
             StoreClick::class,
         ],
+        OrderPlaced::class => [
+            SendInvoiceNotification::class,
+            NotifyAdmin::class
+        ]
     ];
 
     /**
