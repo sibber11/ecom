@@ -20,7 +20,11 @@ const form = useForm({
 });
 
 function getPercent(star) {
-    return Math.round(star / props.product.reviews_count * 100);
+    let percent = Math.round(star / props.product.reviews_count * 100);
+    if (isNaN(percent)) {
+        return 0;
+    }
+    return percent;
 }
 
 function submitReview() {
@@ -52,17 +56,17 @@ const loadMore = ref(true);
             <div class="w-1/2">
                 <div class="flex items-center mb-3">
                     <RatingStars :rating="product.reviews_avg_rating"/>
-                    <p class="ml-2 text-sm font-medium text-gray-900">{{ product.reviews_avg_rating }} out of 5</p>
+                    <p class="ml-2 text-sm font-medium text-gray-900">{{ Math.floor(product.reviews_avg_rating, 2) }} out of 5 stars</p>
                 </div>
                 <p class="text-sm font-medium text-gray-500">{{ product.reviews_count }} total ratings</p>
                 <div class="flex flex-col-reverse">
-                    <template v-for="(star, i) in product.ratings" :key="i">
+                    <template v-for="i in 5" :key="i">
                         <div class="flex items-center mt-4">
                             <span class="text-sm font-medium text-blue-600">{{ i }} star</span>
                             <div class="w-2/3 h-5 mx-4 bg-gray-200 rounded">
-                                <div :style="{width:getPercent(star)+'%'}" class="h-5 bg-yellow-400 rounded"></div>
+                                <div :style="{width:getPercent(product.ratings[i])+'%'}" class="h-5 bg-yellow-400 rounded"></div>
                             </div>
-                            <span class="text-sm font-medium text-blue-600">{{ getPercent(star) }}%</span>
+                            <span class="text-sm font-medium text-blue-600">{{ getPercent(product.ratings[i]) }}%</span>
                         </div>
                     </template>
                 </div>
