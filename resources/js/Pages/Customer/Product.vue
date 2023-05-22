@@ -4,6 +4,7 @@ import CustomerLayout from "@/Layouts/CustomerLayout.vue"
 import Review from "@/Pages/Customer/partial/Review.vue";
 import RatingStars from "@/Pages/Customer/partial/RatingStars.vue";
 import ProductCluster from "@/Pages/Partials/ProductCluster.vue";
+import {ref} from "vue";
 
 const props = defineProps({
     product: Object,
@@ -13,6 +14,8 @@ const form = useForm({
     quantity: 1,
     options: Object.fromEntries(props.product.attributes.map(item => [item.name, null]))
 })
+
+const selectedMedia = ref(props.product.media[0]);
 
 </script>
 
@@ -33,11 +36,13 @@ const form = useForm({
         <!-- product-detail -->
         <div class="container grid grid-cols-2 gap-6">
             <div>
-                <img :src="product.media[0]?.original_url" alt="product" class="w-full">
+                <img :src="selectedMedia?.original_url" alt="product" class="w-full">
                 <div class="grid grid-cols-5 gap-4 mt-4">
                     <template v-for="media in product.media">
-                        <img :src="media.original_url" alt="product2"
-                             class="w-full cursor-pointer border border-primary">
+                        <div class="aspect-w-1 aspect-h-1">
+                            <img :src="media.thumbnail_url??media.original_url" alt="product" class="w-full cursor-pointer" :class="media === selectedMedia ? 'border border-primary' : ''"
+                                 @click="selectedMedia = media">
+                        </div>
                     </template>
                 </div>
             </div>
