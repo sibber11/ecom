@@ -13,10 +13,11 @@ import {InertiaLink} from "@inertiajs/inertia-vue3";
 
                 <!-- dropdown -->
                 <div
-                    class="absolute w-full left-0 top-full bg-white shadow-md py-3 divide-y divide-gray-300 divide-dashed opacity-0 group-hover:opacity-100 transition duration-300 invisible group-hover:visible">
+                    class="z-10 absolute w-full left-0 top-full bg-white shadow-md py-3 divide-y divide-gray-300 divide-dashed opacity-0 group-hover:opacity-100 transition duration-300 invisible group-hover:visible">
                     <template v-for="category in $page.props.categories" :key="category.id">
                         <InertiaLink href="#" class="flex items-center px-6 py-3 hover:bg-gray-100 transition">
-                            <img src="" alt="sofa" class="w-5 h-5 object-contain">
+<!--                            todo: use first media / create resource for category-->
+                            <img :src="category.media[0].original_url" alt="sofa" class="w-10 h-10 object-contain">
                             <span class="ml-6 text-gray-600 text-sm">{{ category.name }}</span>
                         </InertiaLink>
                     </template>
