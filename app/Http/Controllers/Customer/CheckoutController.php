@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Customer;
 
+use App\Events\OrderPlaced;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CheckoutRequest;
 use App\Http\Resources\CartItemResource;
@@ -43,6 +44,7 @@ class CheckoutController extends Controller
         $order->save();
         $order->addProducts(Cart::instance('cart')->content());
         Cart::instance('cart')->destroy();
+        OrderPlaced::dispatch($order);
         return redirect()->route('orders.index')->with('message', 'Order created successfully');
     }
 
