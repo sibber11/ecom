@@ -180,11 +180,12 @@ class Product extends Model implements HasMedia, Buyable
         return $this->hasMany(Click::class);
     }
 
-    public function similarProducts(int $limit = 4): array|Collection|\Illuminate\Support\Collection
+    public function similarProducts(int $limit = 4): array|Collection
     {
         return Product::withAnyTags($this->tags)
             ->where('id', '!=', $this->id)
             ->take($limit)
+            ->withAvg('reviews', 'rating')
             ->get();
     }
 
@@ -199,8 +200,18 @@ class Product extends Model implements HasMedia, Buyable
     public function registerMediaConversions(Media $media = null): void
     {
         $this->addMediaConversion('thumbnail')
-            ->width(48)
-            ->height(48)
+            ->width(100)
+            ->height(100)
             ->sharpen(10);
     }
+
+    public function getRatingsAttribute()
+    {
+        // return count of each rating
+        return $this->reviews()
+            ->selectRaw('rating, count(*) as count')
+            ->groupBy('rating')
+            ->pluck('count', 'rating');
+    }
+
 }
