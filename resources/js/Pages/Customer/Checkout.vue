@@ -47,7 +47,6 @@ const form = useForm({
 <template>
     <!-- wrapper -->
     <CustomerLayout>
-        {{ user }}
         <div class="container grid grid-cols-12 items-start pb-16 pt-4 gap-6">
 
             <form class="col-span-8 border border-gray-200 p-4 rounded"
