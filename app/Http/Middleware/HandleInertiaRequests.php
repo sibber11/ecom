@@ -45,6 +45,7 @@ class HandleInertiaRequests extends Middleware
             'categories' => Category::where('parent_id')->limit(6)->get(),
             'env' => App::environment(),
             'flash' => session()->all(),
+            'notifications' => $request->user()?->notifications()->latest()->take(5)->get()->pluck('data'),
             'wishlist' => Cart::instance('wishlist')->countItems(),
             'ziggy' => function () use ($request) {
                 return array_merge((new Ziggy)->toArray(), [
