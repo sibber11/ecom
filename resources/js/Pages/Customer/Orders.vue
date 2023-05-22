@@ -1,4 +1,4 @@
-<script setup>
+3.<script setup>
 import ProfileLayout from "@/Pages/Customer/partial/ProfileLayout.vue";
 import {InertiaLink} from "@inertiajs/inertia-vue3";
 import {useForm} from "@inertiajs/inertia-vue3";
@@ -42,6 +42,7 @@ const cancelOrder = (order) => {
                         <td class="px-6 py-4 text-right">{{order.status}}</td>
                         <td class="px-6 py-4 text-right">
                             <a :href="route('orders.show', order)" class="px-2 text-blue-500 hover:text-primary-dark" target="_blank">View</a>
+                            <a :href="route('orders.show', order)" class="px-2 text-blue-500 hover:text-primary-dark" target="_blank">Download</a>
                             <button v-if="order.status  !== 'Cancelled' && order.status !== 'Completed'" type="button" class="px-2 text-red-600 hover:text-primary-dark" @click="cancelOrder(order)">
                                 Cancel
                             </button>
