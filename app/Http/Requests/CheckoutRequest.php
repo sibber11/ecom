@@ -27,10 +27,20 @@ class CheckoutRequest extends AddressUpdateRequest
 
         $addressRules = parent::rules();
         $checkoutRules = [
-            'phone' => "required|string|max:20",
-            'notes' => "required|string|max:255",
+            'phone' => "nullable|string|max:20",
+            'notes' => "nullable|string|max:255",
             'terms' => "required|accepted",
         ];
         return array_merge($addressRules,$checkoutRules);
+    }
+
+    public function update()
+    {
+        parent::update();
+        if ($this->has('phone')){
+            $this->user()->update([
+                'phone' => $this->input('phone'),
+            ]);
+        }
     }
 }
