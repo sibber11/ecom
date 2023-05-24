@@ -2,6 +2,7 @@
 
 namespace App\Listeners;
 
+use App\Events\OrderCancelled;
 use App\Events\OrderPlaced;
 use App\Models\User;
 use App\Notifications\NotifyAdminNotification;
@@ -9,7 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Notification;
 
-class NotifyAdmin
+class NotifyAdminAboutNewOrder
 {
     /**
      * Create the event listener.
