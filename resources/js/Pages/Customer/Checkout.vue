@@ -49,7 +49,7 @@ const form = useForm({
     <CustomerLayout>
         <div class="container grid grid-cols-12 items-start pb-16 pt-4 gap-6">
 
-            <form class="col-span-8 border border-gray-200 p-4 rounded"
+            <form class="col-span-8 border border-gray-200 p-4 rounded" id="checkout-form"
                   @submit.prevent="form.post(route('checkout.store'))">
                 <h3 class="text-lg font-medium capitalize mb-4">Checkout</h3>
                 <div class="space-y-4">
@@ -140,33 +140,33 @@ const form = useForm({
                     </template>
 
                 </div>
-                <div class="flex justify-between border-b border-gray-200 mt-1 text-gray-800 font-medium py-3 uppercas">
+                <div class="flex justify-between border-b border-gray-200 mt-1 text-gray-800 font-medium py-3 uppercase">
                     <p>Subtotal</p>
                     <p>${{ subtotal }}</p>
                 </div>
 
-                <div class="flex justify-between border-b border-gray-200 mt-1 text-gray-800 font-medium py-3 uppercas">
+                <div class="flex justify-between border-b border-gray-200 mt-1 text-gray-800 font-medium py-3 uppercase">
                     <p>Shipping</p>
                     <p>Free</p>
                 </div>
-                <div class="flex justify-between border-b border-gray-200 mt-1 text-gray-800 font-medium py-3 uppercas">
+                <div class="flex justify-between border-b border-gray-200 mt-1 text-gray-800 font-medium py-3 uppercase">
                     <p>Tax</p>
                     <p>${{ tax }}</p>
                 </div>
-                <div class="flex justify-between border-b border-gray-200 mt-1 text-gray-800 font-medium py-3 uppercas">
+                <div class="flex justify-between border-b border-gray-200 mt-1 text-gray-800 font-medium py-3 uppercase">
                     <p>Discount</p>
                     <p>${{ discount }}</p>
                 </div>
 
-                <div class="flex justify-between text-gray-800 font-medium py-3 uppercas">
+                <div class="flex justify-between text-gray-800 font-medium py-3 uppercase">
                     <p class="font-semibold">Total</p>
                     <p>${{ total }}</p>
                 </div>
 
                 <div class="flex items-center mb-4 mt-2">
-                    <input id="agreement" v-model="form.terms"
+                    <input id="agreement" v-model="form.terms" form="checkout-form"
                            class="text-primary focus:ring-0 rounded-sm cursor-pointer w-3 h-3" name="agreement"
-                           type="checkbox">
+                           required type="checkbox">
                     <label class="text-gray-600 ml-3 cursor-pointer text-sm" for="agreement">
                         I agree to the <a class="text-primary" href="#">terms & conditions</a>
                     </label>
@@ -174,8 +174,7 @@ const form = useForm({
 
                 <button
                     class="block w-full py-3 px-4 text-center text-white bg-primary border border-primary rounded-md hover:bg-transparent hover:text-primary transition font-medium"
-                    type="submit"
-                    @click="form.post(route('checkout.store'))">
+                    type="submit" form="checkout-form">
                     Place order
                 </button>
             </div>
