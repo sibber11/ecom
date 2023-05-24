@@ -149,13 +149,13 @@ function updateStatus() {
                                     </div>
                                 </td>
                                 <td class="border-b border-gray-200 pt-2">
-                                    <div class="text-sm text-gray-900">{{item.quantity}}</div>
+                                    <div class="text-sm text-gray-900">{{item.pivot.quantity}}</div>
                                 </td>
                                 <td class="border-b border-gray-200 pt-2">
                                     <div class="text-sm text-gray-900">{{item.price}} $</div>
                                 </td>
                                 <td class="border-b border-gray-200 pt-2 text-right">
-                                    <div class="text-sm text-gray-900">{{item.subtotal}} $</div>
+                                    <div class="text-sm text-gray-900">{{item.pivot.total}} $</div>
                                 </td>
                             </tr>
                             </tbody>
@@ -172,7 +172,7 @@ function updateStatus() {
                                 <div class="text-gray-700">{{order.shipping}}</div>
                             </div>
                             <div class="flex justify-between border-b pb-2">
-                                <div class="text-gray-700 font-bold">Tax</div>
+                                <div class="text-gray-700 font-bold">Tax()</div>
                                 <div class="text-gray-700">{{order.tax}}</div>
                             </div>
                             <div class="flex justify-between border-b pb-2">
