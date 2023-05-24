@@ -107,7 +107,7 @@ class User extends Authenticatable
         return $this->hasMany(Click::class);
     }
 
-    public function recommendedProducts($limit = 4): array|Collection|\Illuminate\Support\Collection
+    public function recommendedProducts($limit = 4): array|Collection
     {
         // here we get the tags of the last 5 products the user has clicked on
         $tags = $this
@@ -123,5 +123,18 @@ class User extends Authenticatable
             ->unique('id')
             ->flatten();
         return Product::withAnyTags($tags)->with('tags')->withAvg('reviews', 'rating')->limit($limit)->get();
+    }
+
+    /**
+     * The channels the user receives notification broadcasts on.
+     */
+    public function receivesBroadcastNotificationsOn(): string
+    {
+        return 'admin-notifications';
+    }
+
+    public static function admin(): User
+    {
+        return User::find(1);
     }
 }
