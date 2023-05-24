@@ -8,6 +8,7 @@ use App\Http\Requests\StoreOrderRequest;
 use App\Http\Requests\UpdateOrderRequest;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Milon\Barcode\Facades\DNS2DFacade;
 use ProtoneMedia\LaravelQueryBuilderInertiaJs\InertiaTable;
@@ -65,8 +66,11 @@ class OrderController extends Controller
      */
     public function destroy(Order $order)
     {
+        DB::beginTransaction();
+        $order->products()->detach();
         $order->delete();
-        return to_route('orders.index')
+        DB::commit();
+        return back()
             ->with('message', 'Order deleted successfully');
     }
 }
