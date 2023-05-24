@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Notifications\NotifyAdminNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Support\Facades\Notification;
 
 class NotifyAdmin
 {
@@ -23,7 +24,7 @@ class NotifyAdmin
      */
     public function handle(OrderPlaced $event): void
     {
-
-        User::find(1)->notify(new NotifyAdminNotification($event->order));
+        // using Notification::send method, it is possible to sent notification to multiple users.
+        Notification::send(User::admin(), new NotifyAdminNotification($event->order));
     }
 }
