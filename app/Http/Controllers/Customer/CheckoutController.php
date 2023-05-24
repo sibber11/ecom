@@ -26,15 +26,16 @@ class CheckoutController extends Controller
     }
     public function store(CheckoutRequest $request): RedirectResponse
     {
+        if (Cart::instance('cart')->count() === 0){
+            return back()->withErrors(['cart' => 'Cart is empty']);
+        }
         $request->update();
-//        $products = Cart::instance('cart')->content();
         $total = Cart::instance('cart')->totalFloat();
         $tax = Cart::instance('cart')->taxFloat();
         $subtotal = Cart::instance('cart')->subtotalFloat();
         $discount = Cart::instance('cart')->discountFloat();
         /** @var Order $order */
         $order = $request->user()->orders()->make([
-//            'products' => $products,
             'total' => $total,
             'tax' => $tax,
             'subtotal' => $subtotal,
