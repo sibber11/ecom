@@ -9,11 +9,9 @@ use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class NotifyAdminNotification extends Notification
+class NotifyAdminNotification extends Notification implements ShouldQueue
 {
     use Queueable;
-
-
 
     /**
      * Create a new notification instance.
@@ -28,7 +26,7 @@ class NotifyAdminNotification extends Notification
      */
     public function via($notifiable): array
     {
-        return ['database'];
+        return ['database', 'broadcast'];
     }
 
 
@@ -48,10 +46,5 @@ class NotifyAdminNotification extends Notification
     public function toDatabase($notifiable): array
     {
         return $this->toArray($notifiable);
-    }
-
-    public function toBroadcast($notifiable): BroadcastMessage
-    {
-        return new BroadcastMessage($this->toArray($notifiable));
     }
 }
