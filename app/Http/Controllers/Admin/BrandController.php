@@ -62,7 +62,7 @@ class BrandController extends Controller
         $brand = new Brand();
         $brand->fill($request->validated());
         $brand->save();
-        return to_route('brands.index')
+        return to_route('admin.brands.index')
             ->with('success', 'Brand created successfully');
     }
 
@@ -90,7 +90,7 @@ class BrandController extends Controller
     public function update(UpdateBrandRequest $request, Brand $brand)
     {
         $brand->update($request->validated());
-        return to_route('brands.index')
+        return to_route('admin.brands.index')
             ->with('success', 'Brand updated successfully');
     }
 
@@ -100,11 +100,11 @@ class BrandController extends Controller
     public function destroy(Brand $brand)
     {
         if ($brand->products()->count() > 0){
-            return to_route('brands.index')
+            return to_route('admin.brands.index')
                 ->with('error', 'Brand has product. Delete Failed!');
         }
         $brand->delete();
-        return to_route('brands.index')
+        return to_route('admin.brands.index')
             ->with('success', 'Brand deleted successfully');
     }
 

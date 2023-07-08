@@ -69,7 +69,7 @@ class CategoryController extends Controller
         $category = new Category();
         $this->fill_n_save($category, $request);
 
-        return to_route('categories.index')
+        return to_route('admin.categories.index')
             ->with('success', 'Category created successfully');
     }
 
@@ -90,7 +90,7 @@ class CategoryController extends Controller
     {
 
         $this->fill_n_save($category, $request);
-        return to_route('categories.index')
+        return to_route('admin.categories.index')
             ->with('success', 'Category updated successfully');
     }
 
@@ -107,7 +107,7 @@ class CategoryController extends Controller
         }
         $category->delete();
         //todo return back to the page user came from with the page number
-        return to_route('categories.index')
+        return to_route('admin.categories.index')
             ->with('success', 'Category deleted successfully');
     }
 

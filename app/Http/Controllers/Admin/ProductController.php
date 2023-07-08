@@ -6,18 +6,21 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\GetSlugRequest;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
+use App\Models\Attribute;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
-use App\Models\Attribute;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+use Inertia\Response;
 use ProtoneMedia\LaravelQueryBuilderInertiaJs\InertiaTable;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\MediaCannotBeDeleted;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 use Throwable;
 
@@ -25,41 +28,53 @@ class ProductController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
      */
     public function index()
     {
+        $globalSearch = AllowedFilter::callback('global', function ($query, $value) {
+            $query->where(function ($query) use ($value) {
+                Collection::wrap($value)->each(function ($value) use ($query) {
+                    $query
+                        ->orWhere('name', 'LIKE', "%$value%");
+                });
+            });
+        });
         $products = QueryBuilder::for(Product::class)
-            ->defaultSort('name')
-            ->allowedSorts(['name', 'id', 'category_id', 'brand_id'])
-            ->allowedFilters(['name'])
-            ->paginate(\request()->input('perPage') ?? 9)
+            ->allowedSorts(['name', 'id'])
+            ->allowedFilters([
+                'name',
+                $globalSearch,
+                AllowedFilter::exact('category', 'category_id'),
+                AllowedFilter::exact('brand', 'brand_id')])
+            ->paginate(request()->input('perPage') ?? 9)
             ->withQueryString();
 
         return Inertia::render('Admin/Product/Index', [
             'products' => $products
         ])->table(function (InertiaTable $table) {
             $table->withGlobalSearch()
-                ->column('id',sortable: true)
+                ->column('id', sortable: true)
                 ->column('name', sortable: true, searchable: true)
                 ->column('sku')
                 ->column('brand')
                 ->column('category')
                 ->column('quantity', 'stock')
                 ->column(label: 'actions')
-                ->defaultSort('name');
+                ->selectFilter('category' , Category::orderBy('name')->get()->pluck('name','id')->toArray())
+                ->selectFilter('brand' , Brand::orderBy('name')->get()->pluck('name','id')->toArray())
+            ;
         });
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): Response
     {
-        $options =  Attribute::all();
+        $options = Attribute::all();
         return Inertia::render('Admin/Product/Create',
             [
-                'options' =>$options
+                'options' => $options
             ]
         );
     }
@@ -68,7 +83,7 @@ class ProductController extends Controller
      * Store a newly created resource in storage.
      * @throws Throwable
      */
-    public function store(StoreProductRequest $request)
+    public function store(StoreProductRequest $request): RedirectResponse
     {
         DB::beginTransaction();
         $product = new Product;
@@ -90,7 +105,7 @@ class ProductController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Product $product)
+    public function edit(Product $product): Response
     {
         return Inertia::render('Admin/Product/Edit', [
             'product' => $product->load(['category', 'tags', 'attributes']),
@@ -102,7 +117,7 @@ class ProductController extends Controller
      * Update the specified resource in storage.
      * @throws Throwable
      */
-    public function update(UpdateProductRequest $request, Product $product)
+    public function update(UpdateProductRequest $request, Product $product): RedirectResponse
     {
         DB::beginTransaction();
         $this->fill_n_save($request, $product);
@@ -114,7 +129,7 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Product $product)
+    public function destroy(Product $product): RedirectResponse
     {
         //todo check relation before deleting
         $product->delete();
@@ -125,7 +140,7 @@ class ProductController extends Controller
     /**
      * Returns a unique slug
      */
-    public function get_slug(GetSlugRequest $request)
+    public function get_slug(GetSlugRequest $request): Product
     {
         $product = new Product($request->validated());
         $product->generateSlug();
@@ -139,18 +154,19 @@ class ProductController extends Controller
     public function fill_n_save(UpdateProductRequest|StoreProductRequest $request, Product $product): void
     {
         $product->fill($request->validated());
-        $product->category()->associate(Category::whereName($request->category)->first());
+        $product->category()->associate(Category::whereName($request->input('category'))->first());
         $product->brand()->associate(Brand::whereName($request->input('brand'))->first());
         $product->old_price = 0;
         $product->save();
         //extract tags from request
-        if (is_string($request->tags)){
-            $tags = explode(',', $request->tags);
-        }else{
-            $tags = $request->tags;
+        if (is_string($request->input('tags'))) {
+            $tags = explode(',', $request->input('tags'));
+        } else {
+            $tags = $request->input('tags');
         }
-
-        $product->syncTags($tags);
+        if (!empty($tags)) {
+            $product->syncTags($tags);
+        }
         if ($request->hasFile('images')) {
             $product->addMultipleMediaFromRequest(['images'])
                 ->each(function ($fileAdder) {
@@ -162,6 +178,9 @@ class ProductController extends Controller
         }
     }
 
+    /**
+     * @throws MediaCannotBeDeleted
+     */
     public function deleteMedia(Product $product, Media $media): RedirectResponse
     {
         $product->deleteMedia($media);

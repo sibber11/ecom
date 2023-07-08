@@ -53,7 +53,7 @@ class UserController extends Controller
         $user->fill($request->validated());
         $user->password = bcrypt($request->input('password'));
         $user->save();
-        return to_route('users.index')
+        return to_route('admin.users.index')
             ->with('message', 'User created successfully');
     }
 
@@ -81,7 +81,7 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, User $user)
     {
         $user->update($request->validated());
-        return to_route('users.index')
+        return to_route('admin.users.index')
             ->with('message', 'User updated successfully');
     }
 
@@ -91,7 +91,7 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         $user->delete();
-        return to_route('users.index')
+        return to_route('admin.users.index')
             ->with('message', 'User deleted successfully');
     }
 }

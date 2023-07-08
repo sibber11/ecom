@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Helper\QRCode;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreOrderRequest;
 use App\Http\Requests\UpdateOrderRequest;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
-use Milon\Barcode\Facades\DNS2DFacade;
 use ProtoneMedia\LaravelQueryBuilderInertiaJs\InertiaTable;
+use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class OrderController extends Controller
@@ -21,25 +20,34 @@ class OrderController extends Controller
      */
     public function index()
     {
+        $globalSearch = AllowedFilter::callback('global', function ($query, $value) {
+            $query->where(function ($query) use ($value) {
+                Collection::wrap($value)->each(function ($value) use ($query) {
+                    $query
+                        ->orWhere('name', 'LIKE', "%{$value}%");
+                });
+            });
+        });
         $orders = QueryBuilder::for(Order::class)
             ->defaultSort('id')
             ->allowedSorts(['id', 'status', 'total', 'created_at'])
-            ->allowedFilters(['status'])
+            ->allowedFilters(['status', $globalSearch])
             ->paginate()
             ->withQueryString();
         return Inertia::render('Admin/Order/Index', [
             'orders' => $orders
         ])->table(function (InertiaTable $table) {
-            $table->column('id', sortable: true, searchable: true)
+            $table
+                ->column('#', label: '#', canBeHidden: false)
+                ->column('id', sortable: true, searchable: true)
                 ->column('status', sortable: true, searchable: true)
                 ->column('total')
-                ->column('created_at')
+                ->column('created_at', label: 'placed at')
                 ->column('actions', canBeHidden: false)
                 ->selectFilter('status', Order::STATUSES, label: 'Status')
                 ->withGlobalSearch();
         });
     }
-
 
     /**
      * Display the specified resource.
