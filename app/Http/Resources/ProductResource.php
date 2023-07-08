@@ -16,13 +16,19 @@ class ProductResource extends JsonResource
         /**
          * @var Product $this
          */
-        // check if the media collection is empty
-        // if empty return fallback image
-        $first_media = $this->getFirstMediaUrl(Product::MEDIA_COLLECTION);
-        if (empty($first_media)) {
-            $first_media = asset('images/fallback.jpg');
-        }
-        // return the product with the following attributes
+
+        if ($this->hasMedia(Product::MEDIA_COLLECTION))
+            $media = ProductMediaResource::collection($this->media);
+        else
+            asset('assets/fallback_image.jpg');
+            $media = [
+                [
+                    'size' => getimagesize(public_path('assets/fallback_image.jpg')),
+                    'original_url' => asset('assets/fallback_image.jpg'),
+                    'name' => 'fallback image',
+                    'thumbnail_url' => asset('assets/fallback_image_thumbnail.jpg'),
+                ]
+            ];
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -39,7 +45,7 @@ class ProductResource extends JsonResource
             'ratings' => $this->ratings,
             'brand' => $this->brand,
             'category' => $this->category,
-            'media' => ProductMediaResource::collection($this->media),
+            'media' => $media,
             'latest_reviews' => $this->latestReviews,
             'attributes' => $this->attributes,
             'tags' => $this->tags,

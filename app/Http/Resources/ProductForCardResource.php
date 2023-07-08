@@ -28,10 +28,10 @@ class ProductForCardResource extends JsonResource
             'price' => $this->price,
             'old_price' => $this->old_price,
             'brand_name' => $this->brand->name,
-            'first_media' => $this->getFirstMediaUrl(Product::MEDIA_COLLECTION),
+            'first_media' => $this->getImage(),
             'first_media_name' => $this->getFirstMedia(Product::MEDIA_COLLECTION)?->name,
-            'reviews_count' => $this->reviews_count,
-            'reviews_avg_rating' => $this->reviews_avg_rating,
+            'reviews_count' => $this->reviews_count ?? 0,
+            'reviews_avg_rating' => $this->reviews_avg_rating ?? 0,
         ];
     }
 }

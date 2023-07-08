@@ -13,18 +13,16 @@ class ProductForCartResource extends JsonResource
      * Transform the resource into an array.
      *
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
+        /** @var Product $this */
         return [
             'id' => $this->id,
             'name' => $this->name,
             'url' => route('products.show', $this->slug),
-            'price' => $this->price,
-            'first_media' => $this->getFirstMediaUrl(Product::MEDIA_COLLECTION),
+            'first_media' => $this->getImage(),
             'first_media_name' => $this->getFirstMedia(Product::MEDIA_COLLECTION)?->name,
-            'rating' => $this->rating,
-            'stock' => $this->stock,
-            'options' => $this->options,
+            'quantity' => $this->quantity,
         ];
     }
 }
