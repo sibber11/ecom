@@ -11,26 +11,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
 
-/**
- * App\Models\Attribute
- *
- * @property int $id
- * @property string $name
- * @property string $type
- * @property-read Collection<int, Option> $options
- * @property-read int|null $options_count
- * @property-read Collection<int, Product> $products
- * @property-read int|null $products_count
- * @method static AttributeFactory factory($count = null, $state = [])
- * @method static Builder|Attribute newModelQuery()
- * @method static Builder|Attribute newQuery()
- * @method static Builder|Attribute query()
- * @method static Builder|Attribute whereId($value)
- * @method static Builder|Attribute whereName($value)
- * @method static Builder|Attribute whereType($value)
- * @mixin Eloquent
- */
 class Attribute extends Model
 {
     use HasFactory;
@@ -52,7 +34,24 @@ class Attribute extends Model
 
     public function products(): BelongsToMany
     {
-        return $this->belongsToMany(Product::class, 'product_attributes');
+        return $this->belongsToMany(Product::class);
+    }
+
+
+    public function syncOptions(array $options)
+    {
+        $this->options()->delete();
+        $this->add_options($options);
+    }
+
+    public function add_options(array $options): void
+    {
+        foreach ($options as $option) {
+            $this->options()->create([
+                'name' => Str::ucfirst($option['name']),
+                'value' => $option['name'],
+            ]);
+        }
     }
 
     public function options(): HasMany

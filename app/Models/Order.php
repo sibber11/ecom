@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Events\OrderCancelled;
+use App\Events\OrderDelivered;
 use App\Helper\QRCode;
 use Database\Factories\OrderFactory;
 use Eloquent;
@@ -15,54 +17,10 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 
-/**
- * App\Models\Order
- *
- * @property int $id
- * @property int $user_id
- * @property string $total
- * @property string $tax
- * @property string $subtotal
- * @property string $discount
- * @property string $shipping
- * @property string $status
- * @property string $payment_method
- * @property string $payment_status
- * @property string|null $payment_id
- * @property array|null $billing_address
- * @property array $shipping_address
- * @property string|null $qr_code
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, Product> $products
- * @property-read int|null $products_count
- * @property-read Review|null $review
- * @property-read User $user
- * @method static OrderFactory factory($count = null, $state = [])
- * @method static Builder|Order newModelQuery()
- * @method static Builder|Order newQuery()
- * @method static Builder|Order query()
- * @method static Builder|Order whereBillingAddress($value)
- * @method static Builder|Order whereCreatedAt($value)
- * @method static Builder|Order whereDiscount($value)
- * @method static Builder|Order whereId($value)
- * @method static Builder|Order wherePaymentId($value)
- * @method static Builder|Order wherePaymentMethod($value)
- * @method static Builder|Order wherePaymentStatus($value)
- * @method static Builder|Order whereQrCode($value)
- * @method static Builder|Order whereShipping($value)
- * @method static Builder|Order whereShippingAddress($value)
- * @method static Builder|Order whereStatus($value)
- * @method static Builder|Order whereSubtotal($value)
- * @method static Builder|Order whereTax($value)
- * @method static Builder|Order whereTotal($value)
- * @method static Builder|Order whereUpdatedAt($value)
- * @method static Builder|Order whereUserId($value)
- * @mixin Eloquent
- */
 class Order extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'user_id',
         'products',
@@ -134,6 +92,7 @@ class Order extends Model
     {
         return $this->belongsToMany(Product::class)->withPivot('quantity', 'price', 'total', 'options');
     }
+
     public function addProducts(Collection $content)
     {
         $products = Product::whereIn('slug', $content->pluck('id'))->get();
@@ -142,4 +101,40 @@ class Order extends Model
             $this->products()->attach($product_id, ['quantity' => $item->qty, 'price' => $item->price, 'total' => $item->total, 'options' => $item->options]);
         });
     }
+
+    public function cancel()
+    {
+        // check if the order is cancellable
+        if ($this->isCancellable()){
+            // set the status of the order to cancelled
+            // dispatch the OrderCancelled event
+            $this->changeStatus('cancelled');
+            OrderCancelled::dispatch();
+        }
+    }
+
+    public function complete()
+    {
+        if ($this->isCompletable()){
+            $this->changeStatus('completed');
+            OrderDelivered::dispatch();
+        }
+    }
+
+    public function changeStatus($status)
+    {
+        $this->status = $status;
+        $this->save();
+    }
+
+    public function isCancellable(): bool
+    {
+        return true;
+    }
+
+    private function isCompletable(): bool
+    {
+        return true;
+    }
+
 }
