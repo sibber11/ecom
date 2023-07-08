@@ -32,13 +32,16 @@ const submit = () => {
                         <input type="email" name="email" id="email"
                                v-model="form.email"
                                class="block w-full border border-gray-300 px-4 py-3 text-gray-600 text-sm rounded focus:ring-0 focus:border-primary placeholder-gray-400"
+                               :class="{ 'border-red-600': form.errors.email }"
                                placeholder="youremail.@domain.com">
+                        <small class="text-red-600">{{form.errors.email}}</small>
                     </div>
                     <div>
                         <label for="password" class="text-gray-600 mb-2 block">Password</label>
                         <input type="password" name="password" id="password"
                                v-model="form.password"
                                class="block w-full border border-gray-300 px-4 py-3 text-gray-600 text-sm rounded focus:ring-0 focus:border-primary placeholder-gray-400"
+                               :class="{ 'border-red-600': form.errors.email }"
                                placeholder="*******">
                     </div>
                 </div>
