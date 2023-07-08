@@ -24,10 +24,11 @@ class UpdateProductAttributeRequest extends FormRequest
      */
     public function rules()
     {
+//        dd($this->all());
         return [
             'name' => 'required|string|max:255',
             'type' => 'required|string|max:255|in:' . implode(',', array_keys(Attribute::TYPES)),
-            'options.*' => 'required|array:index,name',
+            'options.*' => 'required|array:id,name,value',
         ];
     }
 }
