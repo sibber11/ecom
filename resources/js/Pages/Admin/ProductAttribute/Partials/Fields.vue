@@ -29,8 +29,21 @@ onMounted(() => {
     }
     form.name = props.attribute.name;
     form.type = props.attribute.type;
-    form.options = props.attribute.options;
+    form.options = props.attribute.options.map(o=>{delete o.attribute_id; return o});
 })
+
+const addOption = () => {
+    if (option.value === '') {
+        return;
+    }
+    form.options.push({
+        id: form.options.length + 1,
+        name: option.value,
+        value: option.value
+    });
+    option.value = '';
+}
+
 
 const option = ref('');
 </script>
@@ -92,15 +105,19 @@ const option = ref('');
                     />
                     <button class="bg-teal-500 text-white font-semibold mt-1 px-4 py-1 rounded block"
                             type="button"
-                            @click="form.options.push({index:form.options.length+1,name:option}); option = ''"
+                            @click="addOption"
                     >Add
                     </button>
                 </div>
-                <InputError :message="form.errors.options" class="mt-2"/>
+                {{form.errors}}
+<!--                <InputError v-for="err in form.errors.options" :message="form.errors.options" class="mt-2"/>-->
                 <table class="w-full my-4">
                     <caption class="font-bold py-4 border-b">Options</caption>
                     <tr>
                         <th class="bg-blue-100 border-b text-left px-6 py-4 whitespace-nowrap text-sm text-gray-800">#
+                        </th>
+                        <th class="bg-blue-100 border-b text-left px-6 py-4 whitespace-nowrap text-sm text-gray-800">
+                            Names
                         </th>
                         <th class="bg-blue-100 border-b text-left px-6 py-4 whitespace-nowrap text-sm text-gray-800">
                             Value
@@ -111,10 +128,13 @@ const option = ref('');
                     </tr>
                     <tr v-for="(option, index) in form.options" :key="index" class="even:bg-gray-50 hover:bg-gray-100">
                         <td class="border-b px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {{ option.index }}
+                            {{ index + 1 }}
                         </td>
                         <td class="border-b px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                             {{ option.name }}
+                        </td>
+                        <td class="border-b px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            {{ option.value }}
                         </td>
                         <td class="border-b px-6 py-4 whitespace-nowrap text-right text-sm font-medium flex justify-end gap-4">
                             <span class="flex flex-col justify-between gap-4 hidden">
