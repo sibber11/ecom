@@ -10,7 +10,7 @@ import {InertiaLink} from "@inertiajs/inertia-vue3";
         <div class="container grid grid-cols-12 items-start gap-6 pt-4 pb-16">
 
             <!-- sidebar -->
-            <div class="col-span-3">
+            <div class="col-span-3" :class="{'pointer-events-none':$page.props.auth.user == null}">
                 <div class="px-4 py-3 shadow flex items-center gap-4">
                     <div class="flex-shrink-0">
                         <img src="/assets/avatar.png" alt="profile"
@@ -18,7 +18,7 @@ import {InertiaLink} from "@inertiajs/inertia-vue3";
                     </div>
                     <div class="flex-grow">
                         <p class="text-gray-600">Hello,</p>
-                        <h4 class="text-gray-800 font-medium">{{$page.props.auth.user.name}}</h4>
+                        <h4 class="text-gray-800 font-medium">{{$page.props.auth.user?.name}}</h4>
                     </div>
                 </div>
 

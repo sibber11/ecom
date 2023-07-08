@@ -5,6 +5,7 @@ import Review from "@/Pages/Customer/partial/Review.vue";
 import RatingStars from "@/Pages/Customer/partial/RatingStars.vue";
 import ProductCluster from "@/Pages/Partials/ProductCluster.vue";
 import {ref} from "vue";
+import Atrribute from "@/components/Attribute.vue";
 
 const props = defineProps({
     product: Object,
@@ -53,12 +54,13 @@ const selectedMedia = ref(props.product.media[0]);
                     <div class="flex gap-1 text-sm">
                         <RatingStars :rating="product.reviews_avg_rating"/>
                     </div>
-                    <div class="text-xs text-gray-500 ml-3">(150 Reviews)</div>
+                    <div class="text-xs text-gray-500 ml-3">({{product.reviews_count}} Reviews)</div>
                 </div>
                 <div class="space-y-2">
                     <p class="text-gray-800 font-semibold space-x-2">
                         <span>Availability: </span>
-                        <span class="text-green-600">In Stock</span>
+                        <span class="text-green-600" v-if="product.quantity > 0">In Stock</span>
+                        <span class="text-red-600" v-else>Out of Stock</span>
                     </p>
                     <p class="space-x-2">
                         <span class="text-gray-800 font-semibold">Brand: </span>
@@ -86,7 +88,7 @@ const selectedMedia = ref(props.product.media[0]);
                         <h3 class="text-xl text-gray-800 mb-3 uppercase font-medium">Size</h3>
                         <div class="flex items-center gap-2">
                             <div class="size-selector" v-for="option in attribute.options">
-                                <input type="radio" :name="attribute.name" :id="option.name" :value="option.name" class="hidden" v-model="form.options[attribute.name]">
+                                <input type="radio" :name="attribute.name" :id="option.name" :value="option.name" class="hidden" v-model="form.options[attribute.name]" required>
                                 <label :for="option.name"
                                        class="text-xs border border-gray-200 rounded-sm h-6 w-6 flex items-center justify-center cursor-pointer shadow-sm text-gray-600">
                                     {{option.name}}
@@ -98,15 +100,15 @@ const selectedMedia = ref(props.product.media[0]);
                         <h3 class="text-xl text-gray-800 mb-3 uppercase font-medium">Color</h3>
                         <div class="flex items-center gap-2">
                             <div class="color-selector" v-for="option in attribute.options">
-                                <input type="radio" :name="attribute.name" :id="option.name" :value="option.name" class="hidden" v-model="form.options[attribute.name]">
+                                <input type="radio" :name="attribute.name" :id="option.name" :value="option.name" class="hidden" v-model="form.options[attribute.name]" required>
                                 <label :for="option.name"
                                        class="border border-gray-200 rounded-sm h-6 w-6  cursor-pointer shadow-sm block"
                                        :style="{'background-color': option.name}"></label>
                             </div>
 
                         </div>
-
                     </div>
+                    <Atrribute v-else :attribute="attribute" v-model="form.options[attribute.name]" required></Atrribute>
                 </div>
 
                 <div class="mt-4">
@@ -124,7 +126,9 @@ const selectedMedia = ref(props.product.media[0]);
 
                 <div class="mt-6 flex gap-3 border-b border-gray-200 pb-5 pt-5">
                     <button type="button" @click="form.post(route('cart.store', product),{preserveScroll:true})"
-                                 class="bg-primary border border-primary text-white px-8 py-2 font-medium rounded uppercase flex items-center gap-2 hover:bg-transparent hover:text-primary transition">
+                            :disabled="product.quantity === 0"
+                                 class="bg-primary border border-primary text-white px-8 py-2 font-medium rounded uppercase flex items-center gap-2 hover:bg-transparent hover:text-primary transition
+                                        disabled:hover:bg-red-400 disabled:border-red-400 disabled:hover:text-white disabled:bg-red-400">
                         <i class="fa-solid fa-bag-shopping"></i> Add to cart
                     </button>
                     <InertiaLink :href="route('wishlist.store', product)" as="button" method="post" preserve-scroll
@@ -153,8 +157,8 @@ const selectedMedia = ref(props.product.media[0]);
 
         <!-- description -->
         <div class="container pb-16">
-            <h3 class="border-b border-gray-200 font-roboto text-gray-800 pb-3 font-medium">Product details</h3>
-            <div class="w-3/5 pt-6">
+            <h3 class="border-b border-gray-200 font-roboto text-gray-800 pb-3 font-bold text-lg mt-6">Product details</h3>
+            <div class="pt-6">
                 <div class="text-gray-600">
                     <p>{{ product.description }}</p>
                 </div>

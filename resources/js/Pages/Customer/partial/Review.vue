@@ -43,7 +43,7 @@ function submitReview() {
 //set offset to the number of reviews from the url
 const offset = ref(props.product.latest_reviews.length + 3);
 const loadMore = ref(true);
-
+const canReview = false;
 </script>
 
 <template>
@@ -56,22 +56,22 @@ const loadMore = ref(true);
             <div class="w-1/2">
                 <div class="flex items-center mb-3">
                     <RatingStars :rating="product.reviews_avg_rating"/>
-                    <p class="ml-2 text-sm font-medium text-gray-900">{{ Math.floor(product.reviews_avg_rating, 2) }} out of 5 stars</p>
+                    <p class="m-2 text-sm font-medium text-gray-900">{{ Math.floor(product.reviews_avg_rating, 2) }} out of 5 stars</p>
+                    <span class="text-sm font-medium text-gray-500 py-4">({{ product.reviews_count }} Ratings)</span>
                 </div>
-                <p class="text-sm font-medium text-gray-500">{{ product.reviews_count }} total ratings</p>
-                <div class="flex flex-col-reverse">
+                <div class="flex flex-col-reverse gap-4">
                     <template v-for="i in 5" :key="i">
-                        <div class="flex items-center mt-4">
-                            <span class="text-sm font-medium text-blue-600">{{ i }} star</span>
-                            <div class="w-2/3 h-5 mx-4 bg-gray-200 rounded">
+                        <div class="grid grid-cols-8 xl:grid-cols-12 items-center space-x-2">
+                            <span class="text-sm font-medium text-blue-600 whitespace-nowrap">{{ i }} star</span>
+                            <div class="w-full h-5 bg-gray-200 rounded col-span-6 xl:col-span-10">
                                 <div :style="{width:getPercent(product.ratings[i])+'%'}" class="h-5 bg-yellow-400 rounded"></div>
                             </div>
-                            <span class="text-sm font-medium text-blue-600">{{ getPercent(product.ratings[i]) }}%</span>
+                            <span class="text-sm font-medium text-blue-600 text-right">{{ getPercent(product.ratings[i]) }}%</span>
                         </div>
                     </template>
                 </div>
             </div>
-            <form class="max-w-lg my-4 w-1/2" method="post" @submit.prevent="submitReview">
+            <form class="max-w-lg my-4 w-1/2" method="post" @submit.prevent="submitReview" v-if="canReview">
                 <h3 class="font-bold text-lg">Write a Review</h3>
                 <div class="flex justify-between">
                     <span class="text-md font-bold">Rate us</span>
